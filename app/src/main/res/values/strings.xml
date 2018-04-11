@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">AppCare</string>
+    <string name="sign_in_cancelled">Sign in failed</string>
+    <string name="no_internet_connection">Check your internet connection</string>
+    <string name="unknown_error">Unknown error</string>
 </resources>

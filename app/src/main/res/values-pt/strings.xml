@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">AppCare</string>
+    <string name="sign_in_cancelled">Falha no cadastro</string>
+    <string name="no_internet_connection">Verifique sua conexão</string>
+    <string name="unknown_error">Erro desconhecido</string>
+</resources>
