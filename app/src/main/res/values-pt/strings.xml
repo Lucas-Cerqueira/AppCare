@@ -3,4 +3,10 @@
     <string name="sign_in_cancelled">Falha no cadastro</string>
     <string name="no_internet_connection">Verifique sua conexão</string>
     <string name="unknown_error">Erro desconhecido</string>
+    <string name="daily_button">Todo dia</string>
+    <string name="weekly_button">Toda semana</string>
+    <string name="monthly_button">Todo mês</string>
+    <string name="once_button">Uma vez</string>
+    <string name="reminder_name">Nome</string>
+
 </resources>

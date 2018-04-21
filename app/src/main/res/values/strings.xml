@@ -29,9 +29,27 @@
     <string name="btn_sign_out">Sign Out</string>
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
+    <string name="daily_button">Every day</string>
+    <string name="weekly_button">Every week</string>
+    <string name="monthly_button">Every month</string>
+    <string name="once_button">Once</string>
+    <string name="reminder_name">Name</string>
+
+
+
 
     <string-array name="user_type_array">
         <item>Patient</item>
         <item>Caregiver</item>
     </string-array>
+    <string name="title_activity_reminder">ReminderActivity</string>
+    <string name="title_activity_create_reminder">Create Reminder</string>
+
+    <string name="roboto_regular">sans-serif</string>
+    <string name="roboto_light">sans-serif-light</string>
+    <string name="roboto_condensed">sans-serif-condensed</string>
+    <string name="roboto_thin">sans-serif-thin</string>
+    <string name="roboto_medium">sans-serif-medium</string>
+
+    <string name="number_picker_formatter">%02d</string>
 </resources>
