@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.concurrent.Future;
 
 public class LoginActivity extends AppCompatActivity {
@@ -31,9 +32,10 @@ public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
     private EditText inputEmail, inputPassword;
     private FirebaseAuth auth;
+    private DatabaseReference db;
     private ProgressBar progressBar;
     private Button btnSignup, btnLogin, btnReset;
-    private DatabaseReference db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -42,11 +44,57 @@ public class LoginActivity extends AppCompatActivity {
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
+        db = FirebaseDatabase.getInstance().getReference();
 
+        if (auth.getCurrentUser() != null)
+        {
+            FirebaseUser user = auth.getCurrentUser();
+            String userUid = user.getUid();
+            DatabaseReference ref = db.child("users").child(userUid);
+            ref.addListenerForSingleValueEvent(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    AppCareUser user = dataSnapshot.getValue(AppCareUser.class);
+                    if (user == null)
+                        return;
 
-        if (auth.getCurrentUser() != null) {
-            startActivity(new Intent(LoginActivity.this, MainActivityPatient.class));
-            finish();
+                    String userType = user.getUserType();
+
+                    System.out.println("User type: " + userType +
+                            "\nUser name: " + user.getFirstName() +
+                            "\nUID: " + user.getUid());
+
+                    Intent intent;
+                    if (userType.equals(AppCareUser.PATIENT))
+                    {
+                        System.out.println("Entrou patient");
+                        intent = new Intent(LoginActivity.this, MainActivityPatient.class);
+                    }
+                    else if (userType.equals(AppCareUser.CAREGIVER))
+                    {
+                        System.out.println("Entrou caregiver");
+                        intent = new Intent(LoginActivity.this, MainActivityCaregiver.class);
+                    }
+                    else
+                    {
+                        intent = null;
+                        System.out.println("Invalid user type: " + userType);
+                    }
+                    if (intent != null)
+                    {
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                }
+            });
         }
 
         // set the view now
@@ -61,10 +109,6 @@ public class LoginActivity extends AppCompatActivity {
         btnSignup =  findViewById(R.id.btn_signup);
         btnLogin =  findViewById(R.id.btn_login);
         btnReset =  findViewById(R.id.btn_reset_password);
-
-        //Get Firebase auth instance
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseDatabase.getInstance().getReference();
 
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,12 +182,12 @@ public class LoginActivity extends AppCompatActivity {
                                                                 "\nUID: " + user.getUid());
 
                                             Intent intent;
-                                            if (userType.equals("Patient"))
+                                            if (userType.equals(AppCareUser.PATIENT))
                                             {
                                                 System.out.println("Entrou patient");
                                                 intent = new Intent(LoginActivity.this, MainActivityPatient.class);
                                             }
-                                            else if (userType.equals("Caregiver"))
+                                            else if (userType.equals(AppCareUser.CAREGIVER))
                                             {
                                                 System.out.println("Entrou caregiver");
                                                 intent = new Intent(LoginActivity.this, MainActivityCaregiver.class);

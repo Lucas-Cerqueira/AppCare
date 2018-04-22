@@ -29,9 +29,18 @@
     <string name="btn_sign_out">Sign Out</string>
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
+    <string name="patient_list">Patients</string>
+    <string name="find_patient_email">Patient email</string>
+    <string name="connect_to_patient_dialog">Connect to patient</string>
+    <string name="connect_patient_button">Connect</string>
+    <string name="cancel">Cancel</string>
+    <string name="remove">Remove</string>
+    <string name="remove_patient_message">Do you want to remove %1$s from your patient list?</string>
 
     <string-array name="user_type_array">
         <item>Patient</item>
         <item>Caregiver</item>
     </string-array>
+    <string name="title_activity_connect_to_patient">ConnectToPatient</string>
+    <string name="title_activity_patient_list">PatientListActivity</string>
 </resources>

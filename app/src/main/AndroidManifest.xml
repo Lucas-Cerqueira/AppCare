@@ -40,6 +40,15 @@
             android:name=".ResetPasswordActivity"
             android:label="@string/title_activity_reset_password"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PatientListActivity"
+            android:label="@string/title_activity_patient_list"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".AddPatientActivity"
+            android:exported="true"
+            android:label="@string/title_activity_connect_to_patient"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
