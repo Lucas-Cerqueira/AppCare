@@ -9,14 +9,14 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/create_reminder_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_marginBottom="8dp"
-        android:background="@color/colorPrimary"
-        android:minHeight="?android:attr/actionBarSize"
-        app:layout_constraintBottom_toTopOf="@+id/custom_picker_title" />
+    <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/create_reminder_toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="75dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:background="@color/colorPrimary"-->
+        <!--android:minHeight="?android:attr/actionBarSize"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/custom_picker_title" />-->
 
     <TextView
         android:id="@+id/custom_picker_title"
@@ -29,60 +29,65 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/layout_rounded_bg"
         android:fontFamily="@string/roboto_light"
         android:gravity="start"
+        android:paddingEnd="0dp"
         android:paddingLeft="10dp"
-        android:text="Selecione a data e hora:"
+        android:paddingRight="0dp"
+        android:paddingStart="10dp"
+        android:text="@string/reminderSelectDateTime"
         android:textColor="@color/black"
         android:textSize="30sp"
         android:textStyle="normal"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="293dp"
+        android:layout_height="208dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.818">
 
         <com.shawnlin.numberpicker.NumberPicker
             android:id="@+id/day_picker"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginEnd="0dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="0dp"
             android:layout_marginStart="5dp"
-
             android:background="@color/background"
             app:np_dividerColor="@color/colorPrimary"
             app:np_fadingEdgeEnabled="true"
-            app:np_formatter="10"
+            app:np_formatter="%02d"
             app:np_height="200dp"
-            app:np_max="59"
-            app:np_min="0"
             app:np_selectedTextColor="@color/colorPrimary"
             app:np_selectedTextSize="30dp"
             app:np_textColor="@color/colorPrimary"
             app:np_textSize="20dp"
             app:np_typeface="@string/roboto_light"
             app:np_value="3"
-            app:np_width="110dp"></com.shawnlin.numberpicker.NumberPicker>
+            app:np_width="110dp" />
 
         <com.shawnlin.numberpicker.NumberPicker
             android:id="@+id/month_picker"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginEnd="40dp"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
@@ -90,19 +95,18 @@
             android:background="@color/background"
             app:np_dividerColor="@color/colorPrimary"
             app:np_fadingEdgeEnabled="true"
-            app:np_formatter="Jan"
             app:np_height="200dp"
             app:np_selectedTextColor="@color/colorPrimary"
             app:np_selectedTextSize="30dp"
             app:np_textColor="@color/colorPrimary"
             app:np_textSize="20dp"
             app:np_typeface="@string/roboto_light"
-            app:np_width="120dp"></com.shawnlin.numberpicker.NumberPicker>
+            app:np_width="120dp" />
 
         <com.shawnlin.numberpicker.NumberPicker
             android:id="@+id/year_picker"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginEnd="5dp"
             android:layout_marginLeft="0dp"
             android:layout_marginRight="5dp"
@@ -110,18 +114,15 @@
             android:background="@color/background"
             app:np_dividerColor="@color/colorPrimary"
             app:np_fadingEdgeEnabled="true"
-            app:np_formatter="10"
             app:np_height="200dp"
-            app:np_max="59"
-            app:np_min="0"
             app:np_selectedTextColor="@color/colorPrimary"
             app:np_selectedTextSize="30dp"
             app:np_textColor="@color/colorPrimary"
             app:np_textSize="20dp"
             app:np_typeface="@string/roboto_light"
-            app:np_value="3"
+            app:np_value="18"
             app:np_width="110dp"
-            app:np_wrapSelectorWheel="true"></com.shawnlin.numberpicker.NumberPicker>
+            app:np_wrapSelectorWheel="true" />
     </LinearLayout>
 
     <LinearLayout
@@ -133,37 +134,36 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/submit_date"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.773">
 
         <com.shawnlin.numberpicker.NumberPicker
             android:id="@+id/hour_picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:layout_marginLeft="10dp"
             android:background="@color/background"
             app:np_dividerColor="@color/colorPrimary"
             app:np_fadingEdgeEnabled="true"
-            app:np_formatter="10"
             app:np_height="180dp"
-            app:np_max="59"
-            app:np_min="0"
+            app:np_formatter="%02d"
             app:np_selectedTextColor="@color/colorPrimary"
             app:np_selectedTextSize="30dp"
             app:np_textColor="@color/colorPrimary"
             app:np_textSize="20dp"
+            app:np_value="8"
             app:np_typeface="@string/roboto_light"
-            app:np_value="3"
-            app:np_width="90dp"></com.shawnlin.numberpicker.NumberPicker>
+            app:np_width="90dp"/>
 
         <com.shawnlin.numberpicker.NumberPicker
             android:id="@+id/split_picker"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:background="@color/background"
             app:np_dividerColor="@color/colorPrimary"
             app:np_fadingEdgeEnabled="true"
@@ -178,50 +178,48 @@
             app:np_textSize="20dp"
             app:np_typeface="@string/roboto_light"
             app:np_value="0"
-            app:np_width="30dp"></com.shawnlin.numberpicker.NumberPicker>
+            app:np_width="30dp"/>
 
         <com.shawnlin.numberpicker.NumberPicker
             android:id="@+id/minute_picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:layout_marginRight="10dp"
-
             android:background="@color/background"
             app:np_dividerColor="@color/colorPrimary"
             app:np_fadingEdgeEnabled="true"
-            app:np_formatter="10"
             app:np_height="180dp"
-            app:np_max="59"
-            app:np_min="0"
+            app:np_formatter="%02d"
             app:np_selectedTextColor="@color/colorPrimary"
             app:np_selectedTextSize="30dp"
             app:np_textColor="@color/colorPrimary"
             app:np_textSize="20dp"
             app:np_typeface="@string/roboto_light"
-            app:np_value="3"
             app:np_width="90dp"
-            app:np_wrapSelectorWheel="true"></com.shawnlin.numberpicker.NumberPicker>
+            app:np_wrapSelectorWheel="true"/>
     </LinearLayout>
 
     <Button
         android:id="@+id/submit_date"
         android:layout_width="288dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="28dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/layout_rounded_primary"
         android:fontFamily="@string/roboto_light"
-        android:text="Confirmar"
+        android:text="@string/confirmation"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="25dp"
+        android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintVertical_bias="1.0" />
 
 
 </android.support.constraint.ConstraintLayout>

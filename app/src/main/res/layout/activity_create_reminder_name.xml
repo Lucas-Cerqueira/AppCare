@@ -4,84 +4,111 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".CreateReminderNameActivity">
 
-    <android.support.v7.widget.AppCompatEditText
-        android:id="@+id/reminderNameText"
-        android:layout_width="309dp"
-        android:layout_height="57dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="52dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="@string/reminder_name"
-        app:backgroundTint="@color/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.508"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:layout_width="fill_parent"
+    <TextView
+        android:id="@+id/custom_picker_title"
+        android:layout_width="359dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="236dp"
+        android:layout_gravity="start"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
+
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/layout_rounded_bg"
+        android:fontFamily="@string/roboto_light"
+        android:gravity="start"
+        android:paddingEnd="0dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="0dp"
+        android:paddingStart="10dp"
+        android:text="@string/reminderSelectNameAndRepeat"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toTopOf="@+id/reminderNameText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.555"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.327" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/reminderNameText"
+        android:layout_width="315dp"
+        android:layout_height="57dp"
+        android:layout_marginBottom="420dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:hint="@string/reminder_name"
+        android:inputType="textPersonName"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.509"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="196dp"
+        android:layout_marginBottom="184dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reminderNameText"
-        app:layout_constraintVertical_bias="1.0"
-        >
+        app:layout_constraintStart_toStartOf="parent">
 
         <android.support.v7.widget.AppCompatRadioButton
             android:id="@+id/onceRadioButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="46dp"
             android:layout_weight="1"
             android:fontFamily="@string/roboto_light"
             android:text="@string/once_button"
-            android:textSize="25dp"
-            app:buttonTint="@color/colorPrimary"
-            />
+            android:textSize="25sp"
+            app:buttonTint="@color/colorPrimary" />
 
         <android.support.v7.widget.AppCompatRadioButton
             android:id="@+id/dailyRadioButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="49dp"
             android:layout_weight="1"
             android:fontFamily="@string/roboto_light"
             android:text="@string/daily_button"
-            android:textSize="25dp"
-            app:buttonTint="@color/colorPrimary"/>
+            android:textSize="25sp"
+            app:buttonTint="@color/colorPrimary" />
 
         <android.support.v7.widget.AppCompatRadioButton
             android:id="@+id/weeklyRadioButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_weight="1"
             android:fontFamily="@string/roboto_light"
             android:text="@string/weekly_button"
-            android:textSize="25dp"
-            app:buttonTint="@color/colorPrimary"/>
+            android:textSize="25sp"
+            app:buttonTint="@color/colorPrimary" />
 
         <android.support.v7.widget.AppCompatRadioButton
             android:id="@+id/monthlyRadioButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_weight="1"
             android:fontFamily="@string/roboto_light"
             android:text="@string/monthly_button"
-            android:textSize="25dp"
-            app:buttonTint="@color/colorPrimary"/>
+            android:textSize="25sp"
+            app:buttonTint="@color/colorPrimary" />
+
     </RadioGroup>
 
     <Button
@@ -94,16 +121,15 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Confirmar"
+        android:background="@drawable/layout_rounded_primary"
+        android:fontFamily="@string/roboto_light"
+        android:text="@string/confirmation"
         android:textAllCaps="false"
-        android:textSize="25dp"
+        android:textColor="@color/white"
+        android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:background="@drawable/layout_rounded_primary"
-        android:textColor="@color/white"
-        android:fontFamily="@string/roboto_light"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup"
-        app:layout_constraintVertical_bias="0.692" />
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
 </android.support.constraint.ConstraintLayout>

@@ -1,60 +1,119 @@
 package com.lf.appcare;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import android.view.View;
+import android.widget.Button;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.shawnlin.numberpicker.NumberPicker;
 
 public class CreateReminderDateActivity extends AppCompatActivity {
 
-    NumberPicker hourPicker, minutePicker, monthPicker;
+    static final int DAILY_REMINDER_REQUEST_CODE = 0;
 
+    NumberPicker hourPicker, minutePicker, monthPicker, dayPicker, yearPicker;
+    Button confirmButton;
+    String reminderName;
+    int reminderType;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_reminder_date);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.create_reminder_toolbar);
-        setSupportActionBar(myToolbar);
 
-        //hourPicker = findViewById(R.id.hourPicker);
-        //minutePicker = findViewById(R.id.minutePicker);
 
-        NumberPicker monthPicker = (NumberPicker) findViewById(R.id.month_picker);
+        reminderName = getIntent().getStringExtra("reminderName");
+        reminderType = getIntent().getIntExtra("reminderType", 1);
+        System.out.println("Importando variaveis: " + reminderName + " " + reminderType);
+
+        hourPicker = findViewById(R.id.hour_picker);
+        minutePicker = findViewById(R.id.minute_picker);
+        dayPicker = findViewById(R.id.day_picker);
+        yearPicker = findViewById(R.id.year_picker);
+        monthPicker = findViewById(R.id.month_picker);
+        confirmButton = findViewById(R.id.submit_date);
+
         String[] data = {"Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
+
+        hourPicker.setMaxValue(23);
+        hourPicker.setMinValue(0);
+        minutePicker.setMaxValue(59);
+        minutePicker.setMinValue(0);
+        dayPicker.setMaxValue(31);
+        dayPicker.setMinValue(0);
         monthPicker.setMinValue(1);
         monthPicker.setMaxValue(data.length);
+
         monthPicker.setDisplayedValues(data);
         // Make it begin on the current month
-        monthPicker.setValue(0);
+        hourPicker.setValue(8);
+        minutePicker.setValue(0);
 
-    }
 
-    private String[] getDatesFromCalendar() {
-        Calendar c1 = Calendar.getInstance();
-        Calendar c2 = Calendar.getInstance();
+        monthPicker.setOnValueChangedListener( new NumberPicker.OnValueChangeListener()
+        {
+            @Override
+           public void onValueChange (NumberPicker picker, int oldVal, int currentMonth) {
+               int currentYear = yearPicker.getValue();
+               int defaultDay = 1;
+               Calendar currentCal = new GregorianCalendar(currentYear, currentMonth - 1, defaultDay);
 
-        List<String> dates = new ArrayList<String>();
-        DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM");
-        dates.add(dateFormat.format(c1.getTime()));
+               int daysInCurrentMonth = currentCal.getActualMaximum(Calendar.DAY_OF_MONTH);
+               dayPicker.setMinValue(1);
+               dayPicker.setMaxValue(daysInCurrentMonth);
+            }
+       });
 
-        for (int i = 0; i < 60; i++) {
-            c1.add(Calendar.DATE, 1);
-            dates.add(dateFormat.format(c1.getTime()));
-        }
-        c2.add(Calendar.DATE, -60);
+        dayPicker.setOnValueChangedListener( new NumberPicker.OnValueChangeListener()
+        {
+            @Override
+            public void onValueChange (NumberPicker picker, int oldVal, int currentMonth) {
+               System.out.println("Dia " + currentMonth);
+            }
+        });
 
-        for (int i = 0; i < 60; i++) {
-            c2.add(Calendar.DATE, 1);
-            dates.add(dateFormat.format(c2.getTime()));
-        }
-        return dates.toArray(new String[dates.size() - 1]);
-    }
+        confirmButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick (View view)
+            {
+
+                int alarmYear = yearPicker.getValue();
+                int alarmMonth = monthPicker.getValue();
+                int alarmDay = dayPicker.getValue();
+                int alarmHour = hourPicker.getValue();
+                int alarmMinute = minutePicker.getValue();
+
+                //Going to 2000's
+                alarmYear = alarmYear + 2000;
+
+                Calendar alarmCalendar = new GregorianCalendar(alarmYear, alarmMonth - 1, alarmDay, alarmHour, alarmMinute);
+
+                System.out.println("Dia " + alarmDay + " Mes " + alarmMonth + " Ano " + alarmYear);
+
+                System.out.println("hora em milisegundos " + alarmCalendar.getTimeInMillis());
+
+                NotificationScheduler.setReminder(CreateReminderDateActivity.this, AlarmReceiver.class, alarmCalendar, reminderType);
+
+            }
+        });
+    };
 }
+

@@ -33,7 +33,11 @@
     <string name="weekly_button">Every week</string>
     <string name="monthly_button">Every month</string>
     <string name="once_button">Once</string>
-    <string name="reminder_name">Name</string>
+    <string name="reminder_name">Reminder\'s name</string>
+    <string name="confirmation">Confirm</string>
+    <string name="reminderSelectDateTime">Select date and time:</string>
+    <string name="reminderSelectNameAndRepeat">Create new reminder</string>
+
 
 
 

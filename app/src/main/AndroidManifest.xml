@@ -41,10 +41,6 @@
             android:label="@string/title_activity_reset_password"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ReminderActivity"
-            android:label="@string/title_activity_reminder"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".CreateReminderDateActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -52,6 +48,8 @@
             android:name=".CreateReminderNameActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <!-- Register the Alarm Receiver -->
+        <receiver android:name=".AlarmReceiver"/>
     </application>
 
 </manifest>
