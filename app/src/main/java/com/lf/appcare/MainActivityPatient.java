@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivityPatient extends AppCompatActivity {
 
     private Button btnChangeEmail, btnChangePassword, btnSendResetEmail, btnRemoveUser,
-            changeEmail, changePassword, sendEmail, remove, signOut, createReminder, settings;
+            changeEmail, changePassword, sendEmail, remove;
 
     private EditText oldEmail, newEmail, password, newPassword;
     private ProgressBar progressBar;
@@ -49,6 +49,8 @@ public class MainActivityPatient extends AppCompatActivity {
                 }
             }
         };
+
+        Button signOut, createReminder, settings;
 
         createReminder =  findViewById(R.id.menuCreateReminder);
         settings = findViewById(R.id.menuSettings);
