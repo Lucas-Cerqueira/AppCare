@@ -2,15 +2,21 @@ package com.lf.appcare;
 
 public class AppCareUser
 {
+    static final String PATIENT = "Patient";
+    static final String CAREGIVER = "Caregiver";
+
     private String uid;
+    private String email;
     private String firstName;
     private String userType;
 
-    private AppCareUser() {}
+    public AppCareUser() {}
 
-    AppCareUser (String uid, String firstName, String userType)
+    public AppCareUser (String uid, String email, String firstName, String userType)
     {
+        System.out.println("APPCARE USER CONSTRUCTOR");
         this.uid = uid;
+        this.email = email;
         this.firstName = firstName;
         this.userType = userType;
     }
@@ -18,6 +24,14 @@ public class AppCareUser
     public String getUid()
     {
         return uid;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getFirstName()

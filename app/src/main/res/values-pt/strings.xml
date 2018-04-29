@@ -8,5 +8,7 @@
     <string name="monthly_button">Todo mês</string>
     <string name="once_button">Uma vez</string>
     <string name="reminder_name">Nome</string>
+    <string name="menuCreateReminder">Criar lembrete</string>
+    <string name="menuSettings">Configurações</string>
 
 </resources>

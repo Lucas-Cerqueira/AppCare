@@ -29,6 +29,13 @@
     <string name="btn_sign_out">Sign Out</string>
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
+    <string name="patient_list">Patients</string>
+    <string name="find_patient_email">Patient email</string>
+    <string name="connect_to_patient_dialog">Connect to patient</string>
+    <string name="connect_patient_button">Connect</string>
+    <string name="cancel">Cancel</string>
+    <string name="remove">Remove</string>
+    <string name="remove_patient_message">Do you want to remove %1$s from your patient list?</string>
     <string name="daily_button">Every day</string>
     <string name="weekly_button">Every week</string>
     <string name="monthly_button">Every month</string>
@@ -37,15 +44,9 @@
     <string name="confirmation">Confirm</string>
     <string name="reminderSelectDateTime">Select date and time:</string>
     <string name="reminderSelectNameAndRepeat">Create new reminder</string>
+    <string name="menuCreateReminder">Create reminder</string>
+    <string name="menuSettings">Settings</string>
 
-
-
-
-
-    <string-array name="user_type_array">
-        <item>Patient</item>
-        <item>Caregiver</item>
-    </string-array>
     <string name="title_activity_reminder">ReminderActivity</string>
     <string name="title_activity_create_reminder">Create Reminder</string>
 
@@ -56,4 +57,12 @@
     <string name="roboto_medium">sans-serif-medium</string>
 
     <string name="number_picker_formatter">%02d</string>
+
+
+    <string-array name="user_type_array">
+        <item>Patient</item>
+        <item>Caregiver</item>
+    </string-array>
+    <string name="title_activity_connect_to_patient">ConnectToPatient</string>
+    <string name="title_activity_patient_list">PatientListActivity</string>
 </resources>

@@ -97,20 +97,26 @@ public class SignupActivity extends AppCompatActivity {
                                 {
                                     Spinner spinner = (Spinner) findViewById(R.id.user_type_spinner);
                                     String userType = spinner.getSelectedItem().toString();
-
                                     EditText name_text = (EditText) findViewById(R.id.first_name);
                                     String firstName = name_text.getText().toString();
-                                    AppCareUser user = new AppCareUser(auth.getCurrentUser().getUid(), firstName, userType);
 
-                                    db.getReference().child("users").child(auth.getCurrentUser().getUid()).setValue(user);
-
-                                    if (userType == "Patient")
+                                    if (userType.equals(AppCareUser.PATIENT))
                                     {
+                                        PatientUser user = new PatientUser(
+                                                auth.getCurrentUser().getUid(),
+                                                auth.getCurrentUser().getEmail(),
+                                                firstName, userType);
+                                        db.getReference().child("users").child(auth.getCurrentUser().getUid()).setValue(user);
                                         startActivity(new Intent(SignupActivity.this, MainActivityPatient.class));
                                         finish();
                                     }
                                     else
                                     {
+                                        CaregiverUser user = new CaregiverUser(
+                                                auth.getCurrentUser().getUid(),
+                                                auth.getCurrentUser().getEmail(),
+                                                firstName, userType);
+                                        db.getReference().child("users").child(auth.getCurrentUser().getUid()).setValue(user);
                                         startActivity(new Intent(SignupActivity.this, MainActivityCaregiver.class));
                                         finish();
                                     }
