@@ -26,6 +26,7 @@
         </activity>
         <activity
             android:name=".MainActivityPatient"
+            android:exported="true"
             android:label="@string/title_activity_profile_patient"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -49,6 +50,22 @@
             android:exported="true"
             android:label="@string/title_activity_connect_to_patient"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".CreateReminderNameActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".CreateReminderDateActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".CreateReminderHourActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <receiver android:name="AlarmReceiver" />
+
     </application>
+
+
 
 </manifest>

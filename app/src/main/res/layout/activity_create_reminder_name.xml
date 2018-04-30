@@ -7,45 +7,35 @@
     android:background="@color/background"
     tools:context=".CreateReminderNameActivity">
 
-    <TextView
-        android:id="@+id/custom_picker_title"
-        android:layout_width="359dp"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="390dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/layout_rounded_bg"
-        android:fontFamily="@string/roboto_light"
-        android:gravity="start"
-        android:paddingEnd="0dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="0dp"
-        android:paddingStart="10dp"
-        android:text="@string/reminderSelectNameAndRepeat"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        android:textStyle="normal"
-        app:layout_constraintBottom_toTopOf="@+id/reminderNameText"
+        android:background="@color/colorPrimary"
+        android:minHeight="60dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.555"
+        app:layout_constraintHorizontal_bias="0.466"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.327" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <android.support.v7.widget.AppCompatEditText
         android:id="@+id/reminderNameText"
         android:layout_width="315dp"
         android:layout_height="57dp"
-        android:layout_marginBottom="420dp"
+        android:layout_marginBottom="416dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/reminder_name"
         android:inputType="textPersonName"
@@ -53,13 +43,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.509"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.965" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="fill_parent"
         android:layout_height="196dp"
-        android:layout_marginBottom="184dp"
+        android:layout_marginBottom="176dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -130,6 +122,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+        app:layout_constraintVertical_bias="0.383" />
 
 </android.support.constraint.ConstraintLayout>

@@ -1,7 +1,10 @@
 package com.lf.appcare;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -26,13 +29,20 @@ public class CreateReminderDateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_reminder_date);
 
+        Toolbar toolbar =  findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.menuCreateReminder));
+//        toolbar.setTitleTextColor(android.graphics.Color.WHITE);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
         reminderName = getIntent().getStringExtra("reminderName");
         reminderType = getIntent().getIntExtra("reminderType", 1);
         System.out.println("Importando variaveis: " + reminderName + " " + reminderType);
 
-        hourPicker = findViewById(R.id.hour_picker);
-        minutePicker = findViewById(R.id.minute_picker);
+//        hourPicker = findViewById(R.id.hour_picker);
+//        minutePicker = findViewById(R.id.minute_picker);
         dayPicker = findViewById(R.id.day_picker);
         yearPicker = findViewById(R.id.year_picker);
         monthPicker = findViewById(R.id.month_picker);
@@ -40,10 +50,10 @@ public class CreateReminderDateActivity extends AppCompatActivity {
 
         String[] data = {"Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
 
-        hourPicker.setMaxValue(23);
-        hourPicker.setMinValue(0);
-        minutePicker.setMaxValue(59);
-        minutePicker.setMinValue(0);
+//        hourPicker.setMaxValue(23);
+//        hourPicker.setMinValue(0);
+//        minutePicker.setMaxValue(59);
+//        minutePicker.setMinValue(0);
         dayPicker.setMaxValue(31);
         dayPicker.setMinValue(0);
         monthPicker.setMinValue(1);
@@ -51,8 +61,8 @@ public class CreateReminderDateActivity extends AppCompatActivity {
 
         monthPicker.setDisplayedValues(data);
         // Make it begin on the current month
-        hourPicker.setValue(8);
-        minutePicker.setValue(0);
+//        hourPicker.setValue(8);
+//        minutePicker.setValue(0);
 
 
         monthPicker.setOnValueChangedListener( new NumberPicker.OnValueChangeListener()
@@ -77,31 +87,44 @@ public class CreateReminderDateActivity extends AppCompatActivity {
             }
         });
 
+        yearPicker.setOnValueChangedListener( new NumberPicker.OnValueChangeListener()
+        {
+            @Override
+            public void onValueChange (NumberPicker picker, int oldVal, int currentMonth) {
+                System.out.println("Ano " + currentMonth);
+            }
+        });
+
+
         confirmButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick (View view)
             {
+                Intent intent = new Intent(getApplicationContext(), CreateReminderHourActivity.class);
+                intent.putExtra("reminderDay", dayPicker.getValue());
+                intent.putExtra("reminderMonth", monthPicker.getValue());
+                intent.putExtra("reminderYear", yearPicker.getValue());
+                intent.putExtra("reminderType", reminderType);
 
-                int alarmYear = yearPicker.getValue();
-                int alarmMonth = monthPicker.getValue();
-                int alarmDay = dayPicker.getValue();
-                int alarmHour = hourPicker.getValue();
-                int alarmMinute = minutePicker.getValue();
-
-                //Going to 2000's
-                alarmYear = alarmYear + 2000;
-
-                Calendar alarmCalendar = new GregorianCalendar(alarmYear, alarmMonth - 1, alarmDay, alarmHour, alarmMinute);
-
-                System.out.println("Dia " + alarmDay + " Mes " + alarmMonth + " Ano " + alarmYear);
-
-                System.out.println("hora em milisegundos " + alarmCalendar.getTimeInMillis());
-
-                NotificationScheduler.setReminder(CreateReminderDateActivity.this, AlarmReceiver.class, alarmCalendar, reminderType);
-
+                startActivity(intent);
+                finish();
             }
         });
+
+
     };
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            Intent intent = new Intent(getApplicationContext(), CreateReminderNameActivity.class);
+            startActivity(intent);
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }
 

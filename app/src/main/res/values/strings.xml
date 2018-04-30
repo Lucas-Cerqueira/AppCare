@@ -42,7 +42,8 @@
     <string name="once_button">Once</string>
     <string name="reminder_name">Reminder\'s name</string>
     <string name="confirmation">Confirm</string>
-    <string name="reminderSelectDateTime">Select date and time:</string>
+    <string name="reminderSelectDate">Select date:</string>
+    <string name="reminderSelectHour">Select hour:</string>
     <string name="reminderSelectNameAndRepeat">Create new reminder</string>
     <string name="menuCreateReminder">Create reminder</string>
     <string name="menuSettings">Settings</string>

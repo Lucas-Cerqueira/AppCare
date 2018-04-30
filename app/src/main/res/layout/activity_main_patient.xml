@@ -4,36 +4,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:background="@color/background"
-    tools:context=".MainActivityPatient">
+    android:background="@color/background">
 
-    <Button
-        android:id="@+id/menuCreateReminder"
-        style="@android:style/Widget.Holo.Button.Borderless"
-        android:layout_width="352dp"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="390dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="116dp"
+        android:background="@color/colorPrimary"
+        android:minHeight="60dp"
+        android:theme="@style/Theme.AppCompat.Light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        />
+
+    <Button
+        android:id="@+id/menuCreateReminder"
+        android:layout_width="318dp"
+        android:layout_height="65dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/layout_rounded_primary"
         android:fontFamily="@string/roboto_light"
         android:text="@string/menuCreateReminder"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toTopOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.181" />
 
     <Button
         android:id="@+id/menuSettings"
-        style="@android:style/Widget.Holo.Button.Borderless.Small"
-        android:layout_width="352dp"
-        android:layout_height="wrap_content"
+        android:layout_width="318dp"
+        android:layout_height="65dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
@@ -46,29 +63,49 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="25sp"
-        app:layout_constraintBottom_toTopOf="@+id/menuSignOut"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/menuCreateReminder" />
+        app:layout_constraintTop_toBottomOf="@+id/menuCreateReminder"
+        app:layout_constraintVertical_bias="0.073" />
 
     <Button
         android:id="@+id/menuSignOut"
-        style="@android:style/Widget.Holo.Button.Borderless.Small"
-        android:layout_width="352dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="232dp"
+        android:layout_width="318dp"
+        android:layout_height="65dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/layout_rounded_primary"
         android:fontFamily="@string/roboto_light"
         android:text="@string/btn_sign_out"
         android:textAllCaps="false"
         android:textColor="@color/white"
+
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/menuSettings"
+        app:layout_constraintVertical_bias="0.105" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/toolbar" />
 
 </android.support.constraint.ConstraintLayout>
