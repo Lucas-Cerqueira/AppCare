@@ -47,6 +47,8 @@
     <string name="reminderSelectNameAndRepeat">Create new reminder</string>
     <string name="menuCreateReminder">Create reminder</string>
     <string name="menuSettings">Settings</string>
+    <string name="alarmDismiss">Dismiss</string>
+
 
     <string name="title_activity_reminder">ReminderActivity</string>
     <string name="title_activity_create_reminder">Create Reminder</string>

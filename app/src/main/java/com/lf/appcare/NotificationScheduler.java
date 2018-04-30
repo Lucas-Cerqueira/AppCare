@@ -53,7 +53,7 @@ public class NotificationScheduler
         return (thenTime - currentMilliseconds); // this is what you set as trigger point time i.e one month after
     }
 
-    public static void setReminder(Context context,Class<?> cls, Calendar alarmCalendar, int reminderType)
+    public static void setReminder(Context context,Class<?> cls, Calendar alarmCalendar, int reminderType, String reminderName, int reminderHour, int reminderMinute)
     {
         long intervalTime;
         switch (reminderType)
@@ -89,6 +89,9 @@ public class NotificationScheduler
 
 
         Intent intent1 = new Intent(context, cls);
+        intent1.putExtra("reminderName", reminderName);
+        intent1.putExtra("reminderHour", reminderHour);
+        intent1.putExtra("reminderMinute", reminderMinute);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, DAILY_REMINDER_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         am.setInexactRepeating(AlarmManager.RTC_WAKEUP, alarmCalendar.getTimeInMillis(), intervalTime, pendingIntent);

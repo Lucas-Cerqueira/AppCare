@@ -1,19 +1,17 @@
 package com.lf.appcare;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import java.util.ArrayList;
+import com.shawnlin.numberpicker.NumberPicker;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
-
-import com.shawnlin.numberpicker.NumberPicker;
 
 public class CreateReminderHourActivity extends AppCompatActivity {
 
@@ -22,6 +20,7 @@ public class CreateReminderHourActivity extends AppCompatActivity {
     NumberPicker hourPicker, minutePicker;
     Button confirmButton;
     int reminderDay, reminderMonth, reminderYear, reminderType;
+    String reminderName;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -30,7 +29,6 @@ public class CreateReminderHourActivity extends AppCompatActivity {
 
         Toolbar toolbar =  findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.menuCreateReminder));
-//        toolbar.setTitleTextColor(android.graphics.Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -39,6 +37,7 @@ public class CreateReminderHourActivity extends AppCompatActivity {
         reminderMonth = getIntent().getIntExtra("reminderMonth", 1);
         reminderYear = getIntent().getIntExtra("reminderYear", 18);
         reminderType = getIntent().getIntExtra("reminderType", 1);
+        reminderName = getIntent().getStringExtra("reminderName");
 
 
         System.out.println("Importando variaveis: " + reminderDay + " " + reminderMonth + " " + reminderYear + " " + reminderType);
@@ -77,10 +76,10 @@ public class CreateReminderHourActivity extends AppCompatActivity {
 
                 System.out.println("hora em milisegundos " + alarmCalendar.getTimeInMillis());
 
-                NotificationScheduler.setReminder(CreateReminderHourActivity.this, AlarmReceiver.class, alarmCalendar, reminderType);
+                NotificationScheduler.setReminder(CreateReminderHourActivity.this, AlarmReceiver.class, alarmCalendar, reminderType, reminderName, alarmHour, alarmMinute);
 
-                Intent intent = new Intent(getApplicationContext(), MainActivityPatient.class);
-                startActivity(intent);
+                Intent intentStart = new Intent(getApplicationContext(), MainActivityPatient.class);
+                startActivity(intentStart);
                 finish();
 
             }
