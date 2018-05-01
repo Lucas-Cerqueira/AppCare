@@ -19,6 +19,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -99,7 +100,7 @@ public class SignupActivity extends AppCompatActivity {
                                     String userType = spinner.getSelectedItem().toString();
                                     EditText name_text = (EditText) findViewById(R.id.first_name);
                                     String firstName = name_text.getText().toString();
-
+                                    String token = FirebaseInstanceId.getInstance().getToken();
                                     if (userType.equals(AppCareUser.PATIENT))
                                     {
                                         PatientUser user = new PatientUser(
@@ -107,6 +108,7 @@ public class SignupActivity extends AppCompatActivity {
                                                 auth.getCurrentUser().getEmail(),
                                                 firstName, userType);
                                         db.getReference().child("users").child(auth.getCurrentUser().getUid()).setValue(user);
+                                        db.getReference().child("users").child(auth.getCurrentUser().getUid()).child("notificationTokens").child(token).setValue(token);
                                         startActivity(new Intent(SignupActivity.this, MainActivityPatient.class));
                                         finish();
                                     }
@@ -117,6 +119,7 @@ public class SignupActivity extends AppCompatActivity {
                                                 auth.getCurrentUser().getEmail(),
                                                 firstName, userType);
                                         db.getReference().child("users").child(auth.getCurrentUser().getUid()).setValue(user);
+                                        db.getReference().child("users").child(auth.getCurrentUser().getUid()).child("notificationTokens").child(token).setValue(token);
                                         startActivity(new Intent(SignupActivity.this, MainActivityCaregiver.class));
                                         finish();
                                     }
