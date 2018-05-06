@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -50,8 +51,12 @@ public class PatientListActivity extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_list);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar =  findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.patient_list));
+//        toolbar.setTitleTextColor(android.graphics.Color.WHITE);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         auth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance().getReference();
@@ -118,7 +123,7 @@ public class PatientListActivity extends AppCompatActivity {
             }
         });
 
-        // Get list of user emails from the database
+        // Get list of patient emails from the database
         ref = db.child("users");
         ref.addValueEventListener(new ValueEventListener()
         {
@@ -143,7 +148,7 @@ public class PatientListActivity extends AppCompatActivity {
             }
         });
 
-        // Add patient button
+        // "Add patient" button
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener()
         {
@@ -198,7 +203,8 @@ public class PatientListActivity extends AppCompatActivity {
 
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_dropdown_item_1line, emailList);
-                textView = (AutoCompleteTextView) dialog.findViewById(R.id.patientEmail);
+                textView = dialog.findViewById(R.id.patientEmail);
+                textView.setThreshold(1);
                 textView.setAdapter(adapter);
 
                 dialog.show();
@@ -206,11 +212,27 @@ public class PatientListActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            Intent intent = new Intent(getApplicationContext(), MainActivityCaregiver.class);
+            startActivity(intent);
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void ListPatients ()
     {
         if (patientList == null)
         {
             System.out.println("NOT PATIENTLIST REFERENCE");
+            patientListView.setVisibility(View.GONE);
+        }
+        else if (patientList.isEmpty())
+        {
+            System.out.println("EMPTY PATIENT LIST");
             patientListView.setVisibility(View.GONE);
         }
         else

@@ -1,6 +1,6 @@
 package com.lf.appcare;
 
-import java.util.Date;
+import java.util.Calendar;
 
 public class Reminder
 {
@@ -9,14 +9,31 @@ public class Reminder
     public static final int WEEKLY = 3;
     public static final int MONTHLY = 4;
 
+    private String userUid;
     private String name;
     private int reminderType;
-    private Date date;
+    private Calendar calendar;
 
-    Reminder (String name, int reminderType)
+    public Reminder() {}
+
+    Reminder (String name, int reminderType, Calendar calendar)
     {
+        this.userUid = "";
         this.name = name;
         this.reminderType = reminderType;
+        this.calendar = calendar;
+    }
+
+    Reminder (String userUid, String name, int reminderType, Calendar calendar)
+    {
+        this.userUid = userUid;
+        this.name = name;
+        this.reminderType = reminderType;
+        this.calendar = calendar;
+    }
+
+    public String getUserUid() {
+        return userUid;
     }
 
     public String getName() {

@@ -85,4 +85,16 @@ public class CaregiverUser extends AppCareUser
         }
         return -1;
     }
+
+    public PatientUser FindPatientByEmail (String email)
+    {
+        for (PatientUser patient: patientList)
+        {
+            if (patient.getEmail().equals(email))
+            {
+                return patient;
+            }
+        }
+        return null;
+    }
 }

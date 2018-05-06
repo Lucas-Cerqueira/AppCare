@@ -1,7 +1,9 @@
 package com.lf.appcare;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -84,6 +86,16 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     if (intent != null)
                     {
+                        // Store user info in shared preferences
+                        SharedPreferences myPreferences
+                                = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                        SharedPreferences.Editor myEditor = myPreferences.edit();
+                        myEditor.putString("UID", user.getUid());
+                        myEditor.putString("NAME", user.getFirstName());
+                        myEditor.putString("EMAIL", user.getEmail());
+                        myEditor.putString("USERTYPE", userType);
+                        myEditor.apply();
+
                         startActivity(intent);
                         finish();
                     }
@@ -199,6 +211,16 @@ public class LoginActivity extends AppCompatActivity {
                                             }
                                             if (intent != null)
                                             {
+                                                // Store user info in shared preferences
+                                                SharedPreferences myPreferences
+                                                        = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                                                SharedPreferences.Editor myEditor = myPreferences.edit();
+                                                myEditor.putString("UID", user.getUid());
+                                                myEditor.putString("NAME", user.getFirstName());
+                                                myEditor.putString("EMAIL", user.getEmail());
+                                                myEditor.putString("USERTYPE", userType);
+                                                myEditor.apply();
+
                                                 startActivity(intent);
                                                 finish();
                                             }

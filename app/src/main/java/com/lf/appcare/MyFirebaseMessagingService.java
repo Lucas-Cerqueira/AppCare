@@ -11,6 +11,9 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
+
+import java.util.Map;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService
 {
@@ -18,11 +21,28 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage)
     {
-
+        Map<String, String> data = remoteMessage.getData();
         // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0)
+        if (data.size() > 0)
         {
-            showNotification(remoteMessage.getData().get("title"), remoteMessage.getData().get("author"));
+            if (data.get("messageType") == null)
+            {
+                Log.d ("ERROR", "Missing message type");
+                return;
+            }
+            // If it is a create reminder message
+            if (data.get("messageType").equals("newReminder"))
+            {
+                Log.d("NEW REMINDER",
+                        "Reminder name: " + data.get("reminderName") +
+                        "\nReminder type: " + data.get("reminderType") +
+                        "\nReminder date: " + data.get("reminderDate"));
+            }
+            //else if ()
+            //{
+
+            //}
+            //showNotification(data.get("title"), data.get("author"));
         }
 
         // Check if message contains a notification payload.

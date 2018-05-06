@@ -46,6 +46,10 @@
             android:label="@string/title_activity_patient_list"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
+            android:name=".ReminderListCaregiverActivity"
+            android:label="@string/title_activity_reminder_list"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
             android:name=".AddPatientActivity"
             android:exported="true"
             android:label="@string/title_activity_connect_to_patient"
@@ -60,6 +64,10 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".CreateReminderHourActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".AlarmNotificationActivity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar"/>
         <receiver android:name="AlarmReceiver" />
