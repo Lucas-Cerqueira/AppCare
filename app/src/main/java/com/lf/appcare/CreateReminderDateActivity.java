@@ -49,7 +49,7 @@ public class CreateReminderDateActivity extends AppCompatActivity {
         monthPicker = findViewById(R.id.month_picker);
         confirmButton = findViewById(R.id.submit_date);
 
-        String[] data = {"Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
+        String[] data = getResources().getStringArray(R.array.months_array);
 
 //        hourPicker.setMaxValue(23);
 //        hourPicker.setMinValue(0);

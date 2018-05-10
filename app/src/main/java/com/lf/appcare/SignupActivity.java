@@ -1,6 +1,7 @@
 package com.lf.appcare;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +35,9 @@ public class SignupActivity extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        EditText password = (EditText) findViewById( R.id.password);
+        password.setTypeface( Typeface.DEFAULT );
 
         //Get Firebase instances
         auth = FirebaseAuth.getInstance();

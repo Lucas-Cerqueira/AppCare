@@ -2,6 +2,7 @@ package com.lf.appcare;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -43,6 +44,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        EditText password = (EditText) findViewById( R.id.password );
+        password.setTypeface( Typeface.DEFAULT );
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();

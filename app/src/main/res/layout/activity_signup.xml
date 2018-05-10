@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorPrimary"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="@dimen/activity_horizontal_margin">
@@ -30,7 +30,9 @@
             <EditText
                 android:id="@+id/email"
                 android:layout_width="match_parent"
+                android:textSize="20dp"
                 android:layout_height="wrap_content"
+                android:fontFamily="@string/roboto_light"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
@@ -47,7 +49,9 @@
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="20dp"
                 android:focusableInTouchMode="true"
+                android:fontFamily="@string/roboto_light"
                 android:hint="@string/hint_password"
                 android:imeActionId="123"
                 android:imeOptions="actionUnspecified"
@@ -73,6 +77,7 @@
                 android:inputType="textPersonName"
                 android:maxLines="1"
                 android:singleLine="true"
+                android:textSize="20dp"
                 android:textColor="@android:color/white" />
 
         </android.support.design.widget.TextInputLayout>
@@ -81,6 +86,7 @@
             android:id="@+id/user_type_spinner"
             android:layout_width="match_parent"
             android:layout_height="42dp"
+            android:textSize="20dp"
             android:layout_marginTop="10dp"
             android:dropDownWidth="match_parent"
             android:entries="@array/user_type_array"
@@ -88,14 +94,15 @@
 
         <Button
             android:id="@+id/sign_up_button"
-            style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:background="@color/colorAccent"
+            android:fontFamily="@string/roboto_light"
+            android:background="@drawable/layout_rounded_bg"
             android:text="@string/action_sign_in_short"
-            android:textColor="@android:color/black"
-            android:textStyle="bold" />
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            />
 
 
         <!-- Link to Login Screen -->
@@ -109,7 +116,7 @@
             android:text="@string/btn_link_to_login"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="20dp" />
+            android:textSize="18dp" />
     </LinearLayout>
 
     <ProgressBar

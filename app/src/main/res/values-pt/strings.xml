@@ -12,4 +12,19 @@
     <string name="menuSettings">Configurações</string>
 
 
+    <string-array name="months_array">
+        <item>Jan</item>
+        <item>Fev</item>
+        <item>Mar</item>
+        <item>Abr</item>
+        <item>Mai</item>
+        <item>Jun</item>
+        <item>Jul</item>
+        <item>Ago</item>
+        <item>Set</item>
+        <item>Out</item>
+        <item>Nov</item>
+        <item>Dec</item>
+    </string-array>
+
 </resources>

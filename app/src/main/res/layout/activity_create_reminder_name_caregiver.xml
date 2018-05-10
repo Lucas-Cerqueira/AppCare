@@ -36,6 +36,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="88dp"
+        android:textSize="20dp"
         android:ems="10"
         android:hint="@string/patient_email"
         android:inputType="textEmailAddress"
@@ -56,6 +57,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:textSize="20sp"
         android:ems="10"
         android:hint="@string/reminder_name"
         android:inputType="textPersonName"
@@ -86,7 +88,7 @@
             android:layout_weight="1"
             android:fontFamily="@string/roboto_light"
             android:text="@string/once_button"
-            android:textSize="25sp"
+            android:textSize="20sp"
             app:buttonTint="@color/colorPrimary" />
 
         <android.support.v7.widget.AppCompatRadioButton
@@ -96,7 +98,7 @@
             android:layout_weight="1"
             android:fontFamily="@string/roboto_light"
             android:text="@string/daily_button"
-            android:textSize="25sp"
+            android:textSize="20sp"
             app:buttonTint="@color/colorPrimary" />
 
         <android.support.v7.widget.AppCompatRadioButton
@@ -106,7 +108,7 @@
             android:layout_weight="1"
             android:fontFamily="@string/roboto_light"
             android:text="@string/weekly_button"
-            android:textSize="25sp"
+            android:textSize="20sp"
             app:buttonTint="@color/colorPrimary" />
 
         <android.support.v7.widget.AppCompatRadioButton
@@ -116,7 +118,7 @@
             android:layout_weight="1"
             android:fontFamily="@string/roboto_light"
             android:text="@string/monthly_button"
-            android:textSize="25sp"
+            android:textSize="20sp"
             app:buttonTint="@color/colorPrimary" />
 
     </RadioGroup>
@@ -136,7 +138,7 @@
         android:text="@string/confirmation"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="25sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

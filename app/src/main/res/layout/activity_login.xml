@@ -34,7 +34,7 @@
                 android:layout_marginBottom="10dp"
                 android:hint="@string/hint_email"
                 android:inputType="textEmailAddress"
-                android:textColor="@android:color/white"
+                android:fontFamily="@string/roboto_light"
                 android:textColorHint="#ffffff"
                 tools:alpha="1" />
         </android.support.design.widget.TextInputLayout>
@@ -48,9 +48,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:inputType="textPassword"
-                android:textColor="@android:color/white"
                 android:hint="@string/hint_password"
+                android:inputType="textPassword"
                 android:textColorHint="@android:color/white" />
         </android.support.design.widget.TextInputLayout>
 
@@ -61,8 +60,11 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dip"
-            android:background="@color/background"
+            android:background="@drawable/layout_rounded_bg"
             android:text="@string/btn_login"
+            android:textAllCaps="false"
+            android:textSize="20dp"
+            android:fontFamily="@string/roboto_light"
             android:textColor="@android:color/black" />
 
         <Button
@@ -71,6 +73,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dip"
             android:background="@null"
+            android:textSize="18dp"
+            android:fontFamily="@string/roboto_light"
             android:text="@string/btn_forgot_password"
             android:textAllCaps="false"
             android:textColor="@color/white" />
@@ -85,8 +89,9 @@
             android:background="@null"
             android:text="@string/btn_link_to_register"
             android:textAllCaps="false"
+            android:fontFamily="@string/roboto_light"
             android:textColor="@color/white"
-            android:textSize="15dp" />
+            android:textSize="18dp"/>
 
     </LinearLayout>
 
