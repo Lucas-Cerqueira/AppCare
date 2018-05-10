@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -14,8 +16,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.shawnlin.numberpicker.NumberPicker;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NavigableMap;
+import java.util.Set;
+import java.util.TreeMap;
 
 public class CreateReminderHourActivity extends AppCompatActivity {
 
@@ -85,9 +97,6 @@ public class CreateReminderHourActivity extends AppCompatActivity {
 
                 System.out.println("hora em milisegundos " + alarmCalendar.getTimeInMillis());
 
-                // Alterar o setReminder para receber um id do reminder? Ou fazer ele retornar o id do novo reminder?
-                NotificationScheduler.setReminder(CreateReminderHourActivity.this, AlarmReceiver.class, alarmCalendar, reminderType, reminderName, alarmHour, alarmMinute);
-
                 // Get user type from preferences
                 SharedPreferences myPreferences
                         = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -96,9 +105,46 @@ public class CreateReminderHourActivity extends AppCompatActivity {
 
                 if (userType.equals(AppCareUser.PATIENT))
                 {
-                    // Reminder reminder = new Reminder (reminderName, reminderType, alarmCalendar);
-                    // Salvar o reminder localmente pelo id, talvez com Map, HashMap
+                    Reminder reminder = new Reminder (reminderName, reminderType, alarmCalendar);
+                    NavigableMap<String,Reminder> reminderMap = new TreeMap<>();
 
+                    try
+                    {
+                        reminderMap = (NavigableMap<String,Reminder>) InternalStorage.readObject(CreateReminderHourActivity.this, "reminders");
+                        // If the id reset to 0
+                        if (Reminder.nextId == 0)
+                            Reminder.nextId = Integer.valueOf (reminderMap.lastEntry().getKey()) + 1;
+
+                        for (Map.Entry<String, Reminder> entry: reminderMap.entrySet())
+                        {
+                            System.out.println(entry.getKey()+" : "+entry.getValue().getName()+" : "+entry.getValue().getReminderType());
+                        }
+                    }
+                    catch (IOException e)
+                    {
+                        System.out.println("REMINDERS FILE: " + e.getMessage());
+                    }
+                    catch (ClassNotFoundException e)
+                    {
+                        Log.e("REMINDERS FILE", e.getMessage());
+                        return;
+                    }
+
+                    reminderMap.put(Integer.toString(Reminder.nextId), reminder);
+                    try
+                    {
+                        InternalStorage.writeObject(CreateReminderHourActivity.this, "reminders", reminderMap);
+                        System.out.println("Updated local reminders file");
+                    }
+                    catch (IOException e)
+                    {
+                        System.out.println("REMINDERS FILE: " + e.getMessage());
+                    }
+
+                    // Alterar o setReminder para receber um id do reminder? Ou fazer ele retornar o id do novo reminder?
+                    NotificationScheduler.setReminder(CreateReminderHourActivity.this, AlarmReceiver.class, alarmCalendar, reminderType, reminderName, Reminder.nextId);
+                    Reminder.nextId += 1;
+                    System.out.println("Next id: " + Reminder.nextId);
                     Intent intentStart = new Intent(getApplicationContext(), MainActivityPatient.class);
                     startActivity(intentStart);
                     finish();
@@ -108,7 +154,6 @@ public class CreateReminderHourActivity extends AppCompatActivity {
                     System.out.println("Reminder name:" + reminderName + "\nReminder type:" + reminderType);
                     Reminder reminder = new Reminder(patientUid, reminderName, reminderType, alarmCalendar);
                     db.child("remoteReminders").child(userUid).push().setValue(reminder);
-                    System.out.println("Reminder added to DB... in theory");
 
                     Intent intentStart = new Intent(getApplicationContext(), ReminderListCaregiverActivity.class);
                     startActivity(intentStart);
