@@ -47,6 +47,7 @@
     <string name="reminderSelectHour">Select hour:</string>
     <string name="reminderSelectNameAndRepeat">Create new reminder</string>
     <string name="menuCreateReminder">Create reminder</string>
+    <string name="menuRemoveReminder">Remove reminder</string>
     <string name="menuSettings">Settings</string>
     <string name="alarmDismiss">Dismiss</string>
     <string name="reminder_list_caregiver">Reminders</string>

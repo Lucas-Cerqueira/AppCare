@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 public class AlarmNotificationActivity extends AppCompatActivity {
 
-    String reminderName;
-    int reminderHour, reminderMinute;
+    private String reminderName;
+    private int reminderHour, reminderMinute, reminderType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +22,11 @@ public class AlarmNotificationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_alarm_notification);
 
         reminderName = getIntent().getStringExtra("reminderName");
+        reminderType = getIntent().getIntExtra("reminderType", 1);
         reminderHour = getIntent().getIntExtra("reminderHour", 1);
         reminderMinute = getIntent().getIntExtra("reminderMinute", 1);
+
+
 
         System.out.println("Nome do alarme ao chegar no alarmnotification: " + reminderName + " hora: " + reminderHour + " minuto: " + reminderMinute);
 

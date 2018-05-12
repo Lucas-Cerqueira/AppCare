@@ -16,6 +16,7 @@ public class MainActivityPatient extends AppCompatActivity {
     private ProgressBar progressBar;
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
+    private Button signOut, createReminder, removeReminder, settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +49,8 @@ public class MainActivityPatient extends AppCompatActivity {
             }
         };
 
-        Button signOut, createReminder, settings;
-
         createReminder =  findViewById(R.id.menuCreateReminder);
+        removeReminder =  findViewById(R.id.menuRemoveReminder);
         settings = findViewById(R.id.menuSettings);
         signOut = findViewById(R.id.menuSignOut);
 
@@ -60,6 +60,17 @@ public class MainActivityPatient extends AppCompatActivity {
             public void onClick (View view)
             {
                 Intent intent = new Intent(getApplicationContext(), CreateReminderNameActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        removeReminder.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick (View view)
+            {
+                Intent intent = new Intent(getApplicationContext(), ReminderListPatientActivity.class);
                 startActivity(intent);
                 finish();
             }

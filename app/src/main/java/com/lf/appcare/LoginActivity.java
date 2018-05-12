@@ -44,8 +44,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
 
-        EditText password = (EditText) findViewById( R.id.password );
+        EditText password = findViewById( R.id.password );
         password.setTypeface( Typeface.DEFAULT );
 
         //Get Firebase auth instance

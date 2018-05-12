@@ -90,6 +90,7 @@ public class NotificationScheduler
 
         Intent intent1 = new Intent(context, cls);
         intent1.putExtra("reminderName", reminderName);
+        intent1.putExtra("reminderType", reminderType);
         intent1.putExtra("reminderHour", alarmCalendar.get(Calendar.HOUR_OF_DAY));
         intent1.putExtra("reminderMinute", alarmCalendar.get(Calendar.MINUTE));
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, reminderId, intent1, PendingIntent.FLAG_UPDATE_CURRENT);

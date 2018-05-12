@@ -35,10 +35,11 @@ public class CreateReminderHourActivity extends AppCompatActivity {
 
     private DatabaseReference db;
 
-    NumberPicker hourPicker, minutePicker;
-    Button confirmButton;
-    int reminderDay, reminderMonth, reminderYear, reminderType;
-    String reminderName, patientUid;
+    private NumberPicker hourPicker, minutePicker;
+    private  Button confirmButton;
+    private int reminderDay, reminderMonth, reminderYear, reminderType;
+    private String reminderName, patientUid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -105,52 +106,19 @@ public class CreateReminderHourActivity extends AppCompatActivity {
 
                 if (userType.equals(AppCareUser.PATIENT))
                 {
-                    Reminder reminder = new Reminder (reminderName, reminderType, alarmCalendar);
-                    NavigableMap<String,Reminder> reminderMap = new TreeMap<>();
-
-                    try
-                    {
-                        reminderMap = (NavigableMap<String,Reminder>) InternalStorage.readObject(CreateReminderHourActivity.this, "reminders");
-                        // If the id reset to 0
-                        if (Reminder.nextId == 0)
-                            Reminder.nextId = Integer.valueOf (reminderMap.lastEntry().getKey()) + 1;
-
-                        for (Map.Entry<String, Reminder> entry: reminderMap.entrySet())
-                        {
-                            System.out.println(entry.getKey()+" : "+entry.getValue().getName()+" : "+entry.getValue().getReminderType());
-                        }
-                    }
-                    catch (IOException e)
-                    {
-                        System.out.println("REMINDERS FILE: " + e.getMessage());
-                    }
-                    catch (ClassNotFoundException e)
-                    {
-                        Log.e("REMINDERS FILE", e.getMessage());
-                        return;
-                    }
-
-                    reminderMap.put(Integer.toString(Reminder.nextId), reminder);
-                    try
-                    {
-                        InternalStorage.writeObject(CreateReminderHourActivity.this, "reminders", reminderMap);
-                        System.out.println("Updated local reminders file");
-                    }
-                    catch (IOException e)
-                    {
-                        System.out.println("REMINDERS FILE: " + e.getMessage());
-                    }
-
-                    // Alterar o setReminder para receber um id do reminder? Ou fazer ele retornar o id do novo reminder?
-                    NotificationScheduler.setReminder(CreateReminderHourActivity.this, AlarmReceiver.class, alarmCalendar, reminderType, reminderName, Reminder.nextId);
-                    Reminder.nextId += 1;
+                    // Create and set the reminder
+                    Reminder reminder = new Reminder (userUid, reminderName, reminderType, alarmCalendar);
+                    reminder.set(getApplicationContext());
                     System.out.println("Next id: " + Reminder.nextId);
+
+                    // Return to the main screen
                     Intent intentStart = new Intent(getApplicationContext(), MainActivityPatient.class);
                     startActivity(intentStart);
                     finish();
                 }
                 else if (userType.equals(AppCareUser.CAREGIVER))
                 {
+                    // Create the remote reminder and write it to the database
                     System.out.println("Reminder name:" + reminderName + "\nReminder type:" + reminderType);
                     Reminder reminder = new Reminder(patientUid, reminderName, reminderType, alarmCalendar);
                     db.child("remoteReminders").child(userUid).push().setValue(reminder);
