@@ -53,7 +53,7 @@ public class NotificationScheduler
         return (thenTime - currentMilliseconds); // this is what you set as trigger point time i.e one month after
     }
 
-    public static void setReminder(Context context,Class<?> cls, Calendar alarmCalendar, int reminderType, String reminderName, int reminderHour, int reminderMinute)
+    public static void setReminder(Context context,Class<?> cls, Calendar alarmCalendar, int reminderType, String reminderName, int reminderId)
     {
         long intervalTime;
         switch (reminderType)
@@ -76,7 +76,7 @@ public class NotificationScheduler
         }
 
         // cancel already scheduled reminders
-        cancelReminder(context,cls);
+        cancelReminder(context, cls, reminderId);
 
         // Enable a receiver
 
@@ -90,15 +90,16 @@ public class NotificationScheduler
 
         Intent intent1 = new Intent(context, cls);
         intent1.putExtra("reminderName", reminderName);
-        intent1.putExtra("reminderHour", reminderHour);
-        intent1.putExtra("reminderMinute", reminderMinute);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, DAILY_REMINDER_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        intent1.putExtra("reminderType", reminderType);
+        intent1.putExtra("reminderHour", alarmCalendar.get(Calendar.HOUR_OF_DAY));
+        intent1.putExtra("reminderMinute", alarmCalendar.get(Calendar.MINUTE));
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, reminderId, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         am.setInexactRepeating(AlarmManager.RTC_WAKEUP, alarmCalendar.getTimeInMillis(), intervalTime, pendingIntent);
 
     }
 
-    public static void cancelReminder(Context context,Class<?> cls)
+    public static void cancelReminder(Context context,Class<?> cls, int reminderId)
     {
         // Disable a receiver
 
@@ -110,7 +111,7 @@ public class NotificationScheduler
                 PackageManager.DONT_KILL_APP);
 
         Intent intent1 = new Intent(context, cls);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, DAILY_REMINDER_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, reminderId, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         am.cancel(pendingIntent);
         pendingIntent.cancel();

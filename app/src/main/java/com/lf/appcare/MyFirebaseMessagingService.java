@@ -8,8 +8,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -17,6 +19,9 @@ import java.util.Map;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService
 {
+    private String reminderName, reminderDate, caregiverUid, remoteId, userUid;
+    private int reminderType;
+    private Reminder reminder;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage)
@@ -29,6 +34,64 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
             {
                 Log.d ("ERROR", "Missing message type");
                 return;
+            }
+
+            SharedPreferences myPreferences
+                    = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            userUid = myPreferences.getString("UID", "");
+            String userType = myPreferences.getString("USERTYPE", "");
+            String messageType = data.get("messageType");
+            switch (messageType)
+            {
+                case "createdReminder":
+                    if (userType.equals(AppCareUser.PATIENT))
+                    {
+                        System.out.println("Caregiver CREATED reminder");
+                        reminderName = data.get ("reminderName");
+                        System.out.println("Got name: " + reminderName);
+                        reminderType = Integer.getInteger (data.get ("reminderType"));
+                        System.out.println("Got type: " + reminderType);
+                        reminderDate = data.get ("reminderDate");
+                        System.out.println("Got date: " + reminderDate);
+                        caregiverUid = data.get ("caregiverUid");
+                        System.out.println("Got caregiver: " + caregiverUid);
+                        remoteId = data.get ("reminderId");
+                        System.out.println("Got remoteId: " + remoteId);
+                        reminder = new Reminder(userUid, reminderName, reminderType, reminderDate,
+                                caregiverUid, remoteId);
+                        reminder.set(getApplicationContext());
+                        System.out.println("Remote reminder set");
+                    }
+                    else
+                    {
+                        System.out.println("Not a patient, ops...");
+                    }
+                    break;
+
+                case "removedReminder":
+                    if (userType.equals(AppCareUser.PATIENT))
+                    {
+                        System.out.println("Caregiver REMOVED reminder");
+                        remoteId = data.get("reminderId");
+                        if (remoteId != null)
+                        {
+                            reminder = Reminder.findByRemoteId(getApplicationContext(), remoteId);
+                            if (reminder != null)
+                                reminder.cancel(getApplicationContext());
+                            else
+                                System.out.println("Reminder with remote id " + remoteId + " not found locally.");
+                            System.out.println("Remote reminder cancelled");
+                        }
+                    }
+                    else
+                        System.out.println("Not a patient, ops...");
+                    break;
+
+                case "ackReminder":
+                    break;
+
+                default:
+                    System.out.println("Received unknown message type");
             }
             // If it is a create reminder message
             if (data.get("messageType").equals("newReminder"))

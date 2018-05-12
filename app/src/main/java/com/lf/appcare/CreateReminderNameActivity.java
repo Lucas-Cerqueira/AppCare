@@ -117,6 +117,7 @@ public class CreateReminderNameActivity extends AppCompatActivity {
         RadioButton radioButton = findViewById(R.id.onceRadioButton);
         radioButton.setChecked(true);
 
+        reminderType = Reminder.ONCE;
         RadioGroup radioGroup = findViewById(R.id.radioGroup);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
         {

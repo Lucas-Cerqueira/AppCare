@@ -48,6 +48,28 @@
         app:layout_constraintVertical_bias="0.181" />
 
     <Button
+        android:id="@+id/menuRemoveReminder"
+        android:layout_width="318dp"
+        android:layout_height="65dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/layout_rounded_primary"
+        android:fontFamily="@string/roboto_light"
+        android:text="@string/menuRemoveReminder"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/menuCreateReminder"
+        app:layout_constraintVertical_bias="0.212" />
+
+    <Button
         android:id="@+id/menuSettings"
         android:layout_width="318dp"
         android:layout_height="65dp"
@@ -66,7 +88,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/menuCreateReminder"
+        app:layout_constraintTop_toBottomOf="@+id/menuRemoveReminder"
         app:layout_constraintVertical_bias="0.073" />
 
     <Button
@@ -106,6 +128,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/toolbar" />
+        app:layout_constraintTop_toTopOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.964" />
 
 </android.support.constraint.ConstraintLayout>
