@@ -120,7 +120,7 @@ public class Reminder implements Serializable
             Date auxDate = dateFormat.parse(this.date);
             Calendar alarmCalendar = Calendar.getInstance();
             alarmCalendar.setTime(auxDate);
-            NotificationScheduler.setReminder(context, AlarmReceiver.class, alarmCalendar, this.reminderType, this.name, Reminder.nextId);
+            NotificationScheduler.setReminder(context, AlarmReceiver.class, alarmCalendar, this);
             Reminder.nextId += 1;
         }
         catch (ParseException e)

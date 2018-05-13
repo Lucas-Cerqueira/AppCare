@@ -10,6 +10,7 @@
     <string name="reminder_name">Nome</string>
     <string name="menuCreateReminder">Criar lembrete</string>
     <string name="menuSettings">Configurações</string>
+    <string name="reminderListCaregiverField">Criado pelo cuidador(a)</string>
 
 
     <string-array name="months_array">

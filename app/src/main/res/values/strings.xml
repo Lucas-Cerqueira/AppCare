@@ -51,6 +51,9 @@
     <string name="menuSettings">Settings</string>
     <string name="alarmDismiss">Dismiss</string>
     <string name="reminder_list_caregiver">Reminders</string>
+    <string name="reminderListCaregiverField">Created by caregiver</string>
+
+
 
     <string name="patient_email">Patient\'s email</string>
     <string name="empty_patient_list_hint">No patients added yet</string>
