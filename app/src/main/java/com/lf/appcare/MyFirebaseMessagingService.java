@@ -62,6 +62,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
                                 caregiverUid, remoteId);
                         reminder.set(getApplicationContext());
                         System.out.println("Remote reminder set");
+                        NotificationScheduler.showNotification(getApplicationContext(), MainActivityPatient.class,
+                                "New reminder", "Caregiver created reminder \"" + reminderName + "\"");
                     }
                     else
                     {
@@ -81,6 +83,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
                             {
                                 reminder.cancel(getApplicationContext());
                                 System.out.println("Remote reminder cancelled");
+                                NotificationScheduler.showNotification(getApplicationContext(), MainActivityPatient.class,
+                                        "Reminder removed", "Caregiver removed reminder \"" + reminderName + "\"");
                             }
                             else
                                 {
@@ -91,6 +95,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
                     }
                     else
                         System.out.println("Not a patient, ops...");
+
                     break;
 
                 case "ackReminder":
@@ -98,14 +103,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
 
                 default:
                     System.out.println("Received unknown message type");
-            }
-            // If it is a create reminder message
-            if (data.get("messageType").equals("newReminder"))
-            {
-                Log.d("NEW REMINDER",
-                        "Reminder name: " + data.get("reminderName") +
-                        "\nReminder type: " + data.get("reminderType") +
-                        "\nReminder date: " + data.get("reminderDate"));
             }
             //else if ()
             //{

@@ -60,38 +60,39 @@ public class ReminderListPatientActivity extends AppCompatActivity {
         reminderListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
-            public void onItemClick(final AdapterView<?> parent, View view, final int position, long id)
-            {
-                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setMessage(getString(R.string.remove_reminder_message))
-                        .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id)
-                            {
-                                int reminderKey = reminderKeys.get(position);
-                                Reminder reminder = reminderMap.get(reminderKey);
-                                // Cancel the reminder
-                                reminder.cancel(getApplicationContext());
-                                // Remove from the map
-                                reminderMap.remove(reminderKey);
-                                // Refresh the reminders list
-                                ListReminders(reminderMap);
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
-                        {
-                            public void onClick(DialogInterface dialog, int id)
-                            {
-                            }
-                        });
-                // Create the AlertDialog object
-                AlertDialog dialog = builder.create();
-                dialog.show();
+            public void onItemClick(final AdapterView<?> parent, View view, final int position, long id) {
+                final int reminderKey = reminderKeys.get(position);
+                final Reminder reminder = reminderMap.get(reminderKey);
 
-                // Configure the buttons
-                Button posButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                Button negButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-                posButton.setTextColor(getResources().getColor(R.color.colorPrimary));
-                negButton.setTextColor(getResources().getColor(R.color.colorPrimary));
+                if (reminder.getRemoteId().equals(""))
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                    builder.setMessage(getString(R.string.remove_reminder_message))
+                            .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+
+                                    // Cancel the reminder
+                                    reminder.cancel(getApplicationContext());
+                                    // Remove from the map
+                                    reminderMap.remove(reminderKey);
+                                    // Refresh the reminders list
+                                    ListReminders(reminderMap);
+                                }
+                            })
+                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                }
+                            });
+                    // Create the AlertDialog object
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                    // Configure the buttons
+                    Button posButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                    Button negButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+                    posButton.setTextColor(getResources().getColor(R.color.colorPrimary));
+                    negButton.setTextColor(getResources().getColor(R.color.colorPrimary));
+                }
             }
         });
 
