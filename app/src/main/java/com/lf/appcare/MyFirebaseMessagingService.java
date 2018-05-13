@@ -49,7 +49,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
                         System.out.println("Caregiver CREATED reminder");
                         reminderName = data.get ("reminderName");
                         System.out.println("Got name: " + reminderName);
-                        reminderType = Integer.getInteger (data.get ("reminderType"));
+                        System.out.println("ReminderType string: " + data.get ("reminderType"));
+                        reminderType = Integer.parseInt (data.get ("reminderType"));
                         System.out.println("Got type: " + reminderType);
                         reminderDate = data.get ("reminderDate");
                         System.out.println("Got date: " + reminderDate);
@@ -77,10 +78,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
                         {
                             reminder = Reminder.findByRemoteId(getApplicationContext(), remoteId);
                             if (reminder != null)
+                            {
                                 reminder.cancel(getApplicationContext());
+                                System.out.println("Remote reminder cancelled");
+                            }
                             else
+                                {
                                 System.out.println("Reminder with remote id " + remoteId + " not found locally.");
-                            System.out.println("Remote reminder cancelled");
+                            }
+
                         }
                     }
                     else
@@ -111,7 +117,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null)
         {
-
+            RemoteMessage.Notification notification = remoteMessage.getNotification();
+            String title = notification.getTitle();
+            String body = notification.getBody();
+            System.out.println("Title: " + title + "\nBody: " + body);
         }
     }
 
