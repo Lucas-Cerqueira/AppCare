@@ -172,18 +172,27 @@ public class ReminderListPatientActivity extends AppCompatActivity {
             System.out.println("THERE ARE " + reminderList.size() + " REMINDERS");
             System.out.println("Reminder name: " + reminderList.get(0).getName() + "\nReminder type: " + reminderList.get(0).getReminderType());
             reminderListView.setVisibility(View.VISIBLE);
-            arrayAdapterReminder = new ArrayAdapter<Reminder>(this, android.R.layout.simple_list_item_2, android.R.id.text1, reminderList)
+            arrayAdapterReminder = new ArrayAdapter<Reminder>(this, R.layout.content_reminder_list_patient, R.id.reminderName, reminderList)
             {
                 @Override
                 public View getView(int position, View convertView, ViewGroup parent)
                 {
                     View view = super.getView(position, convertView, parent);
-                    TextView text1 = view.findViewById(android.R.id.text1);
-                    TextView text2 = view.findViewById(android.R.id.text2);
 
-                    // PRECISA MUDAR O LAYOUT
+                    TextView text1 = view.findViewById(R.id.reminderName);
+                    TextView text2 = view.findViewById(R.id.reminderDateTime);
+                    TextView text3 = view.findViewById(R.id.reminderType);
+                    TextView text4 = view.findViewById(R.id.caregiverName);
+
                     text1.setText(reminderList.get(position).getName());
-                    text2.setText(Integer.toString(reminderList.get(position).getReminderType()));
+                    text2.setText(reminderList.get(position).getDate());
+                    text3.setText(Integer.toString(reminderList.get(position).getReminderType()));
+
+                    if (reminderList.get(position).getRemoteId().equals(""))
+                        text4.setText("");
+                    else
+                        text4.setText(getString(R.string.reminderListCaregiverField));
+
                     return view;
                 }
             };

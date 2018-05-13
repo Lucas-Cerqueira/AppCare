@@ -53,10 +53,10 @@ public class NotificationScheduler
         return (thenTime - currentMilliseconds); // this is what you set as trigger point time i.e one month after
     }
 
-    public static void setReminder(Context context,Class<?> cls, Calendar alarmCalendar, int reminderType, String reminderName, int reminderId)
+    public static void setReminder(Context context,Class<?> cls, Calendar alarmCalendar, Reminder reminder)
     {
         long intervalTime;
-        switch (reminderType)
+        switch (reminder.getReminderType())
         {
             case 1:
                 intervalTime = 0;
@@ -76,7 +76,7 @@ public class NotificationScheduler
         }
 
         // cancel already scheduled reminders
-        cancelReminder(context, cls, reminderId);
+        cancelReminder(context, cls, reminder.getlocalId());
 
         // Enable a receiver
 
@@ -89,11 +89,13 @@ public class NotificationScheduler
 
 
         Intent intent1 = new Intent(context, cls);
-        intent1.putExtra("reminderName", reminderName);
-        intent1.putExtra("reminderType", reminderType);
+        intent1.putExtra("reminderName", reminder.getName());
+        intent1.putExtra("reminderType", reminder.getReminderType());
         intent1.putExtra("reminderHour", alarmCalendar.get(Calendar.HOUR_OF_DAY));
         intent1.putExtra("reminderMinute", alarmCalendar.get(Calendar.MINUTE));
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, reminderId, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        intent1.putExtra("remoteId", reminder.getRemoteId());
+        intent1.putExtra("caregiverUid", reminder.getCaregiverUid());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, reminder.getlocalId(), intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         am.setInexactRepeating(AlarmManager.RTC_WAKEUP, alarmCalendar.getTimeInMillis(), intervalTime, pendingIntent);
 
