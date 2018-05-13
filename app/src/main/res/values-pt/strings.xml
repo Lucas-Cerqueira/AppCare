@@ -10,8 +10,11 @@
     <string name="reminder_name">Nome</string>
     <string name="menuCreateReminder">Criar lembrete</string>
     <string name="menuSettings">Configurações</string>
-    <string name="reminderListCaregiverField">Criado pelo cuidador(a)</string>
-
+    <string name="reminderListCaregiverField">Criado pelo(a) cuidador(a)</string>
+    <string name="onceReminderType">Uma vez</string>
+    <string name="dailyReminderType">Todo dia</string>
+    <string name="weeklyReminderType">Toda semana</string>
+    <string name="monthlyReminderType">Todo mês</string>
 
     <string-array name="months_array">
         <item>Jan</item>

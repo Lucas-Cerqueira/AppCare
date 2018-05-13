@@ -34,6 +34,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
 
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 public class ReminderListPatientActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
@@ -185,9 +188,31 @@ public class ReminderListPatientActivity extends AppCompatActivity {
                     TextView text3 = view.findViewById(R.id.reminderType);
                     TextView text4 = view.findViewById(R.id.caregiverName);
 
+                    //Getting date in a good format to read
+                    String dateMatcher = "(\\d{4})(?:-)(\\d{2})(?:-)(\\d{2})(?:T)(.*)";
+                    Pattern datePattern = Pattern.compile(dateMatcher);
+                    Matcher date = datePattern.matcher(reminderList.get(position).getDate());
+                    if(date.matches())
+                    {
+                        String newDate = date.group(2) + "/" + date.group(3) + "/" + date.group(1) + " " + date.group(4);
+                        System.out.println(newDate);
+                        text2.setText(newDate);
+                    }
+
                     text1.setText(reminderList.get(position).getName());
-                    text2.setText(reminderList.get(position).getDate());
-                    text3.setText(Integer.toString(reminderList.get(position).getReminderType()));
+
+
+                    switch (reminderList.get(position).getReminderType())
+                    {
+                        case 1:
+                            text3.setText(R.string.onceReminderType);
+                        case 2:
+                            text3.setText(R.string.dailyReminderType);
+                        case 3:
+                            text3.setText(R.string.weeklyReminderType);
+                        case 4:
+                            text3.setText(R.string.monthlyReminderType);
+                    }
 
                     if (reminderList.get(position).getRemoteId().equals(""))
                         text4.setText("");

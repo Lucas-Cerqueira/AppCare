@@ -31,12 +31,15 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginTop="60dp">
+        android:layout_marginTop="75dp">
 
         <ListView
             android:id="@+id/reminderListView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10dp"/>
 
     </LinearLayout>
 
