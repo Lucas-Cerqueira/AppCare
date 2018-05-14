@@ -2,6 +2,7 @@ package com.lf.appcare;
 
 
 import com.google.common.collect.Lists;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,8 +34,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage)
     {
-        final String reminderName, reminderDate, patientUid, caregiverUid, remoteId, userUid,
-                patientName, caregiverName;
+        final String reminderName, reminderDate, patientUid, caregiverUid, remoteId,
+                userUid, patientName, caregiverName;
         int reminderType;
         Reminder reminder;
         DatabaseReference db;
@@ -61,24 +62,30 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
                 case "createdReminder":
                     if (userType.equals(AppCareUser.PATIENT))
                     {
-                        System.out.println("Caregiver CREATED reminder");
-                        reminderName = data.get ("reminderName");
-                        System.out.println("Got name: " + reminderName);
-                        System.out.println("ReminderType string: " + data.get ("reminderType"));
-                        reminderType = Integer.parseInt (data.get ("reminderType"));
-                        System.out.println("Got type: " + reminderType);
-                        reminderDate = data.get ("reminderDate");
-                        System.out.println("Got date: " + reminderDate);
-                        caregiverUid = data.get ("caregiverUid");
-                        System.out.println("Got caregiver: " + caregiverUid);
-                        remoteId = data.get ("reminderId");
-                        System.out.println("Got remoteId: " + remoteId);
-                        reminder = new Reminder(userUid, reminderName, reminderType, reminderDate,
-                                caregiverUid, remoteId);
-                        reminder.set(getApplicationContext());
-                        System.out.println("Remote reminder set");
-                        NotificationScheduler.showNotification(getApplicationContext(), MainActivityPatient.class,
-                                "New reminder", "Caregiver created reminder \"" + reminderName + "\"");
+                        patientUid = data.get("patientUid");
+                        if (patientUid.equals(userUid))
+                        {
+                            System.out.println("Caregiver CREATED reminder");
+                            reminderName = data.get("reminderName");
+                            System.out.println("Got name: " + reminderName);
+                            System.out.println("ReminderType string: " + data.get("reminderType"));
+                            reminderType = Integer.parseInt(data.get("reminderType"));
+                            System.out.println("Got type: " + reminderType);
+                            reminderDate = data.get("reminderDate");
+                            System.out.println("Got date: " + reminderDate);
+                            caregiverUid = data.get("caregiverUid");
+                            System.out.println("Got caregiver: " + caregiverUid);
+                            remoteId = data.get("reminderId");
+                            System.out.println("Got remoteId: " + remoteId);
+                            reminder = new Reminder(userUid, reminderName, reminderType, reminderDate,
+                                    caregiverUid, remoteId);
+                            reminder.set(getApplicationContext());
+                            System.out.println("Remote reminder set");
+                            NotificationScheduler.showNotification(getApplicationContext(), MainActivityPatient.class,
+                                    "New reminder", "Caregiver created reminder \"" + reminderName + "\"");
+                        }
+                        else
+                            System.out.println("Wrong patient");
                     }
                     else
                     {
@@ -91,24 +98,30 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
                 case "removedReminder":
                     if (userType.equals(AppCareUser.PATIENT))
                     {
-                        System.out.println("Caregiver REMOVED reminder");
-                        remoteId = data.get("reminderId");
-                        if (remoteId != null)
+                        patientUid = data.get("patientUid");
+                        if (patientUid.equals(userUid))
                         {
-                            reminder = Reminder.findByRemoteId(getApplicationContext(), remoteId);
-                            if (reminder != null)
+                            reminderName = data.get("reminderName");
+                            System.out.println("Caregiver REMOVED reminder");
+                            remoteId = data.get("reminderId");
+                            if (remoteId != null)
                             {
-                                reminder.cancel(getApplicationContext());
-                                System.out.println("Remote reminder cancelled");
-                                NotificationScheduler.showNotification(getApplicationContext(), MainActivityPatient.class,
-                                        "Reminder removed", "Caregiver removed reminder \"" + reminderName + "\"");
-                            }
-                            else
+                                reminder = Reminder.findByRemoteId(getApplicationContext(), remoteId);
+                                if (reminder != null)
                                 {
-                                System.out.println("Reminder with remote id " + remoteId + " not found locally.");
+                                    reminder.cancel(getApplicationContext());
+                                    System.out.println("Remote reminder cancelled");
+                                    NotificationScheduler.showNotification(getApplicationContext(), MainActivityPatient.class,
+                                            "Reminder removed", "Caregiver removed reminder \"" + reminderName + "\"");
+                                }
+                                else
+                                    {
+                                    System.out.println("Reminder with remote id " + remoteId + " not found locally.");
+                                }
                             }
-
                         }
+                        else
+                            System.out.println("Wrong patient");
                     }
                     else
                         System.out.println("Not a patient, ops...");
@@ -120,26 +133,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
                 case "ackReminder":
                     if (userType.equals(AppCareUser.CAREGIVER))
                     {
-                        reminderName = data.get("reminderName");
-                        patientUid = data.get("patientUid");
-                        db = FirebaseDatabase.getInstance().getReference();
-                        db.child("users").child(patientUid).child("firstName").addListenerForSingleValueEvent(new ValueEventListener()
+                        caregiverUid = data.get("caregiverUid");
+                        if (caregiverUid.equals(userUid))
                         {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot)
-                            {
-                                String patientName = dataSnapshot.getValue(String.class);
-                                NotificationScheduler.showNotification(getApplicationContext(), MainActivityCaregiver.class,
-                                        getString(R.string.ack_title),
-                                        getString(R.string.ack_body, patientName, reminderName));
-                            }
+                            reminderName = data.get("reminderName");
+                            patientUid = data.get("patientUid");
+                            db = FirebaseDatabase.getInstance().getReference();
+                            db.child("users").child(patientUid).child("firstName").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    String patientName = dataSnapshot.getValue(String.class);
+                                    NotificationScheduler.showNotification(getApplicationContext(), MainActivityCaregiver.class,
+                                            getString(R.string.ack_title),
+                                            getString(R.string.ack_body, patientName, reminderName));
+                                }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError)
-                            {
-                                System.out.println("The read failed: " + databaseError.getCode());
-                            }
-                        });
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    System.out.println("The read failed: " + databaseError.getCode());
+                                }
+                            });
+                        }
+                        else
+                            System.out.println("Wrong caregiver");
                     }
                     break;
 
@@ -148,10 +164,36 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
                 case "newConnection":
                     if (userType.equals(AppCareUser.PATIENT))
                     {
+                        patientUid = data.get("patientUid");
+                        caregiverUid = data.get("caregiverUid");
                         caregiverName = data.get("caregiverName");
-                        NotificationScheduler.showNotification(getApplicationContext(), MainActivityPatient.class,
-                                getString(R.string.new_connection_title),
-                                getString(R.string.new_connection_body, caregiverName));
+
+                        if (patientUid.equals(userUid))
+                        {
+                            db = FirebaseDatabase.getInstance().getReference();
+                            db.child("users").child(patientUid).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot)
+                                {
+                                    PatientUser patient = dataSnapshot.getValue(PatientUser.class);
+                                    patient.setCaregiverUid(caregiverUid);
+                                    NotificationScheduler.showNotification(getApplicationContext(), MainActivityPatient.class,
+                                            getString(R.string.new_connection_title),
+                                            getString(R.string.new_connection_body, caregiverName));
+
+                                    DatabaseReference db1 = FirebaseDatabase.getInstance().getReference();
+                                    db1.child("users").child(patientUid).setValue(patient);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError)
+                                {
+
+                                }
+                            });
+                        }
+                        else
+                            System.out.println("Wrong patient");
                     }
                     break;
 
@@ -160,9 +202,35 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
                 case "removedConnection":
                     if (userType.equals(AppCareUser.PATIENT))
                     {
-                        NotificationScheduler.showNotification(getApplicationContext(), MainActivityPatient.class,
-                                getString(R.string.removed_connection_title),
-                                getString(R.string.removed_connection_body));
+                        patientUid = data.get("patientUid");
+                        caregiverName = data.get("caregiverName");
+
+                        if (patientUid.equals(userUid))
+                        {
+                            db = FirebaseDatabase.getInstance().getReference();
+                            db.child("users").child(patientUid).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot)
+                                {
+                                    PatientUser patient = dataSnapshot.getValue(PatientUser.class);
+                                    patient.setCaregiverUid("");
+                                    NotificationScheduler.showNotification(getApplicationContext(), MainActivityPatient.class,
+                                            getString(R.string.new_connection_title),
+                                            getString(R.string.new_connection_body, caregiverName));
+
+                                    DatabaseReference db1 = FirebaseDatabase.getInstance().getReference();
+                                    db1.child("users").child(patientUid).setValue(patient);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError)
+                                {
+
+                                }
+                            });
+                        }
+                        else
+                            System.out.println("Wrong patient");
                     }
                     break;
 
@@ -171,15 +239,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
                 case "emergencyRequest":
                     if (userType.equals(AppCareUser.CAREGIVER))
                     {
-                        patientName = data.get("patientName");
-                        NotificationScheduler.showNotification(getApplicationContext(), MainActivityPatient.class,
-                                getString(R.string.emergency_title),
-                                getString(R.string.emergency_body, patientName));
+                        caregiverUid = data.get("caregiverUid");
+                        if (caregiverUid.equals(userUid))
+                        {
+                            patientName = data.get("patientName");
+                            NotificationScheduler.showNotification(getApplicationContext(), MainActivityPatient.class,
+                                    getString(R.string.emergency_title),
+                                    getString(R.string.emergency_body, patientName));
+                        }
+                        else
+                            System.out.println("Wrong caregiver");
                     }
                     break;
-
-
-                //
 
                 default:
                     System.out.println("Received unknown message type");
