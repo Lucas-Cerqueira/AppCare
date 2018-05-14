@@ -12,6 +12,24 @@
     <string name="menuSettings">Configurações</string>
     <string name="reminderListCaregiverField">Criado pelo cuidador(a)</string>
 
+    <!-- PatientListActivity - Caregiver adding or removing patient -->
+    <string name="add_patient_not_found">Paciente não cadastrado</string>
+    <string name="add_patient_success">Novo paciente adicionado</string>
+    <string name="patient_removed">Paciente removido</string>
+
+    <!-- Patient-caregiver connection notifications -->
+    <string name="new_connection_title">Você tem um novo cuidador!</string>
+    <string name="new_connection_body">Cuidador %1$s cadastrou você como paciente</string>
+    <string name="removed_connection_title">Cuidador removido</string>
+    <string name="removed_connection_body">Você não possui mais um cuidador</string>
+
+    <!-- Reminder acknowledge -->
+    <string name="ack_title">Lembrete visto pelo seu paciente</string>
+    <string name="ack_body">Paciente %1$s viu o lembrete "%2$s"</string>
+
+    <!-- Emergency notification -->
+    <string name="emergency_title">!!! EMERGÊNCIA !!!</string>
+    <string name="emergency_body">Paciente %1$s apertou o botão de emergência!</string>
 
     <string-array name="months_array">
         <item>Jan</item>

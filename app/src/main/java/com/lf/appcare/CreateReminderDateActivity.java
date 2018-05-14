@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -49,22 +51,24 @@ public class CreateReminderDateActivity extends AppCompatActivity {
         monthPicker = findViewById(R.id.month_picker);
         confirmButton = findViewById(R.id.submit_date);
 
-        String[] data = getResources().getStringArray(R.array.months_array);
+        String[] months = getResources().getStringArray(R.array.months_array);
 
-//        hourPicker.setMaxValue(23);
-//        hourPicker.setMinValue(0);
-//        minutePicker.setMaxValue(59);
-//        minutePicker.setMinValue(0);
+        // Get current date to set the initial picker values
+        Calendar now = Calendar.getInstance();
+
         dayPicker.setMaxValue(31);
-        dayPicker.setMinValue(0);
+        dayPicker.setMinValue(1);
+        dayPicker.setValue(now.get(Calendar.DAY_OF_MONTH));
+
+        monthPicker.setMaxValue(months.length);
         monthPicker.setMinValue(1);
-        monthPicker.setMaxValue(data.length);
+        monthPicker.setValue(now.get(Calendar.MONTH)+1); // Jan = 0. Why? It is Java...
+        monthPicker.setDisplayedValues(months);
 
-        monthPicker.setDisplayedValues(data);
-        // Make it begin on the current month
-//        hourPicker.setValue(8);
-//        minutePicker.setValue(0);
-
+        int currentYear = now.get(Calendar.YEAR)-2000;
+        yearPicker.setMaxValue(currentYear+10);
+        yearPicker.setMinValue(currentYear);
+        yearPicker.setValue(currentYear);
 
         monthPicker.setOnValueChangedListener( new NumberPicker.OnValueChangeListener()
         {

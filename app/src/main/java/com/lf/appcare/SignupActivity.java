@@ -112,7 +112,7 @@ public class SignupActivity extends AppCompatActivity {
                                                 auth.getCurrentUser().getEmail(),
                                                 firstName, userType);
                                         db.getReference().child("users").child(auth.getCurrentUser().getUid()).setValue(user);
-                                        db.getReference().child("users").child(auth.getCurrentUser().getUid()).child("notificationTokens").child(token).setValue(token);
+                                        MyFirebaseInstanceIDService.sendRegistrationToServer(token);
                                         startActivity(new Intent(SignupActivity.this, MainActivityPatient.class));
                                         finish();
                                     }
@@ -123,7 +123,7 @@ public class SignupActivity extends AppCompatActivity {
                                                 auth.getCurrentUser().getEmail(),
                                                 firstName, userType);
                                         db.getReference().child("users").child(auth.getCurrentUser().getUid()).setValue(user);
-                                        db.getReference().child("users").child(auth.getCurrentUser().getUid()).child("notificationTokens").child(token).setValue(token);
+                                        MyFirebaseInstanceIDService.sendRegistrationToServer(token);
                                         startActivity(new Intent(SignupActivity.this, MainActivityCaregiver.class));
                                         finish();
                                     }

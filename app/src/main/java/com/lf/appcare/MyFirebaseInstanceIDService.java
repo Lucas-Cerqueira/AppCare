@@ -12,8 +12,6 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
-    private DatabaseReference db;
-
     private static final String TAG = "MyFirebaseIDService";
 
     /**
@@ -43,13 +41,13 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      *
      * @param token The new token.
      */
-    private void sendRegistrationToServer(String token)
+    public static void sendRegistrationToServer(String token)
     {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() == null)
             return;
 
-        db = FirebaseDatabase.getInstance().getReference();
-        db.child("users").child(auth.getCurrentUser().getUid()).child("notificationTokens").setValue(token);
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+        db.child("users").child(auth.getCurrentUser().getUid()).child("notificationTokens").child(token).setValue(token);
     }
 }

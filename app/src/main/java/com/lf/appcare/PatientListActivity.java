@@ -4,7 +4,9 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +20,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,6 +48,7 @@ public class PatientListActivity extends AppCompatActivity {
     private FirebaseUser user;
     private AutoCompleteTextView textView;
     private ArrayAdapter<PatientUser> arrayAdapterUser;
+    private String caregiverUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -103,6 +107,9 @@ public class PatientListActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int id)
                             {
                                 int response = caregiver.RemovePatient(patient);
+                                Toast.makeText(getApplicationContext(), R.string.patient_removed,
+                                        Toast.LENGTH_SHORT)
+                                        .show();
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
@@ -148,6 +155,10 @@ public class PatientListActivity extends AppCompatActivity {
             }
         });
 
+        SharedPreferences myPreferences
+                = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        caregiverUid = myPreferences.getString("UID", "");
+
         // "Add patient" button
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener()
@@ -169,6 +180,9 @@ public class PatientListActivity extends AppCompatActivity {
                         String email = textView.getText().toString();
                         if (!emailList.contains(email))
                         {
+                            Toast.makeText(getApplicationContext(), R.string.add_patient_not_found,
+                                    Toast.LENGTH_SHORT)
+                                    .show();
                             // ADD ERROR MESSAGE
                             System.out.println("EMAIL NOT FOUND");
                         }
@@ -182,6 +196,10 @@ public class PatientListActivity extends AppCompatActivity {
                                 {
                                     PatientUser patient = userSnapshot.getValue(PatientUser.class);
                                     response = caregiver.AddPatient(patient);
+
+                                    Toast.makeText(getApplicationContext(), R.string.add_patient_success,
+                                            Toast.LENGTH_SHORT)
+                                            .show();
                                     break;
                                 }
                             }
