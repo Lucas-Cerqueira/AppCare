@@ -56,6 +56,10 @@
     <string name="dailyReminderType">Every day</string>
     <string name="weeklyReminderType">Every week</string>
     <string name="monthlyReminderType">Every month</string>
+    <string name="emergencyButton">EMERGENCY</string>
+    <string name="emergencyMessage">Emergency was sent. Keep calm.</string>
+
+
 
     <string name="patient_email">Patient\'s email</string>
     <string name="empty_patient_list_hint">No patients added yet</string>

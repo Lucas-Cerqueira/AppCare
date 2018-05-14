@@ -1,6 +1,9 @@
 package com.lf.appcare;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -8,15 +11,23 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivityPatient extends AppCompatActivity {
 
-    private ProgressBar progressBar;
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
-    private Button signOut, createReminder, removeReminder, settings;
+    private DatabaseReference db;
+    private Button signOut, createReminder, removeReminder, settings, emergency;
+    private PatientUser patient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,11 +35,20 @@ public class MainActivityPatient extends AppCompatActivity {
         setContentView(R.layout.activity_main_patient);
 
         Toolbar toolbar =  findViewById(R.id.toolbar);
-        progressBar =  findViewById(R.id.progress_bar);
 
         toolbar.setTitle(getString(R.string.app_name));
         toolbar.setTitleTextColor(android.graphics.Color.WHITE);
         setSupportActionBar(toolbar);
+
+        //TESTE PARA O LISTENER DO BOTAO DE VOLUME
+//        // Enable a receiver
+//        Context context = getApplicationContext();
+//        ComponentName receiver = new ComponentName(context, EmergencyReceiver.class);
+//        PackageManager pm = context.getPackageManager();
+//
+//        pm.setComponentEnabledSetting(receiver,
+//                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+//                PackageManager.DONT_KILL_APP);
 
         //get firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -49,10 +69,23 @@ public class MainActivityPatient extends AppCompatActivity {
             }
         };
 
+        db = FirebaseDatabase.getInstance().getReference();
+        db.child("users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                patient = dataSnapshot.getValue(PatientUser.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         createReminder =  findViewById(R.id.menuCreateReminder);
         removeReminder =  findViewById(R.id.menuRemoveReminder);
         settings = findViewById(R.id.menuSettings);
         signOut = findViewById(R.id.menuSignOut);
+        emergency = findViewById(R.id.emergencyButton);
 
         createReminder.setOnClickListener(new View.OnClickListener()
         {
@@ -95,6 +128,18 @@ public class MainActivityPatient extends AppCompatActivity {
             }
         });
 
+        emergency.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick (View view)
+            {
+                db = FirebaseDatabase.getInstance().getReference();
+                System.out.println("patient uid: " + patient.getUid());
+                System.out.println("caregiver uid: " + patient.getCaregiverUid());
+                db.child("emergencyRequest").child(patient.getUid()).setValue(patient.getCaregiverUid());
+                Toast.makeText(getApplicationContext(), R.string.emergencyMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     //sign out method
@@ -105,7 +150,6 @@ public class MainActivityPatient extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        progressBar.setVisibility(View.GONE);
     }
 
     @Override
