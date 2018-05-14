@@ -59,7 +59,24 @@
     <string name="emergencyButton">EMERGENCY</string>
     <string name="emergencyMessage">Emergency was sent. Keep calm.</string>
 
+    <!-- PatientListActivity - Caregiver adding or removing patient -->
+    <string name="add_patient_not_found">Patient not signed up</string>
+    <string name="add_patient_success">New patient added</string>
+    <string name="patient_removed">Patient removed</string>
 
+    <!-- Patient-caregiver connection notifications -->
+    <string name="new_connection_title">You have a new caregiver!</string>
+    <string name="new_connection_body">Caregiver %1$s added you as a patient</string>
+    <string name="removed_connection_title">Caregiver removed</string>
+    <string name="removed_connection_body">You don\'t have a caregiver anymore</string>
+
+    <!-- Reminder acknowledge notification -->
+    <string name="ack_title">Reminder viewed by your patient</string>
+    <string name="ack_body">Patient %1$s viewed the reminder "%2$s"</string>
+
+    <!-- Emergency notification -->
+    <string name="emergency_title">!!! EMERGENCY !!!</string>
+    <string name="emergency_body">Patient %1$s pressed the emergency button!</string>
 
     <string name="patient_email">Patient\'s email</string>
     <string name="empty_patient_list_hint">No patients added yet</string>

@@ -26,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.HashMap;
 import java.util.concurrent.Future;
@@ -52,67 +53,6 @@ public class LoginActivity extends AppCompatActivity {
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance().getReference();
-
-        if (auth.getCurrentUser() != null)
-        {
-            FirebaseUser user = auth.getCurrentUser();
-            String userUid = user.getUid();
-            DatabaseReference ref = db.child("users").child(userUid);
-            ref.addListenerForSingleValueEvent(new ValueEventListener()
-            {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot)
-                {
-                    AppCareUser user = dataSnapshot.getValue(AppCareUser.class);
-                    if (user == null)
-                        return;
-
-                    String userType = user.getUserType();
-
-                    System.out.println("User type: " + userType +
-                            "\nUser name: " + user.getFirstName() +
-                            "\nUID: " + user.getUid());
-
-                    Intent intent;
-                    if (userType.equals(AppCareUser.PATIENT))
-                    {
-                        System.out.println("Entrou patient");
-                        intent = new Intent(LoginActivity.this, MainActivityPatient.class);
-                    }
-                    else if (userType.equals(AppCareUser.CAREGIVER))
-                    {
-                        System.out.println("Entrou caregiver");
-                        intent = new Intent(LoginActivity.this, MainActivityCaregiver.class);
-                    }
-                    else
-                    {
-                        intent = null;
-                        System.out.println("Invalid user type: " + userType);
-                    }
-                    if (intent != null)
-                    {
-                        // Store user info in shared preferences
-                        SharedPreferences myPreferences
-                                = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-                        SharedPreferences.Editor myEditor = myPreferences.edit();
-                        myEditor.putString("UID", user.getUid());
-                        myEditor.putString("NAME", user.getFirstName());
-                        myEditor.putString("EMAIL", user.getEmail());
-                        myEditor.putString("USERTYPE", userType);
-                        myEditor.apply();
-
-                        startActivity(intent);
-                        finish();
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError)
-                {
-                    System.out.println("The read failed: " + databaseError.getCode());
-                }
-            });
-        }
 
         // set the view now
         setContentView(R.layout.activity_login);
@@ -225,6 +165,11 @@ public class LoginActivity extends AppCompatActivity {
                                                 myEditor.putString("EMAIL", user.getEmail());
                                                 myEditor.putString("USERTYPE", userType);
                                                 myEditor.apply();
+
+                                                // Update notification token
+                                                MyFirebaseInstanceIDService.sendRegistrationToServer(
+                                                        FirebaseInstanceId.getInstance().getToken()
+                                                );
 
                                                 startActivity(intent);
                                                 finish();
