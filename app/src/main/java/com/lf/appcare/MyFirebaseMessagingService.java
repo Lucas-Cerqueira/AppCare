@@ -171,26 +171,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
                         if (patientUid.equals(userUid))
                         {
                             db = FirebaseDatabase.getInstance().getReference();
-                            db.child("users").child(patientUid).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot)
-                                {
-                                    PatientUser patient = dataSnapshot.getValue(PatientUser.class);
-                                    patient.setCaregiverUid(caregiverUid);
-                                    NotificationScheduler.showNotification(getApplicationContext(), MainActivityPatient.class,
-                                            getString(R.string.new_connection_title),
-                                            getString(R.string.new_connection_body, caregiverName));
-
-                                    DatabaseReference db1 = FirebaseDatabase.getInstance().getReference();
-                                    db1.child("users").child(patientUid).setValue(patient);
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError)
-                                {
-
-                                }
-                            });
+                            db.child("users").child(patientUid).child("caregiverUid").setValue(caregiverUid);
+                            NotificationScheduler.showNotification(getApplicationContext(), MainActivityPatient.class,
+                                    getString(R.string.new_connection_title),
+                                    getString(R.string.new_connection_body, caregiverName));
                         }
                         else
                             System.out.println("Wrong patient");
@@ -208,26 +192,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
                         if (patientUid.equals(userUid))
                         {
                             db = FirebaseDatabase.getInstance().getReference();
-                            db.child("users").child(patientUid).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot)
-                                {
-                                    PatientUser patient = dataSnapshot.getValue(PatientUser.class);
-                                    patient.setCaregiverUid("");
-                                    NotificationScheduler.showNotification(getApplicationContext(), MainActivityPatient.class,
-                                            getString(R.string.new_connection_title),
-                                            getString(R.string.new_connection_body, caregiverName));
-
-                                    DatabaseReference db1 = FirebaseDatabase.getInstance().getReference();
-                                    db1.child("users").child(patientUid).setValue(patient);
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError)
-                                {
-
-                                }
-                            });
+                            db.child("users").child(patientUid).child("caregiverUid").setValue("");
+                            NotificationScheduler.showNotification(getApplicationContext(), MainActivityPatient.class,
+                                    getString(R.string.removed_connection_title),
+                                    getString(R.string.removed_connection_body, caregiverName));
                         }
                         else
                             System.out.println("Wrong patient");
