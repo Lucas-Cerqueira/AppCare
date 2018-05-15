@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ReminderListCaregiverActivity extends AppCompatActivity {
 
@@ -174,18 +176,46 @@ public class ReminderListCaregiverActivity extends AppCompatActivity {
             System.out.println("THERE ARE " + reminderList.size() + " REMINDERS");
             System.out.println("Reminder name:" + reminderList.get(0).getName() + "\nReminder type:" + reminderList.get(0).getReminderType());
             reminderListView.setVisibility(View.VISIBLE);
-            arrayAdapterReminder = new ArrayAdapter<Reminder>(this, android.R.layout.simple_list_item_2, android.R.id.text1, reminderList)
+            arrayAdapterReminder = new ArrayAdapter<Reminder>(this, R.layout.content_reminder_list_caregiver, R.id.reminderName, reminderList)
             {
                 @Override
                 public View getView(int position, View convertView, ViewGroup parent)
                 {
                     View view = super.getView(position, convertView, parent);
-                    TextView text1 = view.findViewById(android.R.id.text1);
-                    TextView text2 = view.findViewById(android.R.id.text2);
 
-                    // PRECISA MUDAR O LAYOUT
+                    TextView text1 = view.findViewById(R.id.reminderName);
+                    TextView text2 = view.findViewById(R.id.reminderDateTime);
+                    TextView text3 = view.findViewById(R.id.reminderType);
+                    TextView text4 = view.findViewById(R.id.patientName);
+
+                    //Getting date in a good format to read
+                    String dateMatcher = "(\\d{4})(?:-)(\\d{2})(?:-)(\\d{2})(?:T)(.*)";
+                    Pattern datePattern = Pattern.compile(dateMatcher);
+                    Matcher date = datePattern.matcher(reminderList.get(position).getDate());
+                    if(date.matches())
+                    {
+                        String newDate = date.group(2) + "/" + date.group(3) + "/" + date.group(1) + " " + date.group(4);
+                        System.out.println(newDate);
+                        text2.setText(newDate);
+                    }
+
                     text1.setText(reminderList.get(position).getName());
-                    text2.setText(Integer.toString(reminderList.get(position).getReminderType()));
+
+
+                    switch (reminderList.get(position).getReminderType())
+                    {
+                        case 1:
+                            text3.setText(R.string.onceReminderType);
+                        case 2:
+                            text3.setText(R.string.dailyReminderType);
+                        case 3:
+                            text3.setText(R.string.weeklyReminderType);
+                        case 4:
+                            text3.setText(R.string.monthlyReminderType);
+                    }
+
+                   text4.setText("Patient name");
+
                     return view;
                 }
             };

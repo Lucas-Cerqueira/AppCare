@@ -19,7 +19,7 @@ public class AlarmNotificationActivity extends AppCompatActivity {
 
     private DatabaseReference db;
 
-    private String reminderName, remoteId, caregiverName, caregiverUid;
+    private String reminderName, remoteId, caregiverUid, databaseIds;
     private int reminderHour, reminderMinute, reminderType;
     private Button dismiss;
 
@@ -33,18 +33,25 @@ public class AlarmNotificationActivity extends AppCompatActivity {
                 | WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
         setContentView(R.layout.activity_alarm_notification);
 
-        reminderName = getIntent().getStringExtra("reminderName");
+        databaseIds = getIntent().getStringExtra("reminderName");
         reminderType = getIntent().getIntExtra("reminderType", 1);
         reminderHour = getIntent().getIntExtra("reminderHour", 1);
         reminderMinute = getIntent().getIntExtra("reminderMinute", 1);
-        remoteId = getIntent().getStringExtra("remoteId");
-        caregiverUid = getIntent().getStringExtra("caregiverUid");
 
+//        System.out.println("databaseids " + databaseIds);
+
+
+        String [] dataArray = databaseIds.split("_");
+        reminderName = dataArray[0];
+        remoteId = dataArray[1];
+        caregiverUid = dataArray[2];
+
+//        System.out.println("remote id " + remoteId + " caregiver uid " + caregiverUid);
 
         db = FirebaseDatabase.getInstance().getReference();
 
 
-        System.out.println("Nome do alarme ao chegar no alarmnotification: " + reminderName + " hora: " + reminderHour + " minuto: " + reminderMinute);
+//        System.out.println("Nome do alarme ao chegar no alarmnotification: " + reminderName + " hora: " + reminderHour + " minuto: " + reminderMinute);
 
         TextView nameReminderLayout = (TextView) findViewById(R.id.alarmNotificationText);
         TextView hourReminderLayout = (TextView) findViewById(R.id.textHour);
@@ -56,15 +63,21 @@ public class AlarmNotificationActivity extends AppCompatActivity {
             @Override
             public void onClick (View view)
             {
-                Intent intent = new Intent(AlarmNotificationActivity.this, MainActivityPatient.class);
+//                Intent intent = new Intent(AlarmNotificationActivity.this, MainActivityPatient.class);
                 //If there is no remote id, reminder came from patient -> there is no caregiver name
-                if (remoteId.equals(""))
-                    finish();
-                //Reminder was created by caregiver -> needs to access the db so as to get his name
-                else
+                if (remoteId == "")
                 {
+                    System.out.println("remote id null -> lembrete criado pelo paciente");
                     finish();
                 }
+                else if (caregiverUid != null)
+                {
+                    System.out.println("remote id not null -> lembrete criado pelo caregiver -> acknowledge");
+                    //Reminder was created by caregiver -> needs to access the db so as to get his name
+                    db.child("remoteReminders").child(caregiverUid).child(remoteId).child("ack").setValue(1);
+                    finish();
+                }
+
             }
         });
 

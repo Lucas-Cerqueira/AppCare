@@ -89,12 +89,10 @@ public class NotificationScheduler
 
 
         Intent intent1 = new Intent(context, cls);
-        intent1.putExtra("reminderName", reminder.getName());
+        intent1.putExtra("reminderName", reminder.getName() + "_" + reminder.getRemoteId() + "_" + reminder.getCaregiverUid());
         intent1.putExtra("reminderType", reminder.getReminderType());
         intent1.putExtra("reminderHour", alarmCalendar.get(Calendar.HOUR_OF_DAY));
         intent1.putExtra("reminderMinute", alarmCalendar.get(Calendar.MINUTE));
-        intent1.putExtra("remoteId", reminder.getRemoteId());
-        intent1.putExtra("caregiverUid", reminder.getCaregiverUid());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, reminder.getlocalId(), intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         am.setInexactRepeating(AlarmManager.RTC_WAKEUP, alarmCalendar.getTimeInMillis(), intervalTime, pendingIntent);

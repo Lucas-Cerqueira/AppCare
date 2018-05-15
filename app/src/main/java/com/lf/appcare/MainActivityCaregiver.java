@@ -34,6 +34,7 @@ public class MainActivityCaregiver extends AppCompatActivity {
 
         Toolbar toolbar =  findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.app_name));
+        toolbar.setTitleTextColor(android.graphics.Color.WHITE);
         setSupportActionBar(toolbar);
 
         //get firebase auth instance
