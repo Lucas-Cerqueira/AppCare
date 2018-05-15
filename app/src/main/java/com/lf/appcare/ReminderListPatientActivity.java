@@ -194,24 +194,27 @@ public class ReminderListPatientActivity extends AppCompatActivity {
                     Matcher date = datePattern.matcher(reminderList.get(position).getDate());
                     if(date.matches())
                     {
-                        String newDate = date.group(2) + "/" + date.group(3) + "/" + date.group(1) + " " + date.group(4);
+                        String newDate = date.group(3) + "/" + date.group(2) + "/" + date.group(1) + date.group(4);
                         System.out.println(newDate);
                         text2.setText(newDate);
                     }
 
                     text1.setText(reminderList.get(position).getName());
 
-
                     switch (reminderList.get(position).getReminderType())
                     {
-                        case 1:
+                        case Reminder.ONCE:
                             text3.setText(R.string.onceReminderType);
-                        case 2:
+                            break;
+                        case Reminder.DAILY:
                             text3.setText(R.string.dailyReminderType);
-                        case 3:
+                            break;
+                        case Reminder.WEEKLY:
                             text3.setText(R.string.weeklyReminderType);
-                        case 4:
+                            break;
+                        case Reminder.MONTHLY:
                             text3.setText(R.string.monthlyReminderType);
+                            break;
                     }
 
                     if (reminderList.get(position).getRemoteId().equals(""))
