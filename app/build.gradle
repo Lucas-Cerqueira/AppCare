@@ -37,6 +37,7 @@ dependencies {
     //Extra dependencies
     implementation 'com.google.guava:guava:25.0-android'
     implementation 'com.shawnlin:number-picker:2.4.6'
+    implementation 'com.hbb20:ccp:2.2.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -102,7 +102,7 @@ public class ReminderListPatientActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() == null)
         {
-            startActivity(new Intent(ReminderListPatientActivity.this, LoginActivity.class));
+            startActivity(new Intent(ReminderListPatientActivity.this, StartupActivity.class));
             finish();
         }
 
@@ -227,5 +227,12 @@ public class ReminderListPatientActivity extends AppCompatActivity {
             };
             reminderListView.setAdapter(arrayAdapterReminder);
         }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        startActivity(new Intent(ReminderListPatientActivity.this, MainActivityPatient.class));
+        finish();
     }
 }

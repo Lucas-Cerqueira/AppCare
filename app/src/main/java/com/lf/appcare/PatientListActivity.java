@@ -66,7 +66,7 @@ public class PatientListActivity extends AppCompatActivity {
         db = FirebaseDatabase.getInstance().getReference();
         if (auth.getCurrentUser() == null)
         {
-            startActivity(new Intent(PatientListActivity.this, LoginActivity.class));
+            startActivity(new Intent(PatientListActivity.this, StartupActivity.class));
             finish();
         }
 
@@ -272,5 +272,12 @@ public class PatientListActivity extends AppCompatActivity {
             };
             patientListView.setAdapter(arrayAdapterUser);
         }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        startActivity(new Intent(PatientListActivity.this, MainActivityCaregiver.class));
+        finish();
     }
 }

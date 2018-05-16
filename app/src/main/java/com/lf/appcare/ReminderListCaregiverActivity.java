@@ -99,7 +99,7 @@ public class ReminderListCaregiverActivity extends AppCompatActivity {
 
         if (auth.getCurrentUser() == null)
         {
-            startActivity(new Intent(ReminderListCaregiverActivity.this, LoginActivity.class));
+            startActivity(new Intent(ReminderListCaregiverActivity.this, StartupActivity.class));
             finish();
         }
 
@@ -225,5 +225,12 @@ public class ReminderListCaregiverActivity extends AppCompatActivity {
             };
             reminderListView.setAdapter(arrayAdapterReminder);
         }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        startActivity(new Intent(ReminderListCaregiverActivity.this, MainActivityCaregiver.class));
+        finish();
     }
 }
