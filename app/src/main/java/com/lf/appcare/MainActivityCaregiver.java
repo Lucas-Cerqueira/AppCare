@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -56,7 +57,7 @@ public class MainActivityCaregiver extends AppCompatActivity {
                 {
                     // user auth state is changed - user is null
                     // launch login activity
-                    startActivity(new Intent(MainActivityCaregiver.this, LoginActivity.class));
+                    startActivity(new Intent(MainActivityCaregiver.this, StartupActivity.class));
                     finish();
                 }
 //                else
@@ -116,15 +117,10 @@ public class MainActivityCaregiver extends AppCompatActivity {
         signOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signOut();
+                AuthUI.getInstance().signOut(MainActivityCaregiver.this);
             }
         });
 
-    }
-
-    //sign out method
-    public void signOut() {
-        auth.signOut();
     }
 
     @Override
@@ -145,5 +141,11 @@ public class MainActivityCaregiver extends AppCompatActivity {
         if (authListener != null) {
             auth.removeAuthStateListener(authListener);
         }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        //super.onBackPressed();
     }
 }

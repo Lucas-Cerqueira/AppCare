@@ -9,14 +9,12 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".StartupActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -27,11 +25,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-
-        <activity
             android:name=".MainActivityPatient"
             android:exported="true"
             android:label="@string/title_activity_profile_patient"
@@ -41,12 +34,8 @@
             android:label="@string/title_activity_profile_caregiver"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SignupActivity"
+            android:name=".CompleteSignupActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ResetPasswordActivity"
-            android:label="@string/title_activity_reset_password"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PatientListActivity"
@@ -75,11 +64,12 @@
         <activity
             android:name=".AlarmNotificationActivity"
             android:exported="true"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <receiver android:name="AlarmReceiver" />
-        <receiver android:name=".EmergencyReceiver"/>
-        <service
-            android:name=".MyFirebaseMessagingService">
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <receiver android:name=".AlarmReceiver" />
+        <receiver android:name=".EmergencyReceiver" />
+
+        <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -90,6 +80,10 @@
             </intent-filter>
         </service>
 
+        <activity android:name=".SignupActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -63,7 +64,7 @@ public class MainActivityPatient extends AppCompatActivity {
                 if (user == null) {
                     // user auth state is changed - user is null
                     // launch login activity
-                    startActivity(new Intent(MainActivityPatient.this, LoginActivity.class));
+                    startActivity(new Intent(MainActivityPatient.this, StartupActivity.class));
                     finish();
                 }
             }
@@ -124,7 +125,7 @@ public class MainActivityPatient extends AppCompatActivity {
         signOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signOut();
+                AuthUI.getInstance().signOut(MainActivityPatient.this);
             }
         });
 
@@ -140,11 +141,6 @@ public class MainActivityPatient extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), R.string.emergencyMessage, Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    //sign out method
-    public void signOut() {
-        auth.signOut();
     }
 
     @Override
@@ -164,5 +160,11 @@ public class MainActivityPatient extends AppCompatActivity {
         if (authListener != null) {
             auth.removeAuthStateListener(authListener);
         }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        //super.onBackPressed();
     }
 }

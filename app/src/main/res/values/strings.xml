@@ -12,8 +12,9 @@
     <string name="title_activity_profile_patient">Hello, patient</string>
     <string name="title_activity_profile_caregiver">Hello, caregiver</string>
     <string name="title_activity_login">Sign in</string>
-    <string name="hint_email">Email</string>
-    <string name="hint_password">Password</string>
+    <string name="hint_email"><font size="20">Email</font></string>
+    <string name="hint_password"><font size="20">Password</font></string>
+    <string name="hint_phone">Phone</string>
     <string name="hint_name">First name</string>
     <string name="btn_login">Login</string>
     <string name="btn_link_to_register">Sign up</string>

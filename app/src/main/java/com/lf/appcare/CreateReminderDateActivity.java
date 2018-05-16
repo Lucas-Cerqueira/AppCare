@@ -106,7 +106,7 @@ public class CreateReminderDateActivity extends AppCompatActivity {
             @Override
             public void onClick (View view)
             {
-                Intent intent = new Intent(getApplicationContext(), CreateReminderHourActivity.class);
+                Intent intent = new Intent(CreateReminderDateActivity.this, CreateReminderHourActivity.class);
                 intent.putExtra("reminderDay", dayPicker.getValue());
                 intent.putExtra("reminderMonth", monthPicker.getValue());
                 intent.putExtra("reminderYear", yearPicker.getValue());
@@ -123,15 +123,26 @@ public class CreateReminderDateActivity extends AppCompatActivity {
 
     };
 
+    private void ReturnToPreviousScreen()
+    {
+        Intent intent = new Intent(getApplicationContext(), CreateReminderNameActivity.class);
+        startActivity(intent);
+        finish(); // close this activity and return to preview activity (if there is any)
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            Intent intent = new Intent(getApplicationContext(), CreateReminderNameActivity.class);
-            startActivity(intent);
-            finish(); // close this activity and return to preview activity (if there is any)
+            ReturnToPreviousScreen();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        ReturnToPreviousScreen();
     }
 
 }

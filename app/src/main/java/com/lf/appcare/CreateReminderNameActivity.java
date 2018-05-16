@@ -171,20 +171,32 @@ public class CreateReminderNameActivity extends AppCompatActivity {
         });
 
     }
+
+    private void ReturnToPreviousScreen()
+    {
+        Intent intent;
+        if (userType.equals(AppCareUser.PATIENT))
+            intent = new Intent(getApplicationContext(), MainActivityPatient.class);
+        else
+            intent = new Intent(getApplicationContext(), MainActivityCaregiver.class);
+
+        startActivity(intent);
+        finish(); // close this activity and return to preview activity (if there is any)
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home)
         {
-            Intent intent;
-            if (userType.equals(AppCareUser.PATIENT))
-                intent = new Intent(getApplicationContext(), MainActivityPatient.class);
-            else
-                intent = new Intent(getApplicationContext(), MainActivityCaregiver.class);
-
-            startActivity(intent);
-            finish(); // close this activity and return to preview activity (if there is any)
+            ReturnToPreviousScreen();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        ReturnToPreviousScreen();
     }
 }

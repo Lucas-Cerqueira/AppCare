@@ -37,8 +37,10 @@ public class AlarmNotificationActivity extends AppCompatActivity {
         reminderType = getIntent().getIntExtra("reminderType", 1);
         reminderHour = getIntent().getIntExtra("reminderHour", 1);
         reminderMinute = getIntent().getIntExtra("reminderMinute", 1);
-        remoteId = getIntent().getStringExtra("remoteId");
-        caregiverUid = getIntent().getStringExtra("caregiverUid");
+        //remoteId = getIntent().getStringExtra("remoteId");
+        //caregiverUid = getIntent().getStringExtra("caregiverUid");
+
+        System.out.println("Reminder name: " + reminderName);
 
 
         db = FirebaseDatabase.getInstance().getReference();
@@ -46,9 +48,9 @@ public class AlarmNotificationActivity extends AppCompatActivity {
 
         System.out.println("Nome do alarme ao chegar no alarmnotification: " + reminderName + " hora: " + reminderHour + " minuto: " + reminderMinute);
 
-        TextView nameReminderLayout = (TextView) findViewById(R.id.alarmNotificationText);
-        TextView hourReminderLayout = (TextView) findViewById(R.id.textHour);
-        TextView minuteReminderLayout = (TextView) findViewById(R.id.textMinute);
+        TextView nameReminderLayout = findViewById(R.id.alarmNotificationText);
+        TextView hourReminderLayout = findViewById(R.id.textHour);
+        TextView minuteReminderLayout = findViewById(R.id.textMinute);
         dismiss = findViewById(R.id.alarmDismiss);
 
         dismiss.setOnClickListener(new View.OnClickListener()

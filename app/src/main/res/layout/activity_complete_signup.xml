@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/cool_bg"
     android:fitsSystemWindows="true"
-    tools:context=".LoginActivity">
+    tools:context=".CompleteSignupActivity">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textInputLayout2"

@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseUserMetadata;
 import java.util.Arrays;
 import java.util.List;
 
-public class PhoneSignupActivity extends AppCompatActivity {
+public class SignupActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 123;
 
@@ -52,9 +52,9 @@ public class PhoneSignupActivity extends AppCompatActivity {
             {
                 FirebaseUserMetadata metadata = FirebaseAuth.getInstance().getCurrentUser().getMetadata();
                 if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp())
-                    startActivity (new Intent(PhoneSignupActivity.this, CompleteSignupActivity.class));
+                    startActivity (new Intent(SignupActivity.this, CompleteSignupActivity.class));
                 else
-                    startActivity (new Intent(PhoneSignupActivity.this, MainActivityPatient.class));
+                    startActivity (new Intent(SignupActivity.this, MainActivityPatient.class));
             }
             else
             {
