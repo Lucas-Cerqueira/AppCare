@@ -50,6 +50,7 @@ public class Reminder implements Serializable
         this.date = dateFormat.format(calendar.getTime());
         this.localId = -1;
         this.remoteId = "";
+        this.caregiverUid = ".";
     }
 
     // Remote reminder

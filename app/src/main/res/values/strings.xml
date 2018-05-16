@@ -59,6 +59,8 @@
     <string name="monthlyReminderType">Every month</string>
     <string name="emergencyButton">EMERGENCY</string>
     <string name="emergencyMessage">Emergency was sent. Keep calm.</string>
+    <string name="emergencyMessageError">There is no caregiver linked to you</string>
+
 
     <!-- PatientListActivity - Caregiver adding or removing patient -->
     <string name="add_patient_not_found">Patient not signed up</string>
