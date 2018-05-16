@@ -136,8 +136,14 @@ public class MainActivityPatient extends AppCompatActivity {
                 db = FirebaseDatabase.getInstance().getReference();
                 System.out.println("patient uid: " + patient.getUid());
                 System.out.println("caregiver uid: " + patient.getCaregiverUid());
-                db.child("emergencyRequest").child(patient.getUid()).setValue(patient.getCaregiverUid());
-                Toast.makeText(getApplicationContext(), R.string.emergencyMessage, Toast.LENGTH_SHORT).show();
+                if (!patient.getCaregiverUid().isEmpty())
+                {
+                    db.child("emergencyRequest").child(patient.getUid()).setValue(patient.getCaregiverUid());
+                    Toast.makeText(getApplicationContext(), R.string.emergencyMessage, Toast.LENGTH_SHORT).show();
+                }
+                else
+                    Toast.makeText(getApplicationContext(), R.string.emergencyMessageError, Toast.LENGTH_SHORT).show();
+
             }
         });
     }

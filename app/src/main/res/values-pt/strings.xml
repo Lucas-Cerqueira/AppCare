@@ -17,6 +17,7 @@
     <string name="monthlyReminderType">Todo mês</string>
     <string name="emergencyButton">EMERGÊNCIA</string>
     <string name="emergencyMessage">Emergência enviada. Mantenha a calma</string>
+    <string name="emergencyMessageError">Não há cuidador associado a você</string>
 
     <!-- PatientListActivity - Caregiver adding or removing patient -->
     <string name="add_patient_not_found">Paciente não cadastrado</string>

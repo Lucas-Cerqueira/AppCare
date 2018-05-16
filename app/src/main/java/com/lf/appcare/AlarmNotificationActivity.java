@@ -19,7 +19,7 @@ public class AlarmNotificationActivity extends AppCompatActivity {
 
     private DatabaseReference db;
 
-    private String reminderName, remoteId, caregiverUid, databaseIds;
+    private String reminderName, remoteId, caregiverUid, databaseIds, reminderHourString, reminderMinuteString, prefix;
     private int reminderHour, reminderMinute, reminderType;
     private Button dismiss;
 
@@ -37,8 +37,14 @@ public class AlarmNotificationActivity extends AppCompatActivity {
         reminderType = getIntent().getIntExtra("reminderType", 1);
         reminderHour = getIntent().getIntExtra("reminderHour", 1);
         reminderMinute = getIntent().getIntExtra("reminderMinute", 1);
+        prefix = "0";
 
-//        System.out.println("databaseids " + databaseIds);
+        //Tratando as strings de hora e minuto para ficar bonito
+        if (reminderHour < 10)
+            reminderHourString = prefix.concat(Integer.toString(reminderHour));
+
+        if (reminderMinute < 10)
+            reminderMinuteString = prefix.concat(Integer.toString(reminderMinute));
 
 
         String [] dataArray = databaseIds.split("_");
@@ -51,7 +57,9 @@ public class AlarmNotificationActivity extends AppCompatActivity {
         db = FirebaseDatabase.getInstance().getReference();
 
 
-//        System.out.println("Nome do alarme ao chegar no alarmnotification: " + reminderName + " hora: " + reminderHour + " minuto: " + reminderMinute);
+        System.out.println("Nome do alarme ao chegar no alarmnotification: " + reminderName + " hora: " + reminderHour + " minuto: " + reminderMinute);
+        System.out.println("Remote id: " + remoteId + " caregiverUid: " + caregiverUid);
+
 
         TextView nameReminderLayout = (TextView) findViewById(R.id.alarmNotificationText);
         TextView hourReminderLayout = (TextView) findViewById(R.id.textHour);
@@ -65,25 +73,24 @@ public class AlarmNotificationActivity extends AppCompatActivity {
             {
 //                Intent intent = new Intent(AlarmNotificationActivity.this, MainActivityPatient.class);
                 //If there is no remote id, reminder came from patient -> there is no caregiver name
-                if (remoteId == "")
+                if (remoteId.equals(""))
                 {
                     System.out.println("remote id null -> lembrete criado pelo paciente");
                     finish();
                 }
-                else if (caregiverUid != null)
+                else if (!caregiverUid.equals("."))
                 {
                     System.out.println("remote id not null -> lembrete criado pelo caregiver -> acknowledge");
                     //Reminder was created by caregiver -> needs to access the db so as to get his name
                     db.child("remoteReminders").child(caregiverUid).child(remoteId).child("ack").setValue(1);
                     finish();
                 }
-
             }
         });
 
         nameReminderLayout.setText(reminderName);
-        hourReminderLayout.setText(String.valueOf(reminderHour));
-        minuteReminderLayout.setText(String.valueOf(reminderMinute));
+        hourReminderLayout.setText(reminderHourString);
+        minuteReminderLayout.setText(reminderMinuteString);
         nameReminderLayout.setTextColor(Color.BLACK);
         hourReminderLayout.setTextColor(Color.BLACK);
         minuteReminderLayout.setTextColor(Color.BLACK);
