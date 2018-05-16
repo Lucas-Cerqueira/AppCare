@@ -156,6 +156,8 @@ public class StartupActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN)
         {
             IdpResponse response = IdpResponse.fromResultIntent(data);
+            if (response == null)
+                return;
 
             if (resultCode == RESULT_OK)
             {
