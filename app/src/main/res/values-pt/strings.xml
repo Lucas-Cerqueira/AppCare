@@ -18,6 +18,57 @@
     <string name="emergencyButton">EMERGÊNCIA</string>
     <string name="emergencyMessage">Emergência enviada. Mantenha a calma</string>
     <string name="emergencyMessageError">Não há cuidador associado a você</string>
+    <string name="action_sign_in_short">Registrar</string>
+    <string name="email">Email</string>
+    <string name="minimum_password">Senha muito curta, mínimo de 6 caracteres</string>
+    <string name="auth_failed">Falha na autenticação, cheque seu email e senha ou registre-se</string>
+    <string name="change_email">Alterar email</string>
+    <string name="change_password">Alterar senha</string>
+    <string name="send_password_reset_email">Enviar senha de alteração por email</string>
+    <string name="remove_user">Remover usuário</string>
+    <string name="new_pass">Nova senha</string>
+    <string name="title_activity_profile_patient">Olá, paciente</string>
+    <string name="title_activity_profile_caregiver">Olá, cuidador</string>
+    <string name="title_activity_login">Entrar</string>
+    <string name="hint_email"><font size="20">Email</font></string>
+    <string name="hint_password"><font size="20">Senha</font></string>
+    <string name="hint_phone">Telefone</string>
+    <string name="hint_name">Primeiro nome</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_link_to_register">Registrar-se</string>
+    <string name="btn_link_to_login">Já se cadastrou? Clique aqui para entrar</string>
+    <string name="title_activity_reset_password">ResetPasswordActivity</string>
+    <string name="btn_forgot_password">Esqueceu sua senha?</string>
+    <string name="btn_reset_password">Recuperar senha</string>
+    <string name="btn_back"><![CDATA[<< Back]]></string>
+    <string name="hint_new_email">Novo Email</string>
+    <string name="btn_change">Alterar</string>
+    <string name="btn_send">Enviar</string>
+    <string name="btn_remove">Remover</string>
+    <string name="btn_sign_out">Sair</string>
+    <string name="lbl_forgot_password">Esqueceu sua senha?</string>
+    <string name="forgot_password_msg">Só precisamos do seu email cadastrado para enviar as instruções para recuperar sua senha.</string>
+    <string name="patient_list">Pacientes</string>
+    <string name="find_patient_email">Email do paciente</string>
+    <string name="connect_to_patient_dialog">Conectar ao paciente</string>
+    <string name="connect_patient_button">Conectar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="remove">Remover</string>
+    <string name="remove_patient_message">Você deseja remover %1$s da sua lista de pacientes?</string>
+    <string name="remove_reminder_message">Você deseja remover esse lembrete?</string>
+    <string name="confirmation">Confirmar</string>
+    <string name="reminderSelectDate">Selecionar data:</string>
+    <string name="reminderSelectHour">Selecionar hora:</string>
+    <string name="reminderSelectNameAndRepeat">Criar novo lembrete</string>
+    <string name="menuRemoveReminder">Remover lembrete</string>
+    <string name="alarmDismiss">Esquecer</string>
+    <string name="reminder_list_caregiver">Lembretes</string>
+
+
+    <!-- CreateReminderNameActivity -->
+    <string name="patient_not_found">Paciente não encontrado</string>
+    <string name="empty_patient">Digite o email do paciente</string>
+    <string name="empty_reminder_name">Digite um nome para o lembrete</string>
 
     <!-- PatientListActivity - Caregiver adding or removing patient -->
     <string name="add_patient_not_found">Paciente não cadastrado</string>
@@ -38,6 +89,22 @@
     <string name="emergency_title">!!! EMERGÊNCIA !!!</string>
     <string name="emergency_body">Paciente %1$s apertou o botão de emergência!</string>
 
+    <string name="patient_email">Email do paciente</string>
+    <string name="empty_patient_list_hint">Nenhum paciente adicionado</string>
+
+    <string name="title_activity_reminder">ReminderActivity</string>
+    <string name="title_activity_reminder_list">Lista de lembretes</string>
+    <string name="title_activity_create_reminder">Criar lembrete</string>
+
+    <string name="roboto_regular">sans-serif</string>
+    <string name="roboto_light">sans-serif-light</string>
+    <string name="roboto_condensed">sans-serif-condensed</string>
+    <string name="roboto_thin">sans-serif-thin</string>
+    <string name="roboto_medium">sans-serif-medium</string>
+
+    <string name="number_picker_formatter">%02d</string>
+
+
     <string-array name="months_array">
         <item>Jan</item>
         <item>Fev</item>
@@ -52,4 +119,7 @@
         <item>Nov</item>
         <item>Dec</item>
     </string-array>
+
+    <string name="title_activity_connect_to_patient">ConectarAoPaciente</string>
+    <string name="title_activity_patient_list">ListaPacienteActivity</string>
 </resources>
