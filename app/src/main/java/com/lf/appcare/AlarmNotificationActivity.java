@@ -42,9 +42,15 @@ public class AlarmNotificationActivity extends AppCompatActivity {
         //Tratando as strings de hora e minuto para ficar bonito
         if (reminderHour < 10)
             reminderHourString = prefix.concat(Integer.toString(reminderHour));
+        else
+            reminderHourString = Integer.toString(reminderHour);
+
+
 
         if (reminderMinute < 10)
             reminderMinuteString = prefix.concat(Integer.toString(reminderMinute));
+        else
+            reminderMinuteString = Integer.toString(reminderMinute);
 
 
         String [] dataArray = databaseIds.split("_");
