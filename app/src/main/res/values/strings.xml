@@ -62,6 +62,11 @@
     <string name="emergencyMessageError">There is no caregiver linked to you</string>
 
 
+    <!-- CreateReminderNameActivity -->
+    <string name="patient_not_found">Patient not found</string>
+    <string name="empty_patient">Type the patient email</string>
+    <string name="empty_reminder_name">Type a name for the reminder</string>
+
     <!-- PatientListActivity - Caregiver adding or removing patient -->
     <string name="add_patient_not_found">Patient not signed up</string>
     <string name="add_patient_success">New patient added</string>

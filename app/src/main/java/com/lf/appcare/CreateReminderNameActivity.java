@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.common.collect.Lists;
 import com.google.firebase.auth.FirebaseAuth;
@@ -152,14 +153,34 @@ public class CreateReminderNameActivity extends AppCompatActivity {
             @Override
             public void onClick (View view)
             {
-                Intent intent = new Intent(getApplicationContext(), CreateReminderDateActivity.class);
+                // If it is a daily reminder, skip to hour selection
+                Class<?> targetClass;
+                if (reminderType == Reminder.DAILY)
+                    targetClass = CreateReminderHourActivity.class;
+                else
+                    targetClass = CreateReminderDateActivity.class;
+                Intent intent = new Intent(getApplicationContext(), targetClass);
+
+                if (reminderName.getText().toString().isEmpty())
+                {
+                    Toast.makeText(getApplicationContext(), R.string.empty_reminder_name, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 intent.putExtra("reminderName", reminderName.getText().toString().trim());
+
                 intent.putExtra("reminderType", reminderType);
+
                 if (userType.equals(AppCareUser.CAREGIVER))
                 {
+                    if (patientEmail.getText().toString().isEmpty())
+                    {
+                        Toast.makeText(getApplicationContext(), R.string.empty_patient, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     PatientUser patient = caregiverUser.FindPatientByEmail(patientEmail.getText().toString());
                     if (patient == null)
                     {
+                        Toast.makeText(getApplicationContext(), R.string.patient_not_found, Toast.LENGTH_SHORT).show();
                         System.out.println("Invalid patient");
                         return;
                     }

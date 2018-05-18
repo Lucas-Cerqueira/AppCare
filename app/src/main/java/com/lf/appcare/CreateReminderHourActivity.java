@@ -89,14 +89,27 @@ public class CreateReminderHourActivity extends AppCompatActivity {
                 int alarmHour = hourPicker.getValue();
                 int alarmMinute = minutePicker.getValue();
 
-                //Going to 2000's
-                reminderYear = reminderYear + 2000;
+                Calendar alarmCalendar;
+                if (reminderType == Reminder.DAILY)
+                {
+                    Calendar now = Calendar.getInstance();
+                    alarmCalendar = Calendar.getInstance();
+                    alarmCalendar.set(Calendar.HOUR_OF_DAY, alarmHour);
+                    alarmCalendar.set(Calendar.MINUTE, alarmMinute);
+                    // If it is a past time, add one day
+                    if (alarmCalendar.getTimeInMillis() <= now.getTimeInMillis())
+                        alarmCalendar.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH) + 1);
+                }
+                else
+                {
+                    //Going to 2000's
+                    reminderYear = reminderYear + 2000;
 
-                Calendar alarmCalendar = new GregorianCalendar(reminderYear, reminderMonth - 1, reminderDay, alarmHour, alarmMinute);
-
-                System.out.println("Dia " + reminderDay + " Mes " + reminderMonth + " Ano " + reminderYear);
+                    alarmCalendar = new GregorianCalendar(reminderYear, reminderMonth - 1, reminderDay, alarmHour, alarmMinute);
+                }
 
                 System.out.println("hora em milisegundos " + alarmCalendar.getTimeInMillis());
+                System.out.println(alarmCalendar.getTime().toString());
 
                 // Get user type from preferences
                 SharedPreferences myPreferences
