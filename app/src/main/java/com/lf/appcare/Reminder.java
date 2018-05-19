@@ -178,6 +178,31 @@ public class Reminder implements Serializable
         return null;
     }
 
+    public static Reminder findByLocalId (Context context, int localId, String filename)
+    {
+        NavigableMap<Integer, Reminder> reminderMap;
+        try
+        {
+            reminderMap = (NavigableMap<Integer, Reminder>) InternalStorage.readObject(context, filename);
+            for (Map.Entry<Integer, Reminder> entry : reminderMap.entrySet())
+            {
+                if (entry.getValue().getlocalId() == localId)
+                    return entry.getValue();
+            }
+        }
+        catch (IOException e)
+        {
+            System.out.println("REMINDERS FILE: " + e.getMessage());
+            return null;
+        }
+        catch (ClassNotFoundException e)
+        {
+            Log.e("REMINDERS FILE", e.getMessage());
+            return null;
+        }
+        return null;
+    }
+
     public String getUserUid() {
         return userUid;
     }
@@ -192,6 +217,10 @@ public class Reminder implements Serializable
 
     public String getDate() {
         return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public int getlocalId() {

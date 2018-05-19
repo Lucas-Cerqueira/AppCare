@@ -55,16 +55,16 @@ public class NotificationScheduler
         long intervalTime;
         switch (reminder.getReminderType())
         {
-            case 1:
+            case Reminder.ONCE:
                 intervalTime = 0;
                 break;
-            case 2:
-                intervalTime = AlarmManager.INTERVAL_DAY*24;
+            case Reminder.DAILY:
+                intervalTime = AlarmManager.INTERVAL_DAY;
                 break;
-            case 3:
+            case Reminder.WEEKLY:
                 intervalTime = AlarmManager.INTERVAL_DAY*7;
                 break;
-            case 4:
+            case Reminder.MONTHLY:
                 intervalTime = getMonthInterval(alarmCalendar);
                 break;
             default:

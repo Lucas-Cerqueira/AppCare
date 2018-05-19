@@ -16,7 +16,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     String TAG = "AlarmReceiver";
     String reminderName;
-    int reminderHour, reminderMinute;
+    int reminderHour, reminderMinute, reminderType;
+    String typeAndLocalId;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -36,9 +37,12 @@ public class AlarmReceiver extends BroadcastReceiver {
         reminderName = intent.getStringExtra("reminderName");
         reminderHour = intent.getIntExtra("reminderHour", 1);
         reminderMinute = intent.getIntExtra("reminderMinute",1);
+        typeAndLocalId = intent.getStringExtra("typeAndLocalId");
 
 
         System.out.println("nome do alarm chegando no alarmreceiver: " + reminderName);
+
+
 
         Log.d(TAG, "onReceive: ");
         //Trigger the notification
@@ -51,6 +55,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         intent.putExtra("reminderName", reminderName);
         intent.putExtra("reminderHour", reminderHour);
         intent.putExtra("reminderMinute", reminderMinute);
+        intent.putExtra("typeAndLocalId", typeAndLocalId);
 
         context.startActivity(intent);
 
