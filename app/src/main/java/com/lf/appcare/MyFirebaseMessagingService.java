@@ -106,7 +106,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
                             remoteId = data.get("reminderId");
                             if (remoteId != null)
                             {
-                                reminder = Reminder.findByRemoteId(getApplicationContext(), remoteId);
+                                reminder = Reminder.findByRemoteId(getApplicationContext(), remoteId, Reminder.remindersFilename+userUid);
                                 if (reminder != null)
                                 {
                                     reminder.cancel(getApplicationContext());

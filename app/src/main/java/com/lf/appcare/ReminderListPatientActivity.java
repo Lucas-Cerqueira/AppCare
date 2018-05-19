@@ -2,7 +2,9 @@ package com.lf.appcare;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +47,7 @@ public class ReminderListPatientActivity extends AppCompatActivity {
     private List<Reminder> reminderList = new ArrayList<>();
     private List<Integer> reminderKeys = new ArrayList<>();
     private ArrayAdapter<Reminder> arrayAdapterReminder;
+    private String userUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -57,6 +60,10 @@ public class ReminderListPatientActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        SharedPreferences myPreferences
+                = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        userUid = myPreferences.getString("UID", "");
 
         reminderListView = findViewById(R.id.reminderListView);
         // Set lister when clicking an item from the patient list
@@ -106,7 +113,7 @@ public class ReminderListPatientActivity extends AppCompatActivity {
             finish();
         }
 
-        reminderMap = ReadRemindersFromFile("reminders");
+        reminderMap = ReadRemindersFromFile(Reminder.remindersFilename+userUid);
         ListReminders(reminderMap);
 
 //        // "Create reminder" button

@@ -1,6 +1,8 @@
 package com.lf.appcare;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

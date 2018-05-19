@@ -29,6 +29,7 @@ public class NotificationScheduler
     public static long getMonthInterval(Calendar alarmCalendar){
 
         int currentMonth = alarmCalendar.get(Calendar.MONTH);
+        System.out.println("Month: " + Integer.toString(currentMonth));
         long currentMilliseconds = alarmCalendar.getTimeInMillis();
 
         // move month ahead
@@ -43,11 +44,7 @@ public class NotificationScheduler
         }
         // reset calendar to next month
         alarmCalendar.set(Calendar.MONTH, currentMonth);
-        // get the maximum possible days in this month
-        int maximumDay = alarmCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-        // set the calendar to maximum day (e.g in case of fEB 28th, or leap 29th)
-        alarmCalendar.set(Calendar.DAY_OF_MONTH, maximumDay);
         long thenTime = alarmCalendar.getTimeInMillis(); // this is time one month ahead
 
         return (thenTime - currentMilliseconds); // this is what you set as trigger point time i.e one month after
@@ -74,6 +71,8 @@ public class NotificationScheduler
                 intervalTime = 0;
                 break;
         }
+
+        System.out.println("Interval time: " + intervalTime);
 
         // cancel already scheduled reminders
         cancelReminder(context, cls, reminder.getlocalId());

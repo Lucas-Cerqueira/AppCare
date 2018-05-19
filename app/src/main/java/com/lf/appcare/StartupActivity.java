@@ -94,8 +94,9 @@ public class StartupActivity extends AppCompatActivity {
     private void LaunchLogin()
     {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().setRequireName(false).build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build());
+                new AuthUI.IdpConfig.GoogleBuilder().build(),
+                new AuthUI.IdpConfig.EmailBuilder().setRequireName(false).build()
+                );
 
         // Create and launch sign-in intent
         startActivityForResult(
@@ -103,7 +104,7 @@ public class StartupActivity extends AppCompatActivity {
                         .createSignInIntentBuilder()
                         .setTheme(R.style.LoginTheme)
                         .setAvailableProviders(providers)
-                        .setIsSmartLockEnabled(true)
+                        .setIsSmartLockEnabled(false)
                         .build(),
                 RC_SIGN_IN);
     }
@@ -123,30 +124,25 @@ public class StartupActivity extends AppCompatActivity {
         }
         else
         {
-            intent = null;
             System.out.println("Invalid user type: " + userType);
+            return;
         }
-        if (intent != null)
+        MyFirebaseInstanceIDService.sendRegistrationToServer(FirebaseInstanceId.getInstance().getToken());
+        if (user != null)
         {
             // Update notification token
-            MyFirebaseInstanceIDService.sendRegistrationToServer(FirebaseInstanceId.getInstance().getToken());
-
-            if (user != null)
-            {
-                // Store user info in shared preferences
-                SharedPreferences myPreferences
-                        = PreferenceManager.getDefaultSharedPreferences(StartupActivity.this);
-                SharedPreferences.Editor myEditor = myPreferences.edit();
-                myEditor.putString("UID", user.getUid());
-                myEditor.putString("NAME", user.getFirstName());
-                myEditor.putString("EMAIL", user.getEmail());
-                myEditor.putString("USERTYPE", userType);
-                myEditor.apply();
-            }
-
-            startActivity(intent);
-            finish();
+            // Store user info in shared preferences
+            SharedPreferences myPreferences
+                    = PreferenceManager.getDefaultSharedPreferences(StartupActivity.this);
+            SharedPreferences.Editor myEditor = myPreferences.edit();
+            myEditor.putString("UID", user.getUid());
+            myEditor.putString("NAME", user.getFirstName());
+            myEditor.putString("EMAIL", user.getEmail());
+            myEditor.putString("USERTYPE", userType);
+            myEditor.apply();
         }
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -157,13 +153,18 @@ public class StartupActivity extends AppCompatActivity {
         {
             IdpResponse response = IdpResponse.fromResultIntent(data);
             if (response == null)
+            {
+                finish();
                 return;
+            }
 
             if (resultCode == RESULT_OK)
             {
                 FirebaseUserMetadata metadata = FirebaseAuth.getInstance().getCurrentUser().getMetadata();
+                // New user
                 if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp())
                     startActivity (new Intent(StartupActivity.this, CompleteSignupActivity.class));
+                // Old user
                 else
                 {
                     String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -202,7 +203,8 @@ public class StartupActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Sign in cancelled",
                             Toast.LENGTH_SHORT)
                             .show();
-                    finish();
+                    LaunchLogin();
+                    return;
                 }
                 if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK)
                 {
@@ -211,11 +213,19 @@ public class StartupActivity extends AppCompatActivity {
                             .show();
                     return;
                 }
-                Toast.makeText(getApplicationContext(), "Unknown error",
+                Toast.makeText(getApplicationContext(), "Sign in erro. Try again",
                         Toast.LENGTH_SHORT)
                         .show();
                 System.out.println("Sign-in error: " + response.getError());
+                LaunchLogin();
             }
         }
     }
+
+//    @Override
+//    public void onBackPressed()
+//    {
+//        if (backEnabled)
+//            super.onBackPressed();
+//    }
 }
