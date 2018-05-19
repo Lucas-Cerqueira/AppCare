@@ -16,7 +16,7 @@ import java.util.TreeMap;
 
 public class Reminder implements Serializable
 {
-    private static final String remindersFilename = "reminders";
+    public static final String remindersFilename = "reminders";
 
     public static final int ONCE = 1;
     public static final int DAILY = 2;
@@ -71,7 +71,7 @@ public class Reminder implements Serializable
         NavigableMap<Integer,Reminder> reminderMap = new TreeMap<>();
         try
         {
-            reminderMap = (NavigableMap<Integer,Reminder>) InternalStorage.readObject(context, Reminder.remindersFilename);
+            reminderMap = (NavigableMap<Integer,Reminder>) InternalStorage.readObject(context, Reminder.remindersFilename+this.userUid);
             // If the id reset to 0
             if (Reminder.nextId == 0 && !reminderMap.keySet().isEmpty())
                 Reminder.nextId = Integer.valueOf (reminderMap.lastEntry().getKey()) + 1;
@@ -105,7 +105,7 @@ public class Reminder implements Serializable
         this.localId = Reminder.nextId;
         try
         {
-            InternalStorage.writeObject(context, Reminder.remindersFilename, reminderMap);
+            InternalStorage.writeObject(context, Reminder.remindersFilename+this.userUid, reminderMap);
             System.out.println("Updated local reminders file");
         }
         catch (IOException e)
@@ -137,9 +137,9 @@ public class Reminder implements Serializable
         NavigableMap<Integer, Reminder> reminderMap;
         try
         {
-            reminderMap = (NavigableMap<Integer, Reminder>) InternalStorage.readObject(context, Reminder.remindersFilename);
+            reminderMap = (NavigableMap<Integer, Reminder>) InternalStorage.readObject(context, Reminder.remindersFilename+this.userUid);
             reminderMap.remove(this.localId);
-            InternalStorage.writeObject(context, Reminder.remindersFilename, reminderMap);
+            InternalStorage.writeObject(context, Reminder.remindersFilename + this.userUid, reminderMap);
             NotificationScheduler.cancelReminder(context, AlarmReceiver.class, this.localId);
             System.out.println("Reminder cancelled");
         }
@@ -153,12 +153,12 @@ public class Reminder implements Serializable
         }
     }
 
-    public static Reminder findByRemoteId (Context context, String id)
+    public static Reminder findByRemoteId (Context context, String id, String filename)
     {
         NavigableMap<Integer, Reminder> reminderMap;
         try
         {
-            reminderMap = (NavigableMap<Integer, Reminder>) InternalStorage.readObject(context, Reminder.remindersFilename);
+            reminderMap = (NavigableMap<Integer, Reminder>) InternalStorage.readObject(context, filename);
             for (Map.Entry<Integer, Reminder> entry : reminderMap.entrySet())
             {
                 if (entry.getValue().getRemoteId().equals(id))
