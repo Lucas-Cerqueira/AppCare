@@ -23,7 +23,7 @@ public class CreateReminderDateActivity extends AppCompatActivity {
 
     NumberPicker hourPicker, minutePicker, monthPicker, dayPicker, yearPicker;
     Button confirmButton;
-    String reminderName, patientUid;
+    String reminderName, patientUid, patientEmail;
     int reminderType;
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -42,6 +42,8 @@ public class CreateReminderDateActivity extends AppCompatActivity {
         reminderName = getIntent().getStringExtra("reminderName");
         reminderType = getIntent().getIntExtra("reminderType", 1);
         patientUid = getIntent().getStringExtra("patientUid");
+        patientEmail = getIntent().getStringExtra("patientEmail");
+
         System.out.println("Importando variaveis: " + reminderName + " " + reminderType);
 
 //        hourPicker = findViewById(R.id.hour_picker);
@@ -112,8 +114,11 @@ public class CreateReminderDateActivity extends AppCompatActivity {
                 intent.putExtra("reminderYear", yearPicker.getValue());
                 intent.putExtra("reminderType", reminderType);
                 intent.putExtra("reminderName", reminderName);
+                intent.putExtra("patientEmail", patientEmail);
                 if (patientUid != null)
+                {
                     intent.putExtra("patientUid", patientUid);
+                }
 
                 startActivity(intent);
                 finish();
@@ -126,6 +131,10 @@ public class CreateReminderDateActivity extends AppCompatActivity {
     private void ReturnToPreviousScreen()
     {
         Intent intent = new Intent(getApplicationContext(), CreateReminderNameActivity.class);
+        intent.putExtra("reminderType", reminderType);
+        intent.putExtra("reminderName", reminderName);
+        intent.putExtra("patientEmail", patientEmail);
+
         startActivity(intent);
         finish(); // close this activity and return to preview activity (if there is any)
     }

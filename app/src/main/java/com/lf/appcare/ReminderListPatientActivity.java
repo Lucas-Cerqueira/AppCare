@@ -195,20 +195,26 @@ public class ReminderListPatientActivity extends AppCompatActivity {
                     TextView text3 = view.findViewById(R.id.reminderType);
                     TextView text4 = view.findViewById(R.id.caregiverName);
 
+                    Reminder reminder = reminderList.get(position);
+
                     //Getting date in a good format to read
                     String dateMatcher = "(\\d{4})(?:-)(\\d{2})(?:-)(\\d{2})(?:T)(.*)";
                     Pattern datePattern = Pattern.compile(dateMatcher);
                     Matcher date = datePattern.matcher(reminderList.get(position).getDate());
                     if(date.matches())
                     {
-                        String newDate = date.group(3) + "/" + date.group(2) + "/" + date.group(1) + date.group(4);
+                        String newDate;
+                        if (reminder.getReminderType() == Reminder.DAILY)
+                            newDate = date.group(4);
+                        else
+                            newDate = date.group(3) + "/" + date.group(2) + "/" + date.group(1) + " " + date.group(4);
                         System.out.println(newDate);
                         text2.setText(newDate);
                     }
 
-                    text1.setText(reminderList.get(position).getName());
+                    text1.setText(reminder.getName());
 
-                    switch (reminderList.get(position).getReminderType())
+                    switch (reminder.getReminderType())
                     {
                         case Reminder.ONCE:
                             text3.setText(R.string.onceReminderType);
