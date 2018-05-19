@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.common.collect.Lists;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,8 +31,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CreateReminderNameActivity extends AppCompatActivity {
-    private AutoCompleteTextView patientEmail;
-    private EditText reminderName;
+    private AutoCompleteTextView patientEmailText;
+    private EditText reminderNameText;
     private int reminderType;
     private DatabaseReference db;
     private ArrayList<String> emailList = new ArrayList<>();
@@ -55,11 +56,44 @@ public class CreateReminderNameActivity extends AppCompatActivity {
         {
             setContentView(R.layout.activity_create_reminder_name_caregiver);
             // Autocomplete text field for the patient's email
-            patientEmail = findViewById(R.id.patientEmailText);
-            patientEmail.setThreshold(1);
+            patientEmailText = findViewById(R.id.patientEmailText);
+            patientEmailText.setThreshold(1);
             adapterEmail = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, emailList);
-            patientEmail.setAdapter(adapterEmail);
+            patientEmailText.setAdapter(adapterEmail);
         }
+
+        reminderNameText = findViewById(R.id.reminderNameText);
+        Button confirmButton = findViewById(R.id.submit_name);
+
+        RadioButton radioButton = findViewById(R.id.onceRadioButton);
+        radioButton.setChecked(true);
+
+        reminderType = Reminder.ONCE;
+        RadioGroup radioGroup = findViewById(R.id.radioGroup);
+
+        String reminderName = getIntent().getStringExtra("reminderName");
+        reminderType = getIntent().getIntExtra("reminderType", 1);
+        String patientEmail = getIntent().getStringExtra("patientEmail");
+        if (reminderName != null)
+        {
+            reminderNameText.setText(reminderName);
+            int id;
+            if (reminderType == Reminder.ONCE)
+                id = R.id.onceRadioButton;
+            else if (reminderType == Reminder.DAILY)
+                id = R.id.dailyRadioButton;
+            else if (reminderType == Reminder.WEEKLY)
+                id = R.id.weeklyRadioButton;
+            else if (reminderType == Reminder.MONTHLY)
+                id = R.id.monthlyRadioButton;
+            else
+                id = R.id.onceRadioButton;
+            radioGroup.check(id);
+        }
+        if (patientEmail != null)
+            patientEmailText.setText(patientEmail);
+
+        //String patientEmail = FirebaseDatabase.
 
         Toolbar toolbar =  findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.menuCreateReminder));
@@ -91,9 +125,9 @@ public class CreateReminderNameActivity extends AppCompatActivity {
                         emailList.add(patient.getEmail());
                     }
                     if (emailList.isEmpty())
-                        patientEmail.setHint(getString(R.string.empty_patient_list_hint));
+                        patientEmailText.setHint(getString(R.string.empty_patient_list_hint));
                     else
-                        patientEmail.setHint(getString(R.string.patient_email));
+                        patientEmailText.setHint(getString(R.string.patient_email));
 
                     for (String email: emailList)
                     {
@@ -112,14 +146,6 @@ public class CreateReminderNameActivity extends AppCompatActivity {
             });
         }
 
-        reminderName = findViewById(R.id.reminderNameText);
-        Button confirmButton = findViewById(R.id.submit_name);
-
-        RadioButton radioButton = findViewById(R.id.onceRadioButton);
-        radioButton.setChecked(true);
-
-        reminderType = Reminder.ONCE;
-        RadioGroup radioGroup = findViewById(R.id.radioGroup);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
         {
             @Override
@@ -161,29 +187,30 @@ public class CreateReminderNameActivity extends AppCompatActivity {
                     targetClass = CreateReminderDateActivity.class;
                 Intent intent = new Intent(getApplicationContext(), targetClass);
 
-                if (reminderName.getText().toString().isEmpty())
+                if (reminderNameText.getText().toString().isEmpty())
                 {
                     Toast.makeText(getApplicationContext(), R.string.empty_reminder_name, Toast.LENGTH_SHORT).show();
                     return;
                 }
-                intent.putExtra("reminderName", reminderName.getText().toString().trim());
+                intent.putExtra("reminderName", reminderNameText.getText().toString().trim());
 
                 intent.putExtra("reminderType", reminderType);
 
                 if (userType.equals(AppCareUser.CAREGIVER))
                 {
-                    if (patientEmail.getText().toString().isEmpty())
+                    if (patientEmailText.getText().toString().isEmpty())
                     {
                         Toast.makeText(getApplicationContext(), R.string.empty_patient, Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    PatientUser patient = caregiverUser.FindPatientByEmail(patientEmail.getText().toString());
+                    PatientUser patient = caregiverUser.FindPatientByEmail(patientEmailText.getText().toString());
                     if (patient == null)
                     {
                         Toast.makeText(getApplicationContext(), R.string.patient_not_found, Toast.LENGTH_SHORT).show();
                         System.out.println("Invalid patient");
                         return;
                     }
+                    intent.putExtra("patientEmail", patient.getEmail());
                     intent.putExtra("patientUid", patient.getUid());
                 }
                 startActivity(intent);
