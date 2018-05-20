@@ -5,6 +5,11 @@
     <color name="colorPrimaryDark">#0097a7</color>
     <color name="colorAccent">#b5b5b5</color>
 
+    <color name="fui_bgGoogle">@color/background</color>
+    <color name="fui_bgEmail">@color/background</color>
+
+
+    <color name="emergencyButton">#C3423F</color>
     <color name="bg_login">#26ae90</color>
     <color name="bg_register">#2e3237</color>
     <color name="bg_main">#428bca</color>

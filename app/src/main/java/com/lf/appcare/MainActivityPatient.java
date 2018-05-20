@@ -27,7 +27,7 @@ public class MainActivityPatient extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
     private DatabaseReference db;
-    private Button signOut, createReminder, removeReminder, settings, emergency;
+    private Button signOut, createReminder, removeReminder, emergency;
     private PatientUser patient;
 
     @Override
@@ -84,7 +84,6 @@ public class MainActivityPatient extends AppCompatActivity {
         });
         createReminder =  findViewById(R.id.menuCreateReminder);
         removeReminder =  findViewById(R.id.menuRemoveReminder);
-        settings = findViewById(R.id.menuSettings);
         signOut = findViewById(R.id.menuSignOut);
         emergency = findViewById(R.id.emergencyButton);
 
@@ -105,17 +104,6 @@ public class MainActivityPatient extends AppCompatActivity {
             public void onClick (View view)
             {
                 Intent intent = new Intent(getApplicationContext(), ReminderListPatientActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        settings.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick (View view)
-            {
-                Intent intent = new Intent(getApplicationContext(), CreateReminderNameActivity.class);
                 startActivity(intent);
                 finish();
             }

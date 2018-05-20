@@ -135,7 +135,7 @@ public class NotificationScheduler
                 .setContentText(content)
                 .setAutoCancel(true)
                 .setSound(alarmSound)
-                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setSmallIcon(R.mipmap.ic_launcher_icon_round)
                 .setContentIntent(pendingIntent).build();
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

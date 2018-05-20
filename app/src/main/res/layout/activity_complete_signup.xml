@@ -5,7 +5,7 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/cool_bg"
+    android:background="@color/colorPrimary"
     android:fitsSystemWindows="true"
     tools:context=".CompleteSignupActivity">
 
@@ -35,48 +35,75 @@
             android:maxLines="1"
             android:singleLine="true"
             android:textColor="@android:color/white"
-            android:textSize="20dp"/>
+            android:textSize="25dp"
+            android:fontFamily="@string/roboto_light"/>
 
     </android.support.design.widget.TextInputLayout>
 
-    <Spinner
-        android:id="@+id/user_type_spinner"
+    <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/segmentedGroupSignUp"
         android:layout_width="300dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/layout_rounded_bg"
-        android:dropDownWidth="match_parent"
-        android:entries="@array/user_type_array"
-        android:textSize="20sp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.568" />
+        android:orientation="horizontal"
+        segmentedgroup:layout_constraintBottom_toBottomOf="parent"
+        segmentedgroup:layout_constraintEnd_toEndOf="parent"
+        segmentedgroup:layout_constraintStart_toStartOf="parent"
+        segmentedgroup:layout_constraintTop_toTopOf="parent"
+        segmentedgroup:layout_constraintVertical_bias="0.499"
+        segmentedgroup:sc_border_width="2dp"
+        segmentedgroup:sc_checked_text_color="@color/emergencyButton"
+        segmentedgroup:sc_corner_radius="10dp"
+        segmentedgroup:sc_tint_color="@color/background">
+
+        <RadioButton
+            android:id="@+id/buttonPatientSignUp"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:button="@null"
+            android:text="@string/patient"
+            android:textAlignment="center"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/buttonCaregiverSignUp"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:button="@null"
+            android:text="@string/caregiver"
+            android:textAlignment="center"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+    </info.hoang8f.android.segmented.SegmentedGroup>
+
 
     <Button
         android:id="@+id/sign_up_button"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="380dp"
         android:background="@drawable/layout_rounded_bg"
         android:fontFamily="@string/roboto_light"
         android:text="@string/action_sign_in_short"
         android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_type_spinner" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>

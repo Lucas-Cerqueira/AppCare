@@ -38,6 +38,9 @@
     <string name="remove">Remove</string>
     <string name="remove_patient_message">Do you want to remove %1$s from your patient list?</string>
     <string name="remove_reminder_message">Do you want to remove this reminder?</string>
+
+    <!--CreateReminderActivity -> Patient-->
+    <string name="reminderSelectNameAndRepeat">Create new reminder</string>
     <string name="daily_button">Every day</string>
     <string name="weekly_button">Every week</string>
     <string name="monthly_button">Every month</string>
@@ -46,21 +49,29 @@
     <string name="confirmation">Confirm</string>
     <string name="reminderSelectDate">Select date:</string>
     <string name="reminderSelectHour">Select hour:</string>
-    <string name="reminderSelectNameAndRepeat">Create new reminder</string>
+
+    <!--MenuActivity-->
     <string name="menuCreateReminder">Create reminder</string>
     <string name="menuRemoveReminder">Remove reminder</string>
     <string name="menuSettings">Settings</string>
+
+    <!--Notification reminder-->
     <string name="alarmDismiss">Dismiss</string>
+
+    <!--List reminder-->
     <string name="reminder_list_caregiver">Reminders</string>
     <string name="reminderListCaregiverField">Created by caregiver</string>
+
+    <!--ReminderType-->
     <string name="onceReminderType">Only once</string>
     <string name="dailyReminderType">Every day</string>
     <string name="weeklyReminderType">Every week</string>
     <string name="monthlyReminderType">Every month</string>
+
+    <!--EmergencyReceiver-->
     <string name="emergencyButton">EMERGENCY</string>
     <string name="emergencyMessage">Emergency was sent. Keep calm.</string>
     <string name="emergencyMessageError">There is no caregiver linked to you</string>
-
 
     <!-- CreateReminderNameActivity -->
     <string name="patient_not_found">Patient not found</string>
@@ -101,10 +112,12 @@
 
     <string name="number_picker_formatter">%02d</string>
 
+    <string name="patient">Patient</string>
+    <string name="caregiver">Caregiver</string>
 
     <string-array name="user_type_array">
-        <item>Patient</item>
-        <item>Caregiver</item>
+        <item>@string/patient</item>
+        <item>@string/caregiver</item>
     </string-array>
 
     <string-array name="months_array">
