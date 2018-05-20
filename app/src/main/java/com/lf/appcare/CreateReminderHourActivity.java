@@ -38,7 +38,7 @@ public class CreateReminderHourActivity extends AppCompatActivity {
     private NumberPicker hourPicker, minutePicker;
     private  Button confirmButton;
     private int reminderDay, reminderMonth, reminderYear, reminderType;
-    private String reminderName, patientUid;
+    private String reminderName, patientUid, patientEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -60,7 +60,7 @@ public class CreateReminderHourActivity extends AppCompatActivity {
         reminderType = getIntent().getIntExtra("reminderType", 1);
         reminderName = getIntent().getStringExtra("reminderName");
         patientUid = getIntent().getStringExtra("patientUid");
-
+        patientEmail = getIntent().getStringExtra("patientEmail");
 
         System.out.println("Importando variaveis: " + reminderDay + " " + reminderMonth + " " + reminderYear + " " + reminderType);
 
@@ -146,7 +146,15 @@ public class CreateReminderHourActivity extends AppCompatActivity {
 
     private void ReturnToPreviousScreen()
     {
-        Intent intent = new Intent(getApplicationContext(), CreateReminderDateActivity.class);
+        Intent intent;
+        if (reminderType == Reminder.DAILY)
+            intent = new Intent(getApplicationContext(), CreateReminderNameActivity.class);
+        else
+            intent = new Intent(getApplicationContext(), CreateReminderDateActivity.class);
+
+        intent.putExtra("reminderType", reminderType);
+        intent.putExtra("reminderName", reminderName);
+        intent.putExtra("patientEmail", patientEmail);
         startActivity(intent);
         finish(); // close this activity and return to preview activity (if there is any)
     }
