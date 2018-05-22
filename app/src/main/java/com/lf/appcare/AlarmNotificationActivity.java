@@ -1,9 +1,17 @@
 package com.lf.appcare;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -28,6 +36,8 @@ public class AlarmNotificationActivity extends AppCompatActivity {
     private int reminderHour, reminderMinute, reminderType, localId;
     Reminder currentReminder;
     private Button dismiss;
+    Ringtone r;
+    Uri notification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +109,11 @@ public class AlarmNotificationActivity extends AppCompatActivity {
         TextView nameReminderLayout = findViewById(R.id.alarmNotificationText);
         TextView hourReminderLayout = findViewById(R.id.textHour);
         TextView minuteReminderLayout = findViewById(R.id.textMinute);
+
+        notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+        r.play();
+
         dismiss = findViewById(R.id.alarmDismiss);
 
         dismiss.setOnClickListener(new View.OnClickListener()
@@ -108,6 +123,7 @@ public class AlarmNotificationActivity extends AppCompatActivity {
             {
 //                Intent intent = new Intent(AlarmNotificationActivity.this, MainActivityPatient.class);
                 //If there is no remote id, reminder came from patient -> there is no caregiver name
+                r.stop();
                 if (remoteId.equals(""))
                 {
                     System.out.println("remote id null -> lembrete criado pelo paciente");
@@ -120,6 +136,7 @@ public class AlarmNotificationActivity extends AppCompatActivity {
                     db.child("remoteReminders").child(caregiverUid).child(remoteId).child("ack").setValue(1);
                     finish();
                 }
+
             }
         });
 

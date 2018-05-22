@@ -119,7 +119,6 @@ public class NotificationScheduler
     public static void showNotification(Context context,Class<?> cls,String title,String content)
     {
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
         Intent notificationIntent = new Intent(context, cls);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 

@@ -49,6 +49,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 //        NotificationScheduler.showNotification(context, CreateReminderDateActivity.class,
 //                "You have 5 unwatched videos", "Watch them now?");
 
+
+
         intent = new Intent();
         intent.setClass(context, AlarmNotificationActivity.class); //Test is a dummy class name where to redirect
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
