@@ -65,6 +65,9 @@
     <string name="reminder_list_caregiver">Lembretes</string>
 
 
+    <string name="signInEmailUsed">Você já utilizou jane.doe@example.com. Entre com o Google para continuar para o AppCare</string>
+
+
     <!-- CreateReminderNameActivity -->
     <string name="patient_not_found">Paciente não encontrado</string>
     <string name="empty_patient">Digite o email do paciente</string>
