@@ -50,6 +50,11 @@
     <string name="reminderSelectDate">Select date:</string>
     <string name="reminderSelectHour">Select hour:</string>
 
+    <!--Remove reminder dialog-->
+    <string name="remove_reminder_dialog">Remove reminder</string>
+    <string name="remove_reminder_button">Remove</string>
+
+
     <!--MenuActivity-->
     <string name="menuCreateReminder">Create reminder</string>
     <string name="menuRemoveReminder">Remove reminder</string>

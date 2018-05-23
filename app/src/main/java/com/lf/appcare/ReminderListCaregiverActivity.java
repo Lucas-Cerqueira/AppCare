@@ -77,29 +77,31 @@ public class ReminderListCaregiverActivity extends AppCompatActivity {
             {
 
                 final String reminderKey = reminderKeys.get(position);
-                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setMessage(getString(R.string.remove_reminder_message))
-                        .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id)
-                            {
-                                db.child("remoteReminders").child(auth.getCurrentUser().getUid()).child(reminderKey).removeValue();
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
-                        {
-                            public void onClick(DialogInterface dialog, int id)
-                            {
-                            }
-                        });
-                // Create the AlertDialog object
-                AlertDialog dialog = builder.create();
-                dialog.show();
 
-                // Configure the buttons
-                Button posButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                Button negButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-                posButton.setTextColor(getResources().getColor(R.color.colorPrimary));
-                negButton.setTextColor(getResources().getColor(R.color.colorPrimary));
+                final Dialog dialog = new Dialog(view.getContext());
+                dialog.setContentView(R.layout.dialog_remove_reminder);
+                dialog.setTitle(R.string.connect_to_patient_dialog);
+
+                Button removeButton = dialog.findViewById(R.id.removeButton);
+                removeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        db.child("remoteReminders").child(auth.getCurrentUser().getUid()).child(reminderKey).removeValue();
+                        dialog.cancel();
+                    }
+                });
+                Button cancelButton = dialog.findViewById(R.id.cancelButton);
+                cancelButton.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        dialog.cancel();
+                    }
+                });
+
+                dialog.show();
             }
         });
 
