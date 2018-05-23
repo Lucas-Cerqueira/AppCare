@@ -14,6 +14,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
 import java.util.Calendar;
+import java.util.Random;
 
 import static android.content.Context.ALARM_SERVICE;
 
@@ -130,7 +131,10 @@ public class NotificationScheduler
         stackBuilder.addParentStack(cls);
         stackBuilder.addNextIntent(notificationIntent);
 
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent(DAILY_REMINDER_REQUEST_CODE, PendingIntent.FLAG_UPDATE_CURRENT);
+        Random random = new Random();
+        int notification_id = random.nextInt (1000) + 1000;
+
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(notification_id, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "myId");
 
@@ -144,6 +148,8 @@ public class NotificationScheduler
                 .setContentIntent(pendingIntent).build();
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(DAILY_REMINDER_REQUEST_CODE, notification);
+        // Create random notification id to show multiple notifications
+
+        notificationManager.notify(notification_id, notification);
     }
 }
