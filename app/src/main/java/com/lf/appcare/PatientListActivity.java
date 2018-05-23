@@ -70,6 +70,7 @@ public class PatientListActivity extends AppCompatActivity {
             finish();
         }
 
+        // Get the caregiver patient list from the DB
         user = auth.getCurrentUser();
         String userUid = user.getUid();
         DatabaseReference ref = db.child("users").child(userUid);
@@ -92,9 +93,8 @@ public class PatientListActivity extends AppCompatActivity {
             }
         });
 
-        patientListView = findViewById(R.id.patientListView);
-
         // Set lister when clicking an item from the patient list
+        patientListView = findViewById(R.id.patientListView);
         patientListView.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener()
         {
             @Override

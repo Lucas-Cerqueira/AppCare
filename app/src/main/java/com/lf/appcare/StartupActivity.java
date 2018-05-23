@@ -160,41 +160,39 @@ public class StartupActivity extends AppCompatActivity {
 
             if (resultCode == RESULT_OK)
             {
-                FirebaseUserMetadata metadata = FirebaseAuth.getInstance().getCurrentUser().getMetadata();
-                // New user
-                if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp())
-                    startActivity (new Intent(StartupActivity.this, CompleteSignupActivity.class));
-                // Old user
-                else
+                String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                        .child("users").child(userUid);
+                ref.addListenerForSingleValueEvent(new ValueEventListener()
                 {
-                    String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
-                            .child("users").child(userUid);
-                    ref.addListenerForSingleValueEvent(new ValueEventListener()
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot)
                     {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot)
+                        // If it is a new user
+                        if (!dataSnapshot.exists())
                         {
-                            AppCareUser user = dataSnapshot.getValue(AppCareUser.class);
-                            if (user == null)
-                                return;
-
-                            String userType = user.getUserType();
-
-                            System.out.println("User type: " + userType +
-                                    "\nUser name: " + user.getFirstName() +
-                                    "\nUID: " + user.getUid());
-
-                            GoToMain(userType, user);
+                            startActivity (new Intent(StartupActivity.this, CompleteSignupActivity.class));
+                            finish();
+                            return;
                         }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError)
-                        {
-                            System.out.println("The read failed: " + databaseError.getCode());
-                        }
-                    });
-                }
+                        AppCareUser user = dataSnapshot.getValue(AppCareUser.class);
+
+                        String userType = user.getUserType();
+
+                        System.out.println("User type: " + userType +
+                                "\nUser name: " + user.getFirstName() +
+                                "\nUID: " + user.getUid());
+
+                        GoToMain(userType, user);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError)
+                    {
+                        System.out.println("The read failed: " + databaseError.getCode());
+                    }
+                });
             }
             else
             {
