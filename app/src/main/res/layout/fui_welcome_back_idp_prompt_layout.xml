@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_login">
+
+    <LinearLayout
+        style="@style/FirebaseUI.WrapperStyle"
+        android:layout_height="180dp"
+        android:orientation="vertical"
+        android:layout_marginTop="350dp">
+
+        <TextView
+            style="@style/FirebaseUI.Text.Heading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fui_welcome_back_idp_header"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:id="@+id/welcome_back_idp_prompt"
+            style="@style/FirebaseUI.Text.BodyText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="false"
+            android:textColor="@color/white"
+            tools:text="@string/signInEmailUsed" />
+
+        <Button
+            android:id="@+id/welcome_back_idp_button"
+            style="@style/FirebaseUI.Button"
+            android:background="@drawable/layout_rounded_bg"
+            android:text="@string/fui_sign_in_default"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:layout_marginBottom="5dp"/>
+
+    </LinearLayout>
+
+</ScrollView>

@@ -115,6 +115,8 @@
     <string name="patient">Patient</string>
     <string name="caregiver">Caregiver</string>
 
+    <string name="signInEmailUsed">You\'ve already used jane.doe@example.com. Sign in with Google to continue to AppCare</string>
+
     <string-array name="user_type_array">
         <item>@string/patient</item>
         <item>@string/caregiver</item>

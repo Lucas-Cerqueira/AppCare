@@ -33,6 +33,7 @@ public class SignupActivity extends AppCompatActivity {
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setTheme(R.style.LoginTheme)
+                        .setLogo(R.drawable.icone_appcare)
                         .setAvailableProviders(providers)
                         .setIsSmartLockEnabled(true)
                         .build(),
