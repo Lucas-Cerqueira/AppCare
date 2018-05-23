@@ -92,7 +92,7 @@ public class AlarmNotificationActivity extends AppCompatActivity {
             reminderMinuteString = Integer.toString(reminderMinute);
 
 
-        String [] dataArray = databaseIds.split("_");
+        String [] dataArray = databaseIds.split("#");
         reminderName = dataArray[0];
         remoteId = dataArray[1];
         caregiverUid = dataArray[2];
