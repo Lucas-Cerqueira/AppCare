@@ -26,7 +26,8 @@
             android:layout_height="wrap_content"
             android:textIsSelectable="false"
             android:textColor="@color/white"
-            tools:text="@string/signInEmailUsed" />
+            tools:text="@string/signInEmailUsed"
+            android:textSize="18dp"/>
 
         <Button
             android:id="@+id/welcome_back_idp_button"

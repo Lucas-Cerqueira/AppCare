@@ -209,7 +209,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
                         if (caregiverUid.equals(userUid))
                         {
                             patientName = data.get("patientName");
-                            NotificationScheduler.showNotification(getApplicationContext(), MainActivityPatient.class,
+                            NotificationScheduler.showNotification(getApplicationContext(), MainActivityCaregiver.class,
                                     getString(R.string.emergency_title),
                                     getString(R.string.emergency_body, patientName));
                         }
