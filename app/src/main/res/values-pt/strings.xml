@@ -61,7 +61,7 @@
     <string name="reminderSelectHour">Selecionar hora:</string>
     <string name="reminderSelectNameAndRepeat">Criar novo lembrete</string>
     <string name="menuRemoveReminder">Remover lembrete</string>
-    <string name="alarmDismiss">Esquecer</string>
+    <string name="alarmDismiss">Cancelar</string>
     <string name="reminder_list_caregiver">Lembretes</string>
 
 

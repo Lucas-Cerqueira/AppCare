@@ -78,7 +78,6 @@ public class NotificationScheduler
         cancelReminder(context, cls, reminder.getlocalId());
 
         // Enable a receiver
-
         ComponentName receiver = new ComponentName(context, cls);
         PackageManager pm = context.getPackageManager();
 
@@ -86,6 +85,11 @@ public class NotificationScheduler
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
 
+
+        if (alarmCalendar.getTimeInMillis() < Calendar.getInstance().getTimeInMillis())
+            alarmCalendar.setTimeInMillis(alarmCalendar.getTimeInMillis() + intervalTime);
+
+        System.out.println(alarmCalendar.getTime().toString());
 
         Intent intent1 = new Intent(context, cls);
         intent1.putExtra("reminderName", reminder.getName() + "#" + reminder.getRemoteId() + "#" + reminder.getCaregiverUid());
@@ -132,6 +136,8 @@ public class NotificationScheduler
 
         Notification notification = builder.setContentTitle(title)
                 .setContentText(content)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(content))
                 .setAutoCancel(true)
                 .setSound(alarmSound)
                 .setSmallIcon(R.mipmap.ic_launcher_icon_round)
