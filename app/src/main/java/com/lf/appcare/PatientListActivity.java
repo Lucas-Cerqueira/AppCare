@@ -1,7 +1,6 @@
 package com.lf.appcare;
 
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -167,7 +166,7 @@ public class PatientListActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 final Dialog dialog = new Dialog(view.getContext());
-                dialog.setContentView(R.layout.activity_add_patient);
+                dialog.setContentView(R.layout.dialog_add_patient);
                 dialog.setTitle(R.string.connect_to_patient_dialog);
 
                 Button searchButton = dialog.findViewById(R.id.searchButton);

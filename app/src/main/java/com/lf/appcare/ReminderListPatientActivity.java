@@ -1,11 +1,11 @@
 package com.lf.appcare;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,23 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.common.collect.Lists;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
@@ -76,32 +67,35 @@ public class ReminderListPatientActivity extends AppCompatActivity {
 
                 if (reminder.getRemoteId().equals(""))
                 {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                    builder.setMessage(getString(R.string.remove_reminder_message))
-                            .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
+                    final Dialog dialog = new Dialog(view.getContext());
+                    dialog.setContentView(R.layout.dialog_remove_reminder);
+                    dialog.setTitle(R.string.remove_reminder_dialog);
 
-                                    // Cancel the reminder
-                                    reminder.cancel(getApplicationContext());
-                                    // Remove from the map
-                                    reminderMap.remove(reminderKey);
-                                    // Refresh the reminders list
-                                    ListReminders(reminderMap);
-                                }
-                            })
-                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                }
-                            });
-                    // Create the AlertDialog object
-                    AlertDialog dialog = builder.create();
+                    Button removeButton = dialog.findViewById(R.id.removeButton);
+                    removeButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            // Cancel the reminder
+                            reminder.cancel(getApplicationContext());
+                            // Remove from the map
+                            reminderMap.remove(reminderKey);
+                            // Refresh the reminders list
+                            ListReminders(reminderMap);
+                            dialog.cancel();
+                        }
+                    });
+                    Button cancelButton = dialog.findViewById(R.id.cancelButton);
+                    cancelButton.setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View view)
+                        {
+                            dialog.cancel();
+                        }
+                    });
+
                     dialog.show();
-
-                    // Configure the buttons
-                    Button posButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                    Button negButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-                    posButton.setTextColor(getResources().getColor(R.color.colorPrimary));
-                    negButton.setTextColor(getResources().getColor(R.color.colorPrimary));
                 }
             }
         });

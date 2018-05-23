@@ -67,6 +67,9 @@
 
     <string name="signInEmailUsed">Você já utilizou jane.doe@example.com. Entre com o Google para continuar para o AppCare</string>
 
+    <!--Remove reminder dialog-->
+    <string name="remove_reminder_dialog">Remover lembrete</string>
+    <string name="remove_reminder_button">Remover</string>
 
     <!-- CreateReminderNameActivity -->
     <string name="patient_not_found">Paciente não encontrado</string>
