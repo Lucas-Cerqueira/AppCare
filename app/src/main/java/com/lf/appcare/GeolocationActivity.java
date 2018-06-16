@@ -82,7 +82,8 @@ public class GeolocationActivity extends AppCompatActivity implements
         }
     }
 
-    private PendingIntent getGeofencePendingIntent() {
+    private PendingIntent getGeofencePendingIntent()
+    {
         Intent intent = new Intent(this, GeofenceTransitionIntentService.class);
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling addgeoFences()
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);

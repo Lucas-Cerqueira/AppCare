@@ -10,6 +10,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -34,10 +36,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private boolean mLocationPermissionsGranted = false;
+    private SeekBar radiusSlide;
+    private TextView textRadius;
+    private float radius;
+    private LatLng currentPosition;
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
-    private static final float DEFAULT_RADIUS = 200f;
+    private static final float DEFAULT_RADIUS = 50f;
 
     private Circle circle;
 
@@ -45,6 +51,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        // Initialize with default value
+        radius = DEFAULT_RADIUS;
+
+        radiusSlide = findViewById(R.id.radiusSlide);
+        textRadius = findViewById(R.id.textRadius);
+
+        radiusSlide.setProgress (Math.round(radius));
+        textRadius.setText("Radius: " + radiusSlide.getProgress() + "m");
+
+        radiusSlide.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+            {
+                textRadius.setText("Radius: " + radiusSlide.getProgress() + "m");
+                radius = radiusSlide.getProgress();
+                createCircle(circle.getCenter(), radius);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar)
+            {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar)
+            {
+
+            }
+        });
 
         getLocationPermission();
     }
@@ -110,7 +148,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // Placing a marker on the touched position
                     mMap.addMarker(markerOptions);
 
-                    createCircle (latLng, DEFAULT_RADIUS);
+                    createCircle (latLng, radius);
                 }
             });
         }
@@ -118,11 +156,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void createCircle(LatLng latLng, float radius)
     {
-        circle = mMap.addCircle(new CircleOptions()
-                .center(latLng)
-                .radius(radius)
-                .fillColor(0x8038F75E) // First 2 hexas are the alpha
-                .strokeWidth(5));
+        if (circle == null)
+        {
+            circle = mMap.addCircle(new CircleOptions()
+                    .center(latLng)
+                    .radius(radius)
+                    .fillColor(0x8038F75E) // First 2 hexas are the alpha
+                    .strokeWidth(5));
+        }
+        else
+        {
+            circle.setCenter (latLng);
+            circle.setRadius (radius);
+        }
     }
 
     private void getDeviceLocation()
@@ -150,17 +196,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         if (task.getResult() != null)
                         {
                             Location currentLocation = (Location) task.getResult();
-                            LatLng coord = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                            moveCamera(coord, DEFAULT_ZOOM);
+                            currentPosition = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                            moveCamera(currentPosition, DEFAULT_ZOOM);
                             // Creating a marker
                             MarkerOptions markerOptions = new MarkerOptions();
                             // Setting the position for the marker
-                            markerOptions.position(coord);
+                            markerOptions.position(currentPosition);
                             // Setting the title for the marker.
                             // This will be displayed on taping the marker
                             //markerOptions.title(coord.latitude + " : " + coord.longitude);
                             mMap.addMarker(markerOptions);
-                            createCircle (coord, DEFAULT_RADIUS);
+                            createCircle (currentPosition, radius);
                         }
                         else
                         {
