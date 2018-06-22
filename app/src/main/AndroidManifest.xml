@@ -92,7 +92,6 @@
             android:name=".SignupActivity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".GeolocationActivity" />
 
         <service android:name=".GeofenceTransitionIntentService" />
 

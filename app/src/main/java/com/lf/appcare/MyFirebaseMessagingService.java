@@ -1,6 +1,7 @@
 package com.lf.appcare;
 
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.common.collect.Lists;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -215,6 +216,37 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
                         }
                         else
                             System.out.println("Wrong caregiver");
+                    }
+                    break;
+
+                case "createdGeofence":
+                    if (userType.equals(AppCareUser.PATIENT))
+                    {
+                        patientUid = data.get("patientUid");
+                        double lat = Double.parseDouble(data.get("lat"));
+                        double lng = Double.parseDouble(data.get("lng"));
+                        float radius = Float.parseFloat(data.get("radius"));
+
+                        if (patientUid.equals(userUid))
+                        {
+                            GeofenceHandler.createGeofence(getApplicationContext(), new LatLng(lat, lng), radius);
+                        }
+                        else
+                            System.out.println("Wrong patient");
+                    }
+                    break;
+
+                case "removedGeofence":
+                    if (userType.equals(AppCareUser.PATIENT))
+                    {
+                        patientUid = data.get("patientUid");
+
+                        if (patientUid.equals(userUid))
+                        {
+                            GeofenceHandler.removeGeofence(getApplicationContext());
+                        }
+                        else
+                            System.out.println("Wrong patient");
                     }
                     break;
 

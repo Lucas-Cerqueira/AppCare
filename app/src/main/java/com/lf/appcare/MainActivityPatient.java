@@ -1,11 +1,14 @@
 package com.lf.appcare;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -24,6 +27,8 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MainActivityPatient extends AppCompatActivity {
 
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
     private DatabaseReference db;
@@ -34,6 +39,9 @@ public class MainActivityPatient extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_patient);
+
+        // Location permission for the geofencing feature
+        getLocationPermission();
 
         Toolbar toolbar =  findViewById(R.id.toolbar);
 
@@ -160,5 +168,25 @@ public class MainActivityPatient extends AppCompatActivity {
     public void onBackPressed()
     {
         //super.onBackPressed();
+    }
+
+    private void getLocationPermission ()
+    {
+        System.out.println("Getting location permissions");
+        String [] permissions = {android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
+
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(this,
+                    permissions,
+                    LOCATION_PERMISSION_REQUEST_CODE);
+        }
+        else
+        {
+            System.out.println("Location permissions already granted");
+        }
     }
 }

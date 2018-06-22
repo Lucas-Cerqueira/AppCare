@@ -1,6 +1,8 @@
 package com.lf.appcare;
 
 import android.Manifest;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -10,11 +12,21 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingClient;
+import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
@@ -27,19 +39,26 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
-import java.util.Map;
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status>
+{
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+    protected GoogleApiClient mGoogleApiClient;
 
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private boolean mLocationPermissionsGranted = false;
     private SeekBar radiusSlide;
     private TextView textRadius;
+    private Button createGeofenceButton;
     private float radius;
     private LatLng currentPosition;
+    private GeofencingClient mGeofencingClient;
+    private PendingIntent pendingIntent;
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
@@ -51,6 +70,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        GeofenceHandler.removeGeofence(getApplicationContext());
+
+//        mGeofencingClient = LocationServices.getGeofencingClient(this);
+//        mGeofencingClient.removeGeofences(getGeofencePendingIntent())
+//                .addOnSuccessListener(this, new OnSuccessListener<Void>()
+//                {
+//                    @Override
+//                    public void onSuccess(Void aVoid)
+//                    {
+//                        Toast.makeText(MapsActivity.this, "Geofence removed", Toast.LENGTH_SHORT).show();
+//                    }
+//                })
+//                .addOnFailureListener(this, new OnFailureListener()
+//                {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e)
+//                    {
+//                        Toast.makeText(MapsActivity.this, "Error removing geofence", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
 
         // Initialize with default value
         radius = DEFAULT_RADIUS;
@@ -68,7 +113,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             {
                 textRadius.setText("Radius: " + radiusSlide.getProgress() + "m");
                 radius = radiusSlide.getProgress();
-                createCircle(circle.getCenter(), radius);
+                if (circle == null)
+                    createCircle(currentPosition, radius);
+                else
+                    createCircle(circle.getCenter(), radius);
             }
 
             @Override
@@ -84,7 +132,51 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+        createGeofenceButton = findViewById(R.id.createGeofence);
+        createGeofenceButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                System.out.println("Start geofencing monitoring call");
+                if (!mGoogleApiClient.isConnected())
+                {
+                    System.out.println("Google API client not connected");
+                }
+                else
+                {
+                    GeofenceHandler.createGeofence (getApplicationContext(), circle.getCenter(), radius);
+                }
+            }
+        });
+
         getLocationPermission();
+    }
+
+    private PendingIntent getGeofencePendingIntent()
+    {
+        if (pendingIntent != null)
+        {
+            return pendingIntent;
+        }
+        Intent intent = new Intent(this, GeofenceTransitionIntentService.class);
+        return PendingIntent.getService(this, 0, intent, PendingIntent.
+                FLAG_UPDATE_CURRENT);
+    }
+
+    private GeofencingRequest getGeofencingRequest (String geofence_id, LatLng center, float radius)
+    {
+        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+        Geofence geofence = new Geofence.Builder()
+                .setRequestId(geofence_id)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setCircularRegion(center.latitude, center.longitude, radius)
+                .setNotificationResponsiveness(1000) // 1 second
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
+                .build();
+        builder.addGeofence(geofence);
+        return builder.build();
     }
 
     private void initMap()
@@ -93,6 +185,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    public void onResult(Status status)
+    {
+        if (status.isSuccess())
+        {
+            Toast.makeText(
+                    this,
+                    "Geofences Added",
+                    Toast.LENGTH_SHORT
+            ).show();
+        }
+        else
+        {
+            // Get the status code for the error and log it using a user-friendly message.
+//            String errorMessage = GeofenceErrorMessages.getErrorString(this,
+//                    status.getStatusCode());
+            Toast.makeText(
+                    this,
+                    "Error adding geofence",
+                    Toast.LENGTH_SHORT
+            ).show();
+        }
     }
 
     /**
@@ -118,7 +233,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            {
                 return;
             }
             mMap.setMyLocationEnabled(true);
@@ -141,6 +257,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     // Clears the previously touched position
                     mMap.clear();
+                    circle = null;
 
                     // Animating to the touched position
                     mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -283,27 +400,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!mGoogleApiClient.isConnecting() || !mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnecting() || mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
     /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
+     * Runs when a GoogleApiClient object successfully connects.
      */
-//    @Override
-//    public void onMapReady(GoogleMap googleMap) {
-//        mMap = googleMap;
-//
-//        // Add a marker in Sydney and move the camera
-//        LatLng marker = new LatLng(0, 0);
-//        mMap.setMyLocationEnabled(true);
-//        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//       // mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-//        Circle circle = mMap.addCircle(new CircleOptions()
-//                        .center(marker)
-//                        .radius(50));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(marker));
-//    }
+    @Override
+    public void onConnected(Bundle connectionHint)
+    {
+        System.out.println("Google API connected");
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result)
+    {
+        // Do something with result.getErrorCode());
+        System.out.println("Google API connection failed - " + result.getErrorMessage());
+        System.out.println("Error code: " + result.getErrorCode());
+    }
+
+    @Override
+    public void onConnectionSuspended(int cause)
+    {
+        System.out.println("Google API connection suspended - " + cause);
+        mGoogleApiClient.connect();
+    }
 }
