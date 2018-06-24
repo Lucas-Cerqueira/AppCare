@@ -49,7 +49,6 @@ public class ReminderListCaregiverActivity extends AppCompatActivity {
     private List<String> reminderKeys = new ArrayList<>();
     private Map<String,String> patientNames = new HashMap<>();
     private FirebaseUser user;
-    private AutoCompleteTextView textView;
     private ArrayAdapter<Reminder> arrayAdapterReminder;
     String caregiverUid;
 

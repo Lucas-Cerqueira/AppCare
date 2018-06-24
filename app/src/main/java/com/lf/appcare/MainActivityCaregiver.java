@@ -28,7 +28,7 @@ public class MainActivityCaregiver extends AppCompatActivity {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
 
-    private Button signOut, patientList, reminderList;
+    private Button signOut, patientList, reminderList, geofenceList;
 
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
@@ -102,6 +102,7 @@ public class MainActivityCaregiver extends AppCompatActivity {
 
         patientList = findViewById(R.id.connectToPatientButton);
         reminderList = findViewById(R.id.remindersButton);
+        geofenceList = findViewById(R.id.geofencesButton);
         signOut =  findViewById(R.id.sign_out);
 
         patientList.setOnClickListener(new View.OnClickListener()
@@ -120,6 +121,16 @@ public class MainActivityCaregiver extends AppCompatActivity {
             public void onClick(View v)
             {
                 startActivity(new Intent(MainActivityCaregiver.this, ReminderListCaregiverActivity.class));
+                finish();
+            }
+        });
+
+        geofenceList.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(MainActivityCaregiver.this, GeofenceListActivity.class));
                 finish();
             }
         });

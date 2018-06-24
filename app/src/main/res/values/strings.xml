@@ -101,6 +101,11 @@
     <!-- Emergency notification -->
     <string name="emergency_title">!!! EMERGENCY !!!</string>
     <string name="emergency_body">Patient %1$s pressed the emergency button!</string>
+    <string name="emergency_exit_geofence_title">Patient exited the geofence.</string>
+    <string name="emergency_exit_geofence_body">Patient %1$s left the geofence that you set.</string>
+    <string name="emergency_enter_geofence_title">Patient entered the geofence.</string>
+    <string name="emergency_enter_geofence_body">Patient %1$s is back inside the geofence that you set.</string>
+
 
     <string name="patient_email">Patient\'s email</string>
     <string name="empty_patient_list_hint">No patients added yet</string>
@@ -145,4 +150,37 @@
     <string name="title_activity_connect_to_patient">ConnectToPatient</string>
     <string name="title_activity_patient_list">PatientListActivity</string>
     <string name="title_activity_maps">Map</string>
+
+    <!-- GeofenceListActivity -->
+    <string name="geofence_list_caregiver">Geofences</string>
+    <string name="title_activity_geofence_list">Geofences</string>
+    <string name="click_to_see_map">Click to edit it</string>
+
+    <!-- MapsActivity -->
+    <!-- Creating geofence -->
+    <string name="cancel_geofence_button">Cancel</string>
+    <string name="create_geofence_button">Create</string>
+    <!-- Editing geofence -->
+    <string name="save_geofence_button">Save</string>
+    <string name="remove_geofence_button">Remove</string>
+    
+    <string name="radius_seekbar_text">Radius: %1$.0f m</string>
+    
+    <string name="error_no_patient">Enter a patient email</string>
+    <string name="add_geofence_success">Geofence created</string>
+    <string name="add_geofence_error">Error creating geofence. Try again</string>
+    <string name="remove_geofence_success">Geofence removed</string>
+    <string name="remove_geofence_error">Error removing geofence. Try again</string>
+
+    <string name="get_location_error">Error getting location. Check if your GPS is on</string>
+    <!-- End of MapsActivity -->
+
+    <!-- GeofenceHandler -->
+    <string name="add_geofence_success_title">Geofence created</string>
+    <string name="add_geofence_success_body">Your caregiver created a geofence for your own safety.</string>
+
+    <string name="remove_geofence_success_title">Geofence removed</string>
+    <string name="remove_geofence_success_body">Your caregiver removed the geofence.</string>
+
+
 </resources>

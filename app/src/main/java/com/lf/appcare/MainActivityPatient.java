@@ -135,7 +135,7 @@ public class MainActivityPatient extends AppCompatActivity {
                 System.out.println("caregiver uid: " + patient.getCaregiverUid());
                 if (!patient.getCaregiverUid().isEmpty())
                 {
-                    db.child("emergencyRequest").child(patient.getUid()).setValue(patient.getCaregiverUid());
+                    db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("emergencyType").setValue("emergencyButton");
                     Toast.makeText(getApplicationContext(), R.string.emergencyMessage, Toast.LENGTH_SHORT).show();
                 }
                 else

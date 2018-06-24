@@ -69,6 +69,19 @@
             android:textColor="@android:color/white"/>
 
         <Button
+            android:id="@+id/geofencesButton"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:textSize="20sp"
+            android:background="@drawable/layout_rounded_primary"
+            android:fontFamily="@string/roboto_light"
+            android:text="@string/geofence_list_caregiver"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"/>
+
+        <Button
             android:id="@+id/sign_out"
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"

@@ -203,7 +203,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
 
                 // Patient triggered an emergency request
                 // Notify the caregiver
-                case "emergencyRequest":
+                case "emergencyButton":
                     if (userType.equals(AppCareUser.CAREGIVER))
                     {
                         caregiverUid = data.get("caregiverUid");
@@ -218,6 +218,42 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
                             System.out.println("Wrong caregiver");
                     }
                     break;
+
+                // Patient entered the geofence
+                case "geofenceEnter":
+                    if (userType.equals(AppCareUser.CAREGIVER))
+                    {
+                        caregiverUid = data.get("caregiverUid");
+                        if (caregiverUid.equals(userUid))
+                        {
+                            patientName = data.get("patientName");
+                            NotificationScheduler.showNotification(getApplicationContext(), MainActivityCaregiver.class,
+                                    getString(R.string.emergency_enter_geofence_title),
+                                    getString(R.string.emergency_enter_geofence_body, patientName));
+                        }
+                        else
+                            System.out.println("Wrong caregiver");
+                    }
+                    break;
+
+                // Patient exited the geofence
+                case "geofenceExit":
+                    if (userType.equals(AppCareUser.CAREGIVER))
+                    {
+                        caregiverUid = data.get("caregiverUid");
+                        if (caregiverUid.equals(userUid))
+                        {
+                            patientName = data.get("patientName");
+                            NotificationScheduler.showNotification(getApplicationContext(), MainActivityCaregiver.class,
+                                    getString(R.string.emergency_exit_geofence_title),
+                                    getString(R.string.emergency_exit_geofence_body, patientName));
+                        }
+                        else
+                            System.out.println("Wrong caregiver");
+                    }
+                    break;
+
+
 
                 case "createdGeofence":
                     if (userType.equals(AppCareUser.PATIENT))

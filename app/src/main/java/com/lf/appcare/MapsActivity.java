@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.provider.ContactsContract;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -14,6 +15,8 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -42,6 +45,19 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status>
@@ -54,11 +70,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean mLocationPermissionsGranted = false;
     private SeekBar radiusSlide;
     private TextView textRadius;
-    private Button createGeofenceButton;
+    //private Button createGeofenceButton;
     private float radius;
     private LatLng currentPosition;
     private GeofencingClient mGeofencingClient;
     private PendingIntent pendingIntent;
+    private CaregiverUser caregiverUser;
+
+    private String mode;
+    private String patientUid;
+    private LatLng savedCircleCenter;
+    private float savedCircleRadius;
+
+    private Map<String,String> patientEmailsUids = new HashMap<>();
+    private AutoCompleteTextView patientEmailText;
+    private ArrayAdapter<String> adapterEmail;
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
@@ -67,51 +93,100 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Circle circle;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+        final String userUid = auth.getCurrentUser().getUid();
 
-        GeofenceHandler.removeGeofence(getApplicationContext());
+        mode = getIntent().getStringExtra("mode");
+        patientUid = getIntent().getStringExtra("patientUid");
 
-//        mGeofencingClient = LocationServices.getGeofencingClient(this);
-//        mGeofencingClient.removeGeofences(getGeofencePendingIntent())
-//                .addOnSuccessListener(this, new OnSuccessListener<Void>()
-//                {
-//                    @Override
-//                    public void onSuccess(Void aVoid)
-//                    {
-//                        Toast.makeText(MapsActivity.this, "Geofence removed", Toast.LENGTH_SHORT).show();
-//                    }
-//                })
-//                .addOnFailureListener(this, new OnFailureListener()
-//                {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e)
-//                    {
-//                        Toast.makeText(MapsActivity.this, "Error removing geofence", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+        patientEmailText = findViewById(R.id.patientEmailText);
+        if (patientUid == null)
+        {
+            // Autocomplete text field for the patient's email
+            patientEmailText.setThreshold(1);
+            adapterEmail = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());
+            patientEmailText.setAdapter(adapterEmail);
+        }
+        else
+        {
+            patientEmailText.setVisibility(View.INVISIBLE);
+            savedCircleCenter = new LatLng(getIntent().getDoubleExtra("lat", 0), getIntent().getDoubleExtra("lng", 0));
+            savedCircleRadius = getIntent().getFloatExtra("radius", 0);
+        }
+
+
+        DatabaseReference ref = db.child("users").child(userUid);
+        ref.addListenerForSingleValueEvent(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                ArrayList<String> emailList = new ArrayList<>();
+                patientEmailsUids = new HashMap<>();
+                caregiverUser = dataSnapshot.getValue(CaregiverUser.class);
+                if (caregiverUser == null || patientUid != null)
+                    return;
+
+                for (PatientUser patient: caregiverUser.getPatientList())
+                {
+                    patientEmailsUids.put(patient.getEmail(), patient.getUid());
+                }
+                if (patientEmailsUids.isEmpty())
+                    patientEmailText.setHint(getString(R.string.empty_patient_list_hint));
+                else
+                    patientEmailText.setHint(getString(R.string.patient_email));
+
+                for (String email: patientEmailsUids.keySet())
+                {
+                    System.out.println("Email: " + email);
+                    emailList.add(email);
+                }
+
+                adapterEmail.clear();
+                for (String email: emailList)
+                {
+                    System.out.println("Email list: " + email);
+                }
+                adapterEmail.addAll(emailList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
 
-        // Initialize with default value
-        radius = DEFAULT_RADIUS;
+
+        if (patientUid == null)
+            // Initialize with default value
+            radius = DEFAULT_RADIUS;
+        else
+            radius = getIntent().getFloatExtra("radius", 0);
 
         radiusSlide = findViewById(R.id.radiusSlide);
         textRadius = findViewById(R.id.textRadius);
 
         radiusSlide.setProgress (Math.round(radius));
-        textRadius.setText("Radius: " + radiusSlide.getProgress() + "m");
+        textRadius.setText(getString(R.string.radius_seekbar_text, radius));
 
         radiusSlide.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
         {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
-                textRadius.setText("Radius: " + radiusSlide.getProgress() + "m");
+                textRadius.setText(getString(R.string.radius_seekbar_text, radius));
                 radius = radiusSlide.getProgress();
                 if (circle == null)
                     createCircle(currentPosition, radius);
@@ -132,21 +207,73 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        createGeofenceButton = findViewById(R.id.createGeofence);
-        createGeofenceButton.setOnClickListener(new View.OnClickListener()
+        Button leftButton = findViewById(R.id.leftButton);
+        // Cancel
+        if (mode.equals("create"))
+            leftButton.setText(R.string.cancel_geofence_button);
+        // Remove geofence
+        else
+            leftButton.setText(R.string.remove_geofence_button);
+        leftButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                System.out.println("Start geofencing monitoring call");
-                if (!mGoogleApiClient.isConnected())
+                // Cancel
+                if (mode.equals("create"))
                 {
-                    System.out.println("Google API client not connected");
+                    startActivity(new Intent(MapsActivity.this, GeofenceListActivity.class));
+                    finish();
                 }
+                // Remove geofence
                 else
                 {
-                    GeofenceHandler.createGeofence (getApplicationContext(), circle.getCenter(), radius);
+                    // REMOVE GEOFENCE ON CLIENT
+                    if (patientUid == null)
+                        patientUid = patientEmailsUids.get(patientEmailText.getText().toString());
+                    DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+                    db.child("geofences").child(userUid).child(patientUid).removeValue();
+                    startActivity(new Intent(MapsActivity.this, GeofenceListActivity.class));
+                    finish();
                 }
+            }
+        });
+
+        Button rightButton = findViewById(R.id.rightButton);
+        // Create geofence
+        if (mode.equals("create"))
+            rightButton.setText(R.string.create_geofence_button);
+        // Save changes
+        else
+            rightButton.setText(R.string.save_geofence_button);
+
+        rightButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                // SEND GEOFENCE TO CLIENT
+                if (patientUid == null)
+                {
+                    patientUid = patientEmailsUids.get(patientEmailText.getText().toString());
+                    if (patientUid == null)
+                    {
+                        Toast.makeText(getApplicationContext(), R.string.error_no_patient, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                // DEBUG
+                //GeofenceHandler.createGeofence(MapsActivity.this, circle.getCenter(), radius);
+                //
+
+                com.lf.appcare.Geofence geofence = new com.lf.appcare.Geofence( circle.getCenter().latitude,
+                                                                                circle.getCenter().longitude,
+                                                                                radius);
+                DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+                db.child("geofences").child(caregiverUser.getUid()).child(patientUid).setValue(geofence);
+                Intent intent = new Intent(getApplicationContext(), GeofenceListActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -193,7 +320,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         {
             Toast.makeText(
                     this,
-                    "Geofences Added",
+                    R.string.add_geofence_success,
                     Toast.LENGTH_SHORT
             ).show();
         }
@@ -204,7 +331,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //                    status.getStatusCode());
             Toast.makeText(
                     this,
-                    "Error adding geofence",
+                    R.string.add_geofence_error,
                     Toast.LENGTH_SHORT
             ).show();
         }
@@ -223,11 +350,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap)
     {
-        Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         System.out.println("onMapReady: map is ready");
         mMap = googleMap;
 
-        if (mLocationPermissionsGranted)
+        if (mLocationPermissionsGranted && patientUid == null)
         {
             getDeviceLocation();
 
@@ -238,7 +364,49 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return;
             }
             mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+            // Click on map listener
+            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+
+                    // Creating a marker
+                    MarkerOptions markerOptions = new MarkerOptions();
+
+                    // Setting the position for the marker
+                    markerOptions.position(latLng);
+
+                    // Setting the title for the marker.
+                    // This will be displayed on taping the marker
+                    //markerOptions.title(latLng.latitude + " : " + latLng.longitude);
+
+                    // Clears the previously touched position
+                    mMap.clear();
+                    circle = null;
+
+                    // Animating to the touched position
+                    mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+                    // Placing a marker on the touched position
+                    mMap.addMarker(markerOptions);
+
+                    createCircle (latLng, radius);
+                }
+            });
+        }
+        else
+        {
+            moveCamera(savedCircleCenter, DEFAULT_ZOOM);
+            // Creating a marker
+            MarkerOptions markerOptions = new MarkerOptions();
+            // Setting the position for the marker
+            markerOptions.position(savedCircleCenter);
+            // Setting the title for the marker.
+            // This will be displayed on taping the marker
+            //markerOptions.title(coord.latitude + " : " + coord.longitude);
+            mMap.addMarker(markerOptions);
+            createCircle (savedCircleCenter, savedCircleRadius);
 
             // Click on map listener
             mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -333,7 +501,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     else
                     {
                         System.out.println("onComplete: current location is null");
-                        Toast.makeText(MapsActivity.this, "Unable to get current location", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapsActivity.this, R.string.get_location_error, Toast.LENGTH_LONG).show();
                     }
 
                 }

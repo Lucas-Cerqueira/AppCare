@@ -57,8 +57,8 @@ public class CaregiverUser extends AppCareUser
         // Update caregiver user in the DB
         db.child("users").child(this.getUid()).child("patientList").setValue(patientList);
 
-
-
+        // Update patient user in the DB
+        db.child("users").child(patient.getUid()).child("caregiverUid").setValue(this.getUid());
 
         return 0;
     }
@@ -84,6 +84,9 @@ public class CaregiverUser extends AppCareUser
         // Remove patient-caregiver connection from the DB to notify the patient
         db = FirebaseDatabase.getInstance().getReference();
         db.child("patientConnections").child(patient.getUid()).removeValue();
+
+        // Remove caregiver UID from patient user in the DB
+        db.child("users").child(patient.getUid()).child("caregiverUid").setValue("");
         return 0;
     }
 

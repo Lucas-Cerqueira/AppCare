@@ -94,6 +94,10 @@
     <!-- Emergency notification -->
     <string name="emergency_title">!!! EMERGÊNCIA !!!</string>
     <string name="emergency_body">Paciente %1$s apertou o botão de emergência!</string>
+    <string name="emergency_exit_geofence_title">Paciente saiu da cerca geográfica.</string>
+    <string name="emergency_exit_geofence_body">Paciente %1$s saiu da cerca geográfica que você configurou.</string>
+    <string name="emergency_enter_geofence_title">Paciente entrou na cerca geográfica.</string>
+    <string name="emergency_enter_geofence_body">Paciente %1$s voltou para a cerca geográfica que você configurou.</string>
 
     <string name="patient_email">Email do paciente</string>
     <string name="empty_patient_list_hint">Nenhum paciente adicionado</string>
@@ -128,4 +132,35 @@
 
     <string name="title_activity_connect_to_patient">ConectarAoPaciente</string>
     <string name="title_activity_patient_list">ListaPacienteActivity</string>
+
+    <!-- GeofenceListActivity -->
+    <string name="geofence_list_caregiver">Cercas Geográficas</string>
+    <string name="title_activity_geofence_list">Cercas Geográficas</string>
+    <string name="click_to_see_map">Clique para editar</string>
+
+    <!-- MapsActivity -->
+    <!-- Creating geofence -->
+    <string name="cancel_geofence_button">Cancelar</string>
+    <string name="create_geofence_button">Criar</string>
+    <!-- Editing geofence -->
+    <string name="save_geofence_button">Salvar</string>
+    <string name="remove_geofence_button">Remover</string>
+
+    <string name="radius_seekbar_text">Raio: %1$.0f m</string>
+
+    <string name="error_no_patient">Digite o email de um paciente</string>
+    <string name="add_geofence_success">Cerca geográfica criada</string>
+    <string name="add_geofence_error">Erro ao criar cerca geográfica. Tente de novo</string>
+    <string name="remove_geofence_success">Cerca geográfica removida</string>
+    <string name="remove_geofence_error">Erro ao remover cerca geográfica. Tente de novo</string>
+
+    <string name="get_location_error">Erro ao determinar posição. Verifique se seu GPS está ligado.</string>
+    <!-- End of MapsActivity -->
+
+    <!-- GeofenceHandler -->
+    <string name="add_geofence_success_title">Cerca geográfica criada</string>
+    <string name="add_geofence_success_body">Seu cuidador criou uma cerca geográfica para sua segurança.</string>
+
+    <string name="remove_geofence_success_title">Cerca geográfica removida</string>
+    <string name="remove_geofence_success_body">Seu cuidador removeu a cerca geográfica.</string>
 </resources>

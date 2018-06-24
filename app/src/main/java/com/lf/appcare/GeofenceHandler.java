@@ -32,7 +32,7 @@ public class GeofenceHandler
                 @Override
                 public void onSuccess(Void aVoid)
                 {
-                    NotificationScheduler.showNotification(context, MainActivityPatient.class, "Geofence removed", "Geofence removed");
+                    NotificationScheduler.showNotification(context, MainActivityPatient.class, context.getString(R.string.remove_geofence_success_title), context.getString(R.string.remove_geofence_success_body));
                 }
             })
             .addOnFailureListener(new OnFailureListener()
@@ -41,7 +41,7 @@ public class GeofenceHandler
                 public void onFailure(@NonNull Exception e)
                 {
                    //Toast.makeText(context, "Error removing geofence", Toast.LENGTH_SHORT).show();
-                    NotificationScheduler.showNotification(context, MainActivityPatient.class, "Error removing geofence", "Error removing geofence");
+                    //NotificationScheduler.showNotification(context, MainActivityPatient.class, "Error removing geofence", "Error removing geofence");
                 }
             }
         );
@@ -59,7 +59,7 @@ public class GeofenceHandler
                         @Override
                         public void onSuccess(Void aVoid)
                         {
-                            NotificationScheduler.showNotification(context, MainActivityPatient.class, "Geofence added", "Geofence added");
+                            NotificationScheduler.showNotification(context, MainActivityPatient.class, context.getString(R.string.add_geofence_success_title), context.getString(R.string.add_geofence_success_body));
                         }
                     })
                     .addOnFailureListener(new OnFailureListener()
@@ -67,7 +67,7 @@ public class GeofenceHandler
                         @Override
                         public void onFailure(@NonNull Exception e)
                         {
-                            NotificationScheduler.showNotification(context, MainActivityPatient.class, "Error adding geofence", "Error adding geofence");
+                            //NotificationScheduler.showNotification(context, MainActivityPatient.class, "Error adding geofence", "Error adding geofence");
                             System.out.println(e.toString());
                         }
                     });
@@ -88,7 +88,7 @@ public class GeofenceHandler
     private static GeofencingRequest getGeofencingRequest (String geofence_id, LatLng center, float radius)
     {
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER |GeofencingRequest.INITIAL_TRIGGER_EXIT);
         Geofence geofence = new Geofence.Builder()
                 .setRequestId(geofence_id)
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)

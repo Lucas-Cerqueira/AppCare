@@ -9,6 +9,14 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseUserMetadata;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +26,8 @@ import java.util.List;
  */
 public class GeofenceTransitionIntentService extends IntentService {
     protected static final String TAG = "geofence-transition";
+    private PatientUser patient;
+    private int geofenceTransition;
 
     public GeofenceTransitionIntentService() {
         // Use the TAG to name the worker thread.
@@ -39,29 +49,50 @@ public class GeofenceTransitionIntentService extends IntentService {
         }
 
         // Get the transition type.
-        int geofenceTransition = geofencingEvent.getGeofenceTransition();
+        geofenceTransition = geofencingEvent.getGeofenceTransition();
 
         // Test that the reported transition was of interest.
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
                 geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT)
         {
 
-            if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER)
-            {
-                Toast.makeText(this, "Transition ENTER", Toast.LENGTH_SHORT).show();
-                System.out.println("Transition ENTER");
-                Log.d("DEBUG", "Transition ENTER");
-                NotificationScheduler.showNotification(getApplicationContext(), MainActivityCaregiver.class,
-                        "Transition ENTER", "Transition ENTER");
-            }
-            else
-            {
-                Toast.makeText(this, "Transition EXIT", Toast.LENGTH_SHORT).show();
-                System.out.println("Transition EXIT");
-                Log.d("DEBUG", "Transition EXIT");
-                NotificationScheduler.showNotification(getApplicationContext(), MainActivityCaregiver.class,
-                        "Transition EXIT", "Transition EXIT");
-            }
+            DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user == null)
+                return;
+            db.child("users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    patient = dataSnapshot.getValue(PatientUser.class);
+                    if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER)
+                    {
+                        System.out.println("Transition ENTER");
+                        NotificationScheduler.showNotification(getApplicationContext(), MainActivityCaregiver.class,
+                                "Transition ENTER", "Transition ENTER");
+
+                        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+                        db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("emergencyType").setValue("geofenceEnter");
+                    }
+                    else
+                    {
+                        System.out.println("Transition EXIT");
+                        NotificationScheduler.showNotification(getApplicationContext(), MainActivityCaregiver.class,
+                               "Transition EXIT", "Transition EXIT");
+                        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+                        db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("emergencyType").setValue("geofenceExit");
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+
+                }
+            });
+
+
+
 
             // Get the geofences that were triggered. A single event can trigger multiple geofences.
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
