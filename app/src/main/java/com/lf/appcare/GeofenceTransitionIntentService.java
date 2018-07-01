@@ -3,6 +3,7 @@ package com.lf.appcare;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -29,6 +30,8 @@ public class GeofenceTransitionIntentService extends IntentService {
     private PatientUser patient;
     private int geofenceTransition;
 
+    private double lastLat, lastLng, accuracy;
+
     public GeofenceTransitionIntentService() {
         // Use the TAG to name the worker thread.
         super(TAG);
@@ -50,6 +53,9 @@ public class GeofenceTransitionIntentService extends IntentService {
 
         // Get the transition type.
         geofenceTransition = geofencingEvent.getGeofenceTransition();
+        lastLat = geofencingEvent.getTriggeringLocation().getLatitude();
+        lastLng = geofencingEvent.getTriggeringLocation().getLongitude();
+        accuracy = geofencingEvent.getTriggeringLocation().getAccuracy();
 
         // Test that the reported transition was of interest.
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
@@ -69,10 +75,13 @@ public class GeofenceTransitionIntentService extends IntentService {
                     {
                         System.out.println("Transition ENTER");
                         NotificationScheduler.showNotification(getApplicationContext(), MainActivityCaregiver.class,
-                                "Transition ENTER", "Transition ENTER");
+                                "Transition ENTER", "Lat: " + Double.toString(lastLat) + " | Lng" + Double.toString(lastLng) + "Acc: " + Double.toString(accuracy));
 
                         DatabaseReference db = FirebaseDatabase.getInstance().getReference();
                         db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("emergencyType").setValue("geofenceEnter");
+                        db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("lat").setValue(lastLat);
+                        db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("lng").setValue(lastLng);
+                        db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("acc").setValue(accuracy);
                     }
                     else
                     {
@@ -81,6 +90,9 @@ public class GeofenceTransitionIntentService extends IntentService {
                                "Transition EXIT", "Transition EXIT");
                         DatabaseReference db = FirebaseDatabase.getInstance().getReference();
                         db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("emergencyType").setValue("geofenceExit");
+                        db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("lat").setValue(lastLat);
+                        db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("lng").setValue(lastLng);
+                        db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("acc").setValue(accuracy);
                     }
                 }
 

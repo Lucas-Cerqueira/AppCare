@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -101,20 +102,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         DatabaseReference db = FirebaseDatabase.getInstance().getReference();
         final String userUid = auth.getCurrentUser().getUid();
 
+        // Mode can que equal to:
+        // 'create': When creating a geofence
+        // 'edit':  When editing a geofence
+        // 'view': When viewing a position on the map
         mode = getIntent().getStringExtra("mode");
         patientUid = getIntent().getStringExtra("patientUid");
 
         patientEmailText = findViewById(R.id.patientEmailText);
-        if (patientUid == null)
+        adapterEmail = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());
+        if (mode.equals("create"))
         {
             // Autocomplete text field for the patient's email
             patientEmailText.setThreshold(1);
-            adapterEmail = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());
             patientEmailText.setAdapter(adapterEmail);
         }
         else
         {
-            patientEmailText.setVisibility(View.INVISIBLE);
+            ViewGroup layout = (ViewGroup) patientEmailText.getParent();
+            if (layout != null)
+                layout.removeView(patientEmailText);
+            //patientEmailText.setVisibility(View.INVISIBLE);
             savedCircleCenter = new LatLng(getIntent().getDoubleExtra("lat", 0), getIntent().getDoubleExtra("lng", 0));
             savedCircleRadius = getIntent().getFloatExtra("radius", 0);
         }
@@ -181,6 +189,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         radiusSlide.setProgress (Math.round(radius));
         textRadius.setText(getString(R.string.radius_seekbar_text, radius));
 
+        if (mode.equals("view"))
+        {
+            ViewGroup layout = (ViewGroup) radiusSlide.getParent();
+            if (layout != null)
+                layout.removeView(radiusSlide);
+            layout = (ViewGroup) textRadius.getParent();
+            if (layout != null)
+                layout.removeView(textRadius);
+        }
+
         radiusSlide.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
         {
             @Override
@@ -212,15 +230,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (mode.equals("create"))
             leftButton.setText(R.string.cancel_geofence_button);
         // Remove geofence
-        else
+        else if (mode.equals("edit"))
             leftButton.setText(R.string.remove_geofence_button);
+        // View position
+        else
+            leftButton.setText(R.string.close_geofence_button);
+
         leftButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                // Cancel
-                if (mode.equals("create"))
+                // Cancel or Close
+                if (mode.equals("create") || mode.equals("view"))
                 {
                     startActivity(new Intent(MapsActivity.this, GeofenceListActivity.class));
                     finish();
@@ -229,8 +251,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 else
                 {
                     // REMOVE GEOFENCE ON CLIENT
-                    if (patientUid == null)
-                        patientUid = patientEmailsUids.get(patientEmailText.getText().toString());
+                    patientEmailText.setVisibility(View.INVISIBLE);
                     DatabaseReference db = FirebaseDatabase.getInstance().getReference();
                     db.child("geofences").child(userUid).child(patientUid).removeValue();
                     startActivity(new Intent(MapsActivity.this, GeofenceListActivity.class));
@@ -244,8 +265,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (mode.equals("create"))
             rightButton.setText(R.string.create_geofence_button);
         // Save changes
-        else
+        else if (mode.equals(("edit")))
             rightButton.setText(R.string.save_geofence_button);
+        // View position
+        else
+        {
+            ViewGroup layout = (ViewGroup) rightButton.getParent();
+            if (layout != null)
+                layout.removeView(rightButton);
+        }
 
         rightButton.setOnClickListener(new View.OnClickListener()
         {
@@ -353,7 +381,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         System.out.println("onMapReady: map is ready");
         mMap = googleMap;
 
-        if (mLocationPermissionsGranted && patientUid == null)
+        if (mLocationPermissionsGranted && mode.equals("create"))
         {
             getDeviceLocation();
 
@@ -376,10 +404,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     // Setting the position for the marker
                     markerOptions.position(latLng);
-
-                    // Setting the title for the marker.
-                    // This will be displayed on taping the marker
-                    //markerOptions.title(latLng.latitude + " : " + latLng.longitude);
+                    markerOptions.draggable(false);
 
                     // Clears the previously touched position
                     mMap.clear();
@@ -398,13 +423,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         else
         {
             moveCamera(savedCircleCenter, DEFAULT_ZOOM);
+
             // Creating a marker
             MarkerOptions markerOptions = new MarkerOptions();
+
             // Setting the position for the marker
             markerOptions.position(savedCircleCenter);
+            markerOptions.draggable(false);
+
             // Setting the title for the marker.
-            // This will be displayed on taping the marker
-            //markerOptions.title(coord.latitude + " : " + coord.longitude);
+            if (mode.equals("view"))
+                markerOptions.title(getString(R.string.last_position));
+
             mMap.addMarker(markerOptions);
             createCircle (savedCircleCenter, savedCircleRadius);
 

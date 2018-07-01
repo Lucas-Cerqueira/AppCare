@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -67,7 +68,11 @@ public class GeofenceHandler
                         @Override
                         public void onFailure(@NonNull Exception e)
                         {
+                            Intent intent1 = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(intent1);
                             //NotificationScheduler.showNotification(context, MainActivityPatient.class, "Error adding geofence", "Error adding geofence");
+                            System.out.println("Error adding geofence");
                             System.out.println(e.toString());
                         }
                     });
@@ -88,7 +93,7 @@ public class GeofenceHandler
     private static GeofencingRequest getGeofencingRequest (String geofence_id, LatLng center, float radius)
     {
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER |GeofencingRequest.INITIAL_TRIGGER_EXIT);
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER | GeofencingRequest.INITIAL_TRIGGER_EXIT);
         Geofence geofence = new Geofence.Builder()
                 .setRequestId(geofence_id)
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)

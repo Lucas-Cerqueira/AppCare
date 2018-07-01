@@ -140,6 +140,7 @@
 
     <!-- MapsActivity -->
     <!-- Creating geofence -->
+    <string name="close_geofence_button">Fechar</string>
     <string name="cancel_geofence_button">Cancelar</string>
     <string name="create_geofence_button">Criar</string>
     <!-- Editing geofence -->
@@ -155,6 +156,8 @@
     <string name="remove_geofence_error">Erro ao remover cerca geográfica. Tente de novo</string>
 
     <string name="get_location_error">Erro ao determinar posição. Verifique se seu GPS está ligado.</string>
+
+    <string name="last_position">Última posição</string>
     <!-- End of MapsActivity -->
 
     <!-- GeofenceHandler -->

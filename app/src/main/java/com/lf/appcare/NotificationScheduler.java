@@ -131,7 +131,8 @@ public class NotificationScheduler
         Random random = new Random();
         int notification_id = random.nextInt (1000) + 1000;
 
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent(notification_id, PendingIntent.FLAG_UPDATE_CURRENT);
+        //PendingIntent pendingIntent = stackBuilder.getPendingIntent(notification_id, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, notification_id, notificationIntent, 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "myId");
 
@@ -142,7 +143,40 @@ public class NotificationScheduler
                 .setAutoCancel(true)
                 .setSound(alarmSound)
                 .setSmallIcon(R.mipmap.ic_launcher_icon_round)
-                .setContentIntent(pendingIntent).build();
+                .setContentIntent(pendingIntent)
+                .build();
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        // Create random notification id to show multiple notifications
+
+        notificationManager.notify(notification_id, notification);
+    }
+
+    public static void showNotification(Context context, Intent intent,String title,String content)
+    {
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+//        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+//        stackBuilder.addNextIntent(intent);
+
+        Random random = new Random();
+        int notification_id = random.nextInt (1000) + 1000;
+
+        //PendingIntent pendingIntent = stackBuilder.getPendingIntent(notification_id, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, notification_id, intent, 0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "myId");
+
+        Notification notification = builder.setContentTitle(title)
+                .setContentText(content)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(content))
+                .setAutoCancel(true)
+                .setSound(alarmSound)
+                .setSmallIcon(R.mipmap.ic_launcher_icon_round)
+                .setContentIntent(pendingIntent)
+                .build();
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         // Create random notification id to show multiple notifications

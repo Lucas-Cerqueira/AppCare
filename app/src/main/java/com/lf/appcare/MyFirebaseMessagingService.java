@@ -226,8 +226,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
                         caregiverUid = data.get("caregiverUid");
                         if (caregiverUid.equals(userUid))
                         {
+                            double lat = Double.parseDouble(data.get("lat"));
+                            double lng = Double.parseDouble(data.get("lng"));
+                            float acc = Float.parseFloat(data.get("acc"));
                             patientName = data.get("patientName");
-                            NotificationScheduler.showNotification(getApplicationContext(), MainActivityCaregiver.class,
+                            Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                            intent.putExtra("mode", "view");
+                            intent.putExtra("lat", lat);
+                            intent.putExtra("lng", lng);
+                            intent.putExtra("radius", acc);
+                            NotificationScheduler.showNotification(getApplicationContext(), intent,
                                     getString(R.string.emergency_enter_geofence_title),
                                     getString(R.string.emergency_enter_geofence_body, patientName));
                         }
@@ -243,8 +251,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
                         caregiverUid = data.get("caregiverUid");
                         if (caregiverUid.equals(userUid))
                         {
+                            double lat = Double.parseDouble(data.get("lat"));
+                            double lng = Double.parseDouble(data.get("lng"));
+                            float acc = Float.parseFloat(data.get("acc"));
                             patientName = data.get("patientName");
-                            NotificationScheduler.showNotification(getApplicationContext(), MainActivityCaregiver.class,
+                            Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                            intent.putExtra("mode", "view");
+                            intent.putExtra("lat", lat);
+                            intent.putExtra("lng", lng);
+                            intent.putExtra("radius", acc);
+                            NotificationScheduler.showNotification(getApplicationContext(), intent,
                                     getString(R.string.emergency_exit_geofence_title),
                                     getString(R.string.emergency_exit_geofence_body, patientName));
                         }
