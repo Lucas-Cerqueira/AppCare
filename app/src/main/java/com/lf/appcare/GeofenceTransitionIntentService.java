@@ -78,10 +78,12 @@ public class GeofenceTransitionIntentService extends IntentService {
                                 "Transition ENTER", "Lat: " + Double.toString(lastLat) + " | Lng" + Double.toString(lastLng) + "Acc: " + Double.toString(accuracy));
 
                         DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-                        db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("emergencyType").setValue("geofenceEnter");
-                        db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("lat").setValue(lastLat);
-                        db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("lng").setValue(lastLng);
-                        db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("acc").setValue(accuracy);
+                        GeofenceEmergency emergency = new GeofenceEmergency("geofenceEnter", lastLat, lastLng, (float)accuracy);
+                        //db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("emergencyType").setValue("geofenceEnter");
+                        //db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("lat").setValue(lastLat);
+                        //db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("lng").setValue(lastLng);
+                        //db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("acc").setValue(accuracy);
+                        db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).setValue(emergency);
                     }
                     else
                     {
@@ -89,10 +91,12 @@ public class GeofenceTransitionIntentService extends IntentService {
                         NotificationScheduler.showNotification(getApplicationContext(), MainActivityCaregiver.class,
                                "Transition EXIT", "Transition EXIT");
                         DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-                        db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("emergencyType").setValue("geofenceExit");
-                        db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("lat").setValue(lastLat);
-                        db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("lng").setValue(lastLng);
-                        db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("acc").setValue(accuracy);
+                        GeofenceEmergency emergency = new GeofenceEmergency("geofenceExit", lastLat, lastLng, (float)accuracy);
+                        //db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("emergencyType").setValue("geofenceExit");
+                        //db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("lat").setValue(lastLat);
+                        //db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("lng").setValue(lastLng);
+                        //db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).child("acc").setValue(accuracy);
+                        db.child("emergencyRequest").child(patient.getUid()).child(patient.getCaregiverUid()).setValue(emergency);
                     }
                 }
 
