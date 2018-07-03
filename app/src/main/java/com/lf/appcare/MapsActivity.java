@@ -476,8 +476,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             circle = mMap.addCircle(new CircleOptions()
                     .center(latLng)
                     .radius(radius)
-                    .fillColor(0x8038F75E) // First 2 hexas are the alpha
-                    .strokeWidth(5));
+                    .fillColor(0x90ff7251) // First 2 hexas are the alpha
+                    .strokeWidth(2));
         }
         else
         {
