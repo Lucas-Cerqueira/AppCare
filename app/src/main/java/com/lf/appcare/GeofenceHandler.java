@@ -86,8 +86,7 @@ public class GeofenceHandler
     private static PendingIntent getGeofencePendingIntent(Context context)
     {
         Intent intent = new Intent(context, GeofenceTransitionIntentService.class);
-        return PendingIntent.getService(context, 0, intent, PendingIntent.
-                FLAG_UPDATE_CURRENT);
+        return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     private static GeofencingRequest getGeofencingRequest (String geofence_id, LatLng center, float radius)
@@ -98,7 +97,11 @@ public class GeofenceHandler
                 .setRequestId(geofence_id)
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .setCircularRegion(center.latitude, center.longitude, radius)
-                .setNotificationResponsiveness(2000) // 2 seconds
+                // ** Notification Responsiveness default is to 0 ms. It is the best-effort notification
+                // ** responsiveness of the geofence. It might adjust this value internally without
+                // ** your control to save power when needed.
+                //.setNotificationResponsiveness(2000) // 2 seconds
+                //.setNotificationResponsiveness(1000) // 1 second
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build();
         builder.addGeofence(geofence);

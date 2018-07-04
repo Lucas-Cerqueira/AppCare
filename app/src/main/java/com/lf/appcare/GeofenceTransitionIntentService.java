@@ -59,13 +59,23 @@ public class GeofenceTransitionIntentService extends IntentService {
 
         // Test that the reported transition was of interest.
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
-                geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT)
+                geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT ||
+                geofenceTransition == Geofence.GEOFENCE_TRANSITION_DWELL)
         {
 
             DatabaseReference db = FirebaseDatabase.getInstance().getReference();
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user == null)
+            {
+                System.out.println("User is NULL");
                 return;
+            }
+            if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_DWELL)
+            {
+                System.out.println("Dwell");
+                return;
+            }
+
             db.child("users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot)
