@@ -10,6 +10,10 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
@@ -44,9 +48,17 @@ public class GeofenceTransitionIntentService extends IntentService {
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
+    protected void onHandleIntent(Intent intent)
+    {
+        if (LocationResult.hasResult(intent) || LocationAvailability.hasLocationAvailability(intent))
+        {
+            System.out.println("Service location");
+            return;
+        }
+
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
-        if (geofencingEvent.hasError()) {
+        if (geofencingEvent.hasError())
+        {
             System.out.println("Geofencing event error");
             return;
         }

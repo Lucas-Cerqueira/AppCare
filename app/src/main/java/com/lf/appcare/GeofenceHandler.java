@@ -14,18 +14,24 @@ import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 public class GeofenceHandler
 {
     public static void removeGeofence (final Context context)
     {
+        FusedLocationProviderClient mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
+        mFusedLocationProviderClient.removeLocationUpdates(PendingIntent.getService(context, 999, new Intent(context, GeofenceTransitionIntentService.class), PendingIntent.FLAG_UPDATE_CURRENT));
         GeofencingClient mGeofencingClient = LocationServices.getGeofencingClient(context);
         mGeofencingClient.removeGeofences(getGeofencePendingIntent(context))
             .addOnSuccessListener(new OnSuccessListener<Void>()
@@ -51,8 +57,22 @@ public class GeofenceHandler
     public static void createGeofence (final Context context, LatLng center, float radius)
     {
         GeofencingClient mGeofencingClient = LocationServices.getGeofencingClient(context);
+        GoogleApiClient googleApiClient = new GoogleApiClient.Builder(context)
+                .addApi(LocationServices.API).build();
+        googleApiClient.connect();
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(10000);
+//        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+//                .addLocationRequest(locationRequest);
+//        builder.setAlwaysShow(false);
         try
         {
+            FusedLocationProviderClient mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
+            mFusedLocationProviderClient.requestLocationUpdates(locationRequest,
+                    PendingIntent.getService(context, 999, new Intent(context, GeofenceTransitionIntentService.class), PendingIntent.FLAG_UPDATE_CURRENT));
+            //final Task location = mFusedLocationProviderClient.getLastLocation();
             mGeofencingClient.addGeofences(getGeofencingRequest("GEOFENCE_ID", center, radius),
                     getGeofencePendingIntent(context))
                     .addOnSuccessListener(new OnSuccessListener<Void>()
