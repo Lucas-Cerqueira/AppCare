@@ -85,8 +85,10 @@ public class GeofenceHandler
 
     private static PendingIntent getGeofencePendingIntent(Context context)
     {
+        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
+        // adding or removing the geofence.
         Intent intent = new Intent(context, GeofenceTransitionIntentService.class);
-        return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private static GeofencingRequest getGeofencingRequest (String geofence_id, LatLng center, float radius)
